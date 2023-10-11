@@ -80,7 +80,6 @@ public class ShopManager : MonoBehaviour,IPointerExitHandler
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("exit");
         HideShop();
     }
 }
