@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using TMPro;
 
-public enum EHorse//因为用英文还要另外弄一堆中文名，干脆用中文枚举一劳永逸了
+public enum EHorse //因为用英文还要另外弄一堆中文名，干脆用中文枚举一劳永逸了
 {
     None,
     慢马,
@@ -31,13 +32,21 @@ public enum EHorse//因为用英文还要另外弄一堆中文名，干脆用中
     黑暗双面,
     巨人
 }
+
 public class Horse : MonoBehaviour
 {
-    [Header("属性")] 
-    public string horseName;
+    public string horseName => type.ToString();
+    
+    [Header("属性"),OnValueChanged(nameof(ResetText))] public EHorse type;
+    [OnValueChanged(nameof(ResetText))]
     public int speed;
+    [OnValueChanged(nameof(ResetText))]
     public int damage;
+    [OnValueChanged(nameof(ResetText))]
     public int price;
+
+    [NonSerialized]public Skill skill;
+    
 
     private Transform attributeTransform;
     private TextMeshPro damageText;
@@ -46,18 +55,20 @@ public class Horse : MonoBehaviour
 
     private void Awake()
     {
-        attributeTransform = transform.Find("Attributes");
+        ResetText();
+        skill = transform.Find("Skill").GetComponent<Skill>();
+    }
+    
+    private void ResetText()
+    {
+        attributeTransform = transform.Find("Texts");
         damageText = attributeTransform.Find("DamageText").GetComponent<TextMeshPro>();
         speedText = attributeTransform.Find("SpeedText").GetComponent<TextMeshPro>();
         nameText = attributeTransform.Find("Name").GetComponent<TextMeshPro>();
 
         damageText.text = damage.ToString();
-        speedText.text = damage.ToString();
+        speedText.text = speed.ToString();
         nameText.text = horseName;
-    }
-
-    private void Start()
-    {
         
     }
 }

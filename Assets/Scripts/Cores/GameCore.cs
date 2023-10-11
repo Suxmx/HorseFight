@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Services;
 using UnityEngine;
 using UnityEngine.Events;
 using MyTimer;
+using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 public enum GameState
 {
@@ -22,11 +25,11 @@ public enum GameState
 }
 public class GameCore : Service
 {
-    public UnityEvent<int> OnRoundChange;
+    public UnityEvent<float> OnFightTick;
     public GameState currentState;
-    public int curRound;
-    public List<Road> roads;
+    public float curTime=>gameTimer.Time;
     
+    private List<Road> roads;
     private PlayerInfo playerA, playerB;
     private TimerOnly gameTimer;
 
@@ -35,13 +38,20 @@ public class GameCore : Service
         base.Awake();
         DontDestroyOnLoad(this);
         
+        
+    }
+
+    protected override void Start()
+    {
+        base.Start();
         RestartGame();
     }
 
     public void RestartGame()
     {
-        gameTimer = new TimerOnly();
-        gameTimer.Restart();
+        gameTimer = new TimerOnly(true);
+        gameTimer.OnTick += _ => { OnFightTick?.Invoke(gameTimer.Time);};
+
         currentState = GameState.Shopping;
         playerA = new PlayerInfo(10);
         playerB = new PlayerInfo(10);
@@ -50,12 +60,13 @@ public class GameCore : Service
         {
             string roadName = "Road " + i;
             roads.Add(GameObject.Find(roadName).GetComponent<Road>());
+            OnFightTick.AddListener(roads[i-1].LogicUpdate);
         }
     }
-
+    [Button("开始游戏")]
     public void FightStart()
     {
-        curRound = 1;
+        gameTimer.Restart();
     }
-    
+
 }
