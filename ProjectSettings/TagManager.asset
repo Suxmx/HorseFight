@@ -44,3 +44,6 @@ TagManager:
   - name: Road
     uniqueID: 3246504823
     locked: 0
+  - name: Horse
+    uniqueID: 4221257347
+    locked: 0
