@@ -12,6 +12,7 @@ public class StormSkill: Skill
     public override void OnStart()
     {
         base.OnStart();
+        if (skillOnStart) return;
         if (owner.locateRoad.num == 3)
         {
             Debug.Log("风暴技能触发");

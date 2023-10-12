@@ -17,7 +17,7 @@ public class Road : MonoBehaviour
     private Vector2 leftPos => leftTrans.position;
     private Vector2 rightPos => rightTrans.position;
     private Transform leftTrans, rightTrans;
-    [SerializeField] private Horse leftHorse, rightHorse;
+    public Horse leftHorse, rightHorse;
     private GameCore core;
     private ShopManager shop;
     private TimerOnly roadTimer;
@@ -63,28 +63,30 @@ public class Road : MonoBehaviour
         ifStart = true;
         roadTimer.Restart();
         //释放开场技能
-        if (!leftHorse || !rightHorse)
-        {
-            leftHorse?.skill.OnStart();
-            rightHorse?.skill.OnStart();
-        }
-        else if (leftHorse.type == EHorse.沉默者)
-        {
-            if (!rightHorse.skill.onStartSilentAble)
-                rightHorse.skill.OnStart();
-        }
-        else if (rightHorse.type == EHorse.沉默者)
-        {
-            if (!leftHorse.skill.onStartSilentAble)
-                leftHorse.skill.OnStart();
-        }
-        else
-        {
-            // Debug.Log(
-            //     $"Default:{leftHorse.type} {rightHorse.type} {leftHorse.skill.onStartSilentAble} {rightHorse.skill.onStartSilentAble}");
-            leftHorse.skill.OnStart();
-            rightHorse.skill.OnStart();
-        }
+        leftHorse?.skill.OnStart();
+        rightHorse?.skill.OnStart();
+        // if (!leftHorse || !rightHorse)
+        // {
+        // leftHorse?.skill.OnStart();
+        // rightHorse?.skill.OnStart();
+        // }
+        // else if (leftHorse.type == EHorse.沉默者)
+        // {
+        //     if (!rightHorse.skill.onStartSilentAble)
+        //         rightHorse.skill.OnStart();
+        // }
+        // else if (rightHorse.type == EHorse.沉默者)
+        // {
+        //     if (!leftHorse.skill.onStartSilentAble)
+        //         leftHorse.skill.OnStart();
+        // }
+        // else
+        // {
+        //     // Debug.Log(
+        //     //     $"Default:{leftHorse.type} {rightHorse.type} {leftHorse.skill.onStartSilentAble} {rightHorse.skill.onStartSilentAble}");
+        //     leftHorse.skill.OnStart();
+        //     rightHorse.skill.OnStart();
+        // }
     }
 
     public void LogicUpdate()
