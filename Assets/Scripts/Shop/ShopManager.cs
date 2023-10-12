@@ -15,6 +15,10 @@ public class ShopManager : Service,IPointerExitHandler
     private bool ifAnim=false;//防止协程多次被开始
     private RectTransform panelRect;
     private List<ShopItem> shopItems;
+    private Dictionary<Team, PlayerInfo> playerDic;
+    private PlayerInfo playerA, playerB;
+    private Team curTeam=Team.A;//当前正在购买的对象
+    private HorseFactory horseFactory;
 
     private int loopTimes;
     protected override void Awake()
@@ -27,7 +31,14 @@ public class ShopManager : Service,IPointerExitHandler
         loopTimes = (int)(aniTime / 0.02f);
         shopItems = new List<ShopItem>();
     }
-# region 商店动画
+
+    protected override void Start()
+    {
+        base.Start();
+        horseFactory = ServiceLocator.Get<HorseFactory>();
+    }
+
+    # region 商店动画
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -91,5 +102,29 @@ public class ShopManager : Service,IPointerExitHandler
     public void RegisterItem(ShopItem item)
     {
         shopItems.Add(item);
+    }
+
+    public void SetPlayerInfo(Dictionary<Team, PlayerInfo> dic)
+    {
+        playerDic = dic;
+    }
+
+    public void ShopRequest(ShopItem item)
+    {
+        if (playerDic[curTeam].coins < item.price)
+        {
+            Debug.LogWarning($"购买{item.type}失败,{curTeam}所持有金币:{playerDic[curTeam].coins},目标价格:{item.price}");
+            return;
+        }
+
+        playerDic[curTeam].coins -= item.price;
+        playerDic[curTeam].ownHorses.Add(item.type);
+        Debug.Log($"{curTeam}购买{item.type}成功,剩余金币{playerDic[curTeam].coins}");
+        Transform gainItem= Instantiate(horseFactory.GetHorseObj(item.type), playerDic[curTeam].trans).transform;
+        Vector3 mousePosition = Input.mousePosition;
+        Debug.Log(mousePosition);
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, 10f));
+        gainItem.position = worldPosition;
+        HideShop();
     }
 }

@@ -36,26 +36,35 @@ public class GameCore : Service
     private List<Road> roads;
     private PlayerInfo playerA, playerB;
     private TimerOnly gameTimer;
+    private ShopManager shop;
+    private Dictionary<Team, PlayerInfo> playerDic;
 
     protected override void Awake()
     {
         base.Awake();
         DontDestroyOnLoad(this);
-        InitGame();
+        
     }
 
     protected override void Start()
     {
         base.Start();
+        InitGame();
     }
 
 
     private void InitGame()
     {
+        playerDic = new Dictionary<Team, PlayerInfo>();
+        shop = ServiceLocator.Get<ShopManager>();
         currentState = GameState.Shopping;
-        playerA = new PlayerInfo(10);
-        playerB = new PlayerInfo(10);
+        playerA = new PlayerInfo(10,Team.A,new GameObject("PlayerA").transform);
+        playerB = new PlayerInfo(10,Team.B,new GameObject("PlayerA").transform);
+        playerDic.Add(Team.A,playerA);
+        playerDic.Add(Team.B,playerB);
         roads = new List<Road>();
+        
+        shop.SetPlayerInfo(playerDic);
     }
 
     [Button("开始游戏")]

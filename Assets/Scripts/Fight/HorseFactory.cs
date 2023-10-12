@@ -27,7 +27,7 @@ public class HorseFactory : Service
 
     public GameObject GetHorseObj(EHorse type)
     {
-        return Instantiate(factoryDic[type]);
+        return factoryDic[type];
     }
 
     public int GetHorseDamage(EHorse type)
@@ -43,5 +43,10 @@ public class HorseFactory : Service
     public string GetHorseDesc(EHorse type)
     {
         return horseAttriDic[type].description;
+    }
+
+    public int GetHorsePrice(EHorse type)
+    {
+        return horseAttriDic[type].price;
     }
 }

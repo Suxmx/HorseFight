@@ -6,9 +6,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ShopItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
+public class ShopItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,IPointerClickHandler
 {
     public EHorse type;
+    public int price;
     
     private ShopManager manager;
     private HorseFactory horseFactory;
@@ -40,6 +41,7 @@ public class ShopItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
         damageText.text = horseFactory.GetHorseDamage(type).ToString();
         speedText.text = horseFactory.GetHorseSpeed(type).ToString();
         nameText.text = type.ToString();
+        price = horseFactory.GetHorsePrice(type);
         manager.RegisterItem(this);
 
         string desc = horseFactory.GetHorseDesc(type);
@@ -60,5 +62,10 @@ public class ShopItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
     public void OnPointerExit(PointerEventData eventData)
     {
         descRoot.gameObject.SetActive(false);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        manager.ShopRequest(this);
     }
 }

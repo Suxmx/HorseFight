@@ -5,17 +5,16 @@ using UnityEngine;
 
 public class PlayerInfo
 {
-    public Dictionary<EHorse, int> horses;
-    public PlayerInfo(int coins)
+    public List<EHorse> ownHorses;
+    public PlayerInfo(int coins,Team team,Transform trans)
     {
+        this.team = team;
         this.coins = coins;
-        horses = new Dictionary<EHorse, int>();
-        foreach (EHorse horse in Enum.GetValues(typeof(EHorse)))
-        {
-            if(horse==EHorse.None) continue;
-            horses.Add(horse, 0);
-        }
+        this.trans = trans;
+        ownHorses = new List<EHorse>();
     }
     public int coins;
     public int scores;
+    public Team team;
+    public Transform trans;
 }
