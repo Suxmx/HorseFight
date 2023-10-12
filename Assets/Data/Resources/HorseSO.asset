@@ -1,0 +1,121 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de40c7677f3e4306b24f2a8ef62720fb, type: 3}
+  m_Name: HorseSO
+  m_EditorClassIdentifier: 
+  baseHorse: {fileID: 1596212282070573571, guid: 6325c050e044f9648b48df3604e8b6e0, type: 3}
+  horses:
+  - type: 1
+    damage: 1
+    speed: 1
+    price: 1
+    description: 
+  - type: 2
+    damage: 1
+    speed: 2
+    price: 1
+    description: 
+  - type: 3
+    damage: 1
+    speed: 2
+    price: 1
+    description: "\u5728\u4E2D\u8DEF+1\u653B\u51FB"
+  - type: 4
+    damage: 1
+    speed: 4
+    price: 2
+    description: "\u6B7B\u4EA1\u65F6\u5468\u56F4\u5355\u4F4D-1\u653B\u51FB"
+  - type: 5
+    damage: 1
+    speed: 2
+    price: 2
+    description: "\u6218\u6597\u5F00\u59CB\u65F6\u6C89\u9ED8\u5BF9\u9762\u5355\u4F4D"
+  - type: 6
+    damage: 1
+    speed: 1
+    price: 2
+    description: "\u6BCF3\u79D2+1\u653B\u51FB"
+  - type: 7
+    damage: 2
+    speed: 1
+    price: 2
+    description: 
+  - type: 8
+    damage: 1
+    speed: 2
+    price: 2
+    description: "\u6B63\u4E0B\u65B9\u7684\u6211\u65B9\u5355\u4F4D+1\u653B\u51FB"
+  - type: 9
+    damage: 1
+    speed: 2
+    price: 2
+    description: "\u6253\u51FA\u65F6\u968F\u673A\u6211\u65B9\u5355\u4F4D+2\u653B\u51FB"
+  - type: 10
+    damage: 2
+    speed: 4
+    price: 2
+    description: 
+  - type: 11
+    damage: 0
+    speed: 3
+    price: 2
+    description: "\u4E0D\u4F1A\u548C\u5176\u4ED6\u5355\u4F4D\u76F8\u649E"
+  - type: 12
+    damage: 3
+    speed: 2
+    price: 3
+    description: 
+  - type: 13
+    damage: 2
+    speed: 6
+    price: 3
+    description: "\u4ED6\u5230\u8FBE\u7EC8\u70B9\u5F97\u5206+1"
+  - type: 14
+    damage: 1
+    speed: 2
+    price: 3
+    description: "\u524D\u65B9\u7684\u6211\u65B9\u5355\u4F4D+1\u653B\u51FB"
+  - type: 15
+    damage: 2
+    speed: 2
+    price: 3
+    description: "\u6218\u6597\u5F00\u59CB\u65F6\u968F\u673A\u51BB\u7ED33\u4E2A\u6211\u65B9\u5355\u4F4D"
+  - type: 16
+    damage: 2
+    speed: 3
+    price: 3
+    description: "\u540E\u65B9\u7684\u6211\u65B9\u5355\u4F4D+1\u653B\u51FB"
+  - type: 17
+    damage: 1
+    speed: 6
+    price: 3
+    description: "\u5BF9\u6218\u5F00\u59CB\u65F6\u590D\u5236\u5BF9\u9762\u653B\u51FB\u529B"
+  - type: 18
+    damage: 6
+    speed: 4
+    price: 4
+    description: 
+  - type: 19
+    damage: 3
+    speed: 7
+    price: 4
+    description: "\u5230\u8FBE\u7EC8\u70B9\u65F6\uFF0C\u56DE\u5230\u4E0B\u8DEF\u91CD\u65B0\u51FA\u53D1"
+  - type: 20
+    damage: 3
+    speed: 2
+    price: 4
+    description: "\u76F8\u90BB\u8DEF\u7EBF\u6211\u65B9\u5355\u4F4D+1\u901F"
+  - type: 23
+    damage: 5
+    speed: 1
+    price: 4
+    description: "\u6EA2\u51FA\u4F24\u5BB3\u4F1A\u5316\u4E3A\u653B\u51FB\u529B\u52A0\u6210\u8D4B\u4E88\u76F8\u90BB\u8DEF\u7EBF\u6211\u65B9\u5355\u4F4D"

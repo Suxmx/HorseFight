@@ -79,7 +79,7 @@ public class Horse : MonoBehaviour
         statusFactory = ServiceLocator.Get<StatusFactory>();
     }
 
-    private void ResetText()
+    public void ResetText()
     {
         attributeTransform = transform.Find("Texts");
         damageText = attributeTransform.Find("DamageText").GetComponent<TextMeshPro>();
