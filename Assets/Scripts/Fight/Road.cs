@@ -72,12 +72,22 @@ public class Road : MonoBehaviour
         if (CheckHit()|| stalemated)
         {
             HorseFight();
-            Debug.Log($"相撞时间{roadTimer.Time}");
+            // Debug.Log($"相撞时间{roadTimer.Time}");
         }
         
-        if(leftHorse.transform.position.x>rightPos.x||rightHorse.transform.position.x<leftPos.x )
+        if(leftHorse!=null&&leftHorse.transform.position.x>rightPos.x)
         {
             finish = true;
+            core.AddScore(Team.A,1);
+            Debug.Log("AWIN");
+            Debug.Log($"到达时间{roadTimer.Time}");
+        }
+
+        if (rightHorse!=null&&rightHorse.transform.position.x < leftPos.x)
+        {
+            finish = true;
+            Debug.Log("BWIN");
+            core.AddScore(Team.B,1);
             Debug.Log($"到达时间{roadTimer.Time}");
         }
     }
@@ -88,12 +98,12 @@ public class Road : MonoBehaviour
         if (finish) return;
         if(!stalemated)
         {
-            if (!leftHorse.HasStatus(EStatus.Die))
+            if (leftHorse!=null &&!leftHorse.HasStatus(EStatus.Die))
             {
                 leftHorse.transform.Translate(CalcVec(Team.A, dt, leftHorse.speed));
             }
 
-            if (!rightHorse.HasStatus(EStatus.Die))
+            if (rightHorse!=null&&!rightHorse.HasStatus(EStatus.Die))
             {
                 rightHorse.transform.Translate(CalcVec(Team.B, dt, rightHorse.speed));
             }
@@ -102,6 +112,7 @@ public class Road : MonoBehaviour
 
     private bool CheckHit()
     {
+        if (leftHorse == null || rightHorse == null) return false;
         return leftHorse.transform.position.x >= rightHorse.transform.position.x;
     }
 
@@ -111,14 +122,12 @@ public class Road : MonoBehaviour
         {
             rightHorse.LoseCG();
             stalemated = false;
-            Debug.Log("AWIN");
             return Team.A;
         }
         else if (leftHorse.damage < rightHorse.damage)
         {
             leftHorse.LoseCG();
             stalemated = false;
-            Debug.Log("BWIN");
             return Team.B;
         }
         else

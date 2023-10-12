@@ -7,12 +7,14 @@ using UnityEngine;
 public class PlayerInfo
 {
     public List<EHorse> ownHorses;
-    public PlayerInfo(int coins,Team team,Transform trans,TextMeshProUGUI text)
+    public PlayerInfo(int coins,Team team,Transform trans,TextMeshProUGUI coinText,TextMeshProUGUI scoreText)
     {
         this.team = team;
         this.coins = coins;
         this.trans = trans;
-        this.text = text;
+        this.coinText = coinText;
+        this.scoreText = scoreText;
+        scores = 0;
         ownHorses = new List<EHorse>();
     }
 
@@ -22,14 +24,26 @@ public class PlayerInfo
         set
         {
             coins = value;
-            string tmp = text.text;
-            text.text = tmp.Split(':')[0] + ":" + coins;
+            string tmp = coinText.text;
+            coinText.text = tmp.Split(':')[0] + ":" + coins;
         }
     }
-    public int scores;
+
+    public int Scores
+    {
+        get => scores;
+        set
+        {
+            scores = value;
+            scoreText.text = scores.ToString();
+        }
+    }
+    private int scores;
     public Team team;
     public Transform trans;
     
     private int coins;
-    private TextMeshProUGUI text;
+    private TextMeshProUGUI coinText;
+    private TextMeshProUGUI scoreText;
+
 }

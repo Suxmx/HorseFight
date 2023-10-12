@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using MyTimer;
 using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine.Serialization;
 
 public enum GameState
@@ -14,7 +15,7 @@ public enum GameState
     /// 购买马匹
     /// </summary>
     Shopping,
-    
+
     /// <summary>
     /// 进行对战
     /// </summary>
@@ -28,7 +29,7 @@ public class GameCore : Service
     public GameState currentState;
     public float curTime => gameTimer.Time;
 
-    private List<Road> roads;
+    private List<Road> roads= new List<Road>();
     private PlayerInfo playerA, playerB;
     private TimerOnly gameTimer;
     private ShopManager shop;
@@ -38,7 +39,6 @@ public class GameCore : Service
     {
         base.Awake();
         DontDestroyOnLoad(this);
-        
     }
 
     protected override void Start()
@@ -53,12 +53,15 @@ public class GameCore : Service
         playerDic = new Dictionary<Team, PlayerInfo>();
         shop = ServiceLocator.Get<ShopManager>();
         currentState = GameState.Shopping;
-        playerA = new PlayerInfo(10,Team.A,new GameObject("PlayerA").transform,shop.coinTextA);
-        playerB = new PlayerInfo(10,Team.B,new GameObject("PlayerB").transform,shop.coinTextB);
-        playerDic.Add(Team.A,playerA);
-        playerDic.Add(Team.B,playerB);
+        Transform scoreUI = GameObject.Find("UICanvas").transform.Find("ScoreUI");
+        TextMeshProUGUI aScoreText = scoreUI.Find("TeamABg/ScoreText").GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI bScoreText = scoreUI.Find("TeamBBg/ScoreText").GetComponent<TextMeshProUGUI>();
+        playerA = new PlayerInfo(10, Team.A, new GameObject("PlayerA").transform, shop.coinTextA, aScoreText);
+        playerB = new PlayerInfo(10, Team.B, new GameObject("PlayerB").transform, shop.coinTextB, bScoreText);
+        playerDic.Add(Team.A, playerA);
+        playerDic.Add(Team.B, playerB);
         roads = new List<Road>();
-        
+
         shop.SetPlayerInfo(playerDic);
     }
 
@@ -66,6 +69,7 @@ public class GameCore : Service
     {
         currentState = GameState.Fighting;
     }
+
     [Button("开始游戏")]
     public void StartFight()
     {
@@ -80,9 +84,8 @@ public class GameCore : Service
         OnFightStart.AddListener(road.OnStart);
     }
 
-    public void AddScore(Team team,int score)
+    public void AddScore(Team team, int score)
     {
-        
+        playerDic[team].Scores++;
     }
-    
 }
