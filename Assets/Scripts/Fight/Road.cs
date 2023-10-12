@@ -1,14 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using MyTimer;
 using Services;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class Road : MonoBehaviour
 {
     public float roadLength => rightPos.x - leftPos.x;
     public int num => Convert.ToInt32((name.Split("Road ")[1]));
-    public bool finish = false;
+    [LabelText("结束")]public bool finish = false;
+    [LabelText("僵持")]public bool stalemated=false;
+    [LabelText("是否开始")]public bool ifStart=false;
 
     private Vector2 leftPos => leftTrans.position;
     private Vector2 rightPos => rightTrans.position;
@@ -16,6 +20,7 @@ public class Road : MonoBehaviour
     [SerializeField]private Horse leftHorse, rightHorse;
     private GameCore core;
     private ShopManager shop;
+    private TimerOnly roadTimer;
     private float spriteSize;
 
     private float unitLength => roadLength / 20f;
@@ -25,6 +30,7 @@ public class Road : MonoBehaviour
     {
         leftTrans = transform.Find("LeftStart");
         rightTrans = transform.Find("RightStart");
+        roadTimer = new TimerOnly(true);
     }
 
     private void Start()
@@ -34,47 +40,63 @@ public class Road : MonoBehaviour
         core.RegisterRoad(this);
     }
 
-    /// <summary>
-    /// 计算移动后的向量
-    /// </summary>
-    /// <param name="dir">1代表左边的马,2代表右边</param>
-    /// <param name="t">当前游戏时间</param>
-    /// <param name="speed">马匹速度</param>
-    private Vector2 CalcPos(Team team, float t,int speed)
+    private void Update()
+    {
+        if (!ifStart) return;
+        LogicUpdate();
+    }
+
+    private void FixedUpdate()
+    {
+        if (!ifStart) return;
+        MoveHorses(Time.fixedDeltaTime);
+    }
+
+    private Vector2 CalcVec(Team team, float dt,int speed)
     {
         Vector2 dirVec = team == Team.A ? Vector2.right : Vector2.left;
-        Vector2 start = team == Team.A ? leftPos : rightPos;
-        return start + t * dirVec * unitLength*speed;
+        return  dirVec * (dt * unitLength * speed);
     }
 
     public void OnStart()
     {
-        // leftHorse.SetDir(Team.A);
-        // rightHorse.SetDir(Team.B);
+        ifStart = true;
+        roadTimer.Restart();
     }
 
-    public void LogicUpdate(float t)
+    public void LogicUpdate()
     {
         if (finish) return;
         //TODO: 添加马匹状态检测
-        if(!leftHorse.HasStatus(EStatus.Die))
-        {
-            leftHorse.transform.position = CalcPos(Team.A, t, leftHorse.speed);
-        }
-        if(!rightHorse.HasStatus(EStatus.Die))
-        {
-            rightHorse.transform.position = CalcPos(Team.B, t, rightHorse.speed);
-        }
-        if (CheckHit())
+        
+        if (CheckHit()|| stalemated)
         {
             HorseFight();
-            Debug.Log($"相撞时间{t}");
+            Debug.Log($"相撞时间{roadTimer.Time}");
         }
         
         if(leftHorse.transform.position.x>rightPos.x||rightHorse.transform.position.x<leftPos.x )
         {
             finish = true;
-            Debug.Log($"到达时间{t}");
+            Debug.Log($"到达时间{roadTimer.Time}");
+        }
+    }
+    
+
+    public void MoveHorses(float dt)
+    {
+        if (finish) return;
+        if(!stalemated)
+        {
+            if (!leftHorse.HasStatus(EStatus.Die))
+            {
+                leftHorse.transform.Translate(CalcVec(Team.A, dt, leftHorse.speed));
+            }
+
+            if (!rightHorse.HasStatus(EStatus.Die))
+            {
+                rightHorse.transform.Translate(CalcVec(Team.B, dt, rightHorse.speed));
+            }
         }
     }
 
@@ -88,16 +110,20 @@ public class Road : MonoBehaviour
         if (leftHorse.damage > rightHorse.damage)
         {
             rightHorse.LoseCG();
+            stalemated = false;
+            Debug.Log("AWIN");
             return Team.A;
         }
         else if (leftHorse.damage < rightHorse.damage)
         {
             leftHorse.LoseCG();
+            stalemated = false;
+            Debug.Log("BWIN");
             return Team.B;
         }
         else
         {
-            finish = true;
+            stalemated = true;
             return Team.None;
         }
     }

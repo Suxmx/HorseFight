@@ -14,12 +14,7 @@ public enum GameState
     /// 购买马匹
     /// </summary>
     Shopping,
-
-    /// <summary>
-    /// 放置马匹
-    /// </summary>
-    Putting,
-
+    
     /// <summary>
     /// 进行对战
     /// </summary>
@@ -59,7 +54,7 @@ public class GameCore : Service
         shop = ServiceLocator.Get<ShopManager>();
         currentState = GameState.Shopping;
         playerA = new PlayerInfo(10,Team.A,new GameObject("PlayerA").transform,shop.coinTextA);
-        playerB = new PlayerInfo(10,Team.B,new GameObject("PlayerA").transform,shop.coinTextB);
+        playerB = new PlayerInfo(10,Team.B,new GameObject("PlayerB").transform,shop.coinTextB);
         playerDic.Add(Team.A,playerA);
         playerDic.Add(Team.B,playerB);
         roads = new List<Road>();
@@ -67,11 +62,14 @@ public class GameCore : Service
         shop.SetPlayerInfo(playerDic);
     }
 
+    public void FightReady()
+    {
+        currentState = GameState.Fighting;
+    }
     [Button("开始游戏")]
     public void StartFight()
     {
         gameTimer = new TimerOnly(true);
-        gameTimer.OnTick += _ => { OnFightTick?.Invoke(gameTimer.Time); };
         OnFightStart?.Invoke();
         gameTimer.Restart();
     }
@@ -79,8 +77,12 @@ public class GameCore : Service
     public void RegisterRoad(Road road)
     {
         roads.Add(road);
-        OnFightTick.AddListener(road.LogicUpdate);
         OnFightStart.AddListener(road.OnStart);
+    }
+
+    public void AddScore(Team team,int score)
+    {
+        
     }
     
 }
