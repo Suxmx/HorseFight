@@ -11,10 +11,14 @@ public class ShopItem : MonoBehaviour
     
     private ShopManager manager;
     private HorseFactory horseFactory;
+    // Ù–‘œ‘ æ
     private Transform texts;
     private TextMeshProUGUI damageText;
     private TextMeshProUGUI speedText;
     private TextMeshProUGUI nameText;
+    //√Ë ˆ
+    private Transform descRoot;
+    private TextMeshProUGUI desctext;
 
     private void Awake()
     {
@@ -22,6 +26,10 @@ public class ShopItem : MonoBehaviour
         damageText = texts.Find("Damage").GetComponent<TextMeshProUGUI>();
         speedText = texts.Find("Speed").GetComponent<TextMeshProUGUI>();
         nameText = texts.Find("Name").GetComponent<TextMeshProUGUI>();
+        
+        descRoot = transform.Find("DescriptionRoot");
+        
+        
     }
 
     private void Start()
@@ -33,5 +41,11 @@ public class ShopItem : MonoBehaviour
         nameText.text = type.ToString();
         manager.RegisterItem(this);
         
+        descRoot.gameObject.SetActive(true);
+        desctext = descRoot.Find("DescBg").Find("DescText").GetComponent<TextMeshProUGUI>();
+        desctext.text = $"<size=135%>{type.ToString()}\n" + "<size=135%>\n" +
+                        $"<size=100%>{horseFactory.GetHorseDesc(type)}";
+        descRoot.gameObject.SetActive(false);
+
     }
 }
