@@ -62,6 +62,8 @@ public class Road : MonoBehaviour
     {
         ifStart = true;
         roadTimer.Restart();
+        leftHorse?.ShowSelf();
+        rightHorse?.ShowSelf();
     }
 
     public void LogicUpdate()
@@ -146,6 +148,7 @@ public class Road : MonoBehaviour
             horse.transform.position = leftPos;
             horse.SetPutMode(horse.horseTeam,false);
             horse.SetDir(horse.horseTeam);
+            horse.HideSelf();
             shop.NextRound();
             spriteSize = leftHorse.GetComponent<SpriteRenderer>().bounds.size.x;
         }
@@ -156,6 +159,7 @@ public class Road : MonoBehaviour
             horse.transform.position = rightPos;
             horse.SetPutMode(horse.horseTeam,false);
             horse.SetDir(horse.horseTeam);
+            horse.HideSelf();
             shop.NextRound();
             spriteSize = rightHorse.GetComponent<SpriteRenderer>().bounds.size.x;
         }

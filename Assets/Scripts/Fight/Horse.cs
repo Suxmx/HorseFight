@@ -59,10 +59,12 @@ public class Horse : MonoBehaviour
     private TextMeshPro damageText;
     private TextMeshPro speedText;
     private TextMeshPro nameText;
+    private SpriteRenderer iconSr;
     private Sprite backgroundL, backgroundR, backgroundM;
     private List<Status> statuses;
     private StatusFactory statusFactory;
     private bool beingPut = false;
+    private bool ifHiding = false;
 
     private void Awake()
     {
@@ -86,7 +88,7 @@ public class Horse : MonoBehaviour
             Vector3 mousePos = Input.mousePosition;
             Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 10f));
             transform.position = mouseWorldPos;
-            if(Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0))
             {
                 RaycastHit2D hit = Physics2D.Raycast(mouseWorldPos, Vector2.zero);
                 if (hit.collider != null)
@@ -105,6 +107,7 @@ public class Horse : MonoBehaviour
         damageText = attributeTransform.Find("DamageText").GetComponent<TextMeshPro>();
         speedText = attributeTransform.Find("SpeedText").GetComponent<TextMeshPro>();
         nameText = attributeTransform.Find("Name").GetComponent<TextMeshPro>();
+        iconSr = attributeTransform.Find("Image").GetComponent<SpriteRenderer>();
 
         damageText.text = damage.ToString();
         speedText.text = speed.ToString();
@@ -174,10 +177,67 @@ public class Horse : MonoBehaviour
         return true;
     }
 
-    public void SetPutMode(Team team,bool mode)
+    public void SetPutMode(Team team, bool mode)
     {
         if (mode == beingPut) return;
         horseTeam = team;
         beingPut = mode;
+    }
+
+    public void HideSelf()
+    {
+        if (ifHiding) return;
+        ifHiding = true;
+        StartCoroutine(IeChangeAlpha(false));
+    }
+
+    public void ShowSelf()
+    {
+        if (!ifHiding) return;
+        ifHiding = false;
+        StartCoroutine(IeChangeAlpha(true));
+    }
+
+    IEnumerator IeChangeAlpha(bool show)
+    {
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        for (int i = 1; i <= 15; i++)
+        {
+            //背景
+            var bGcolor = sr.color;
+            bGcolor = new Color(bGcolor.r, bGcolor.g, bGcolor.b, show ? 1f / 15f * i : 1 - 1f / 15f * i);
+            sr.color = bGcolor;
+            //名字与图标
+            var ncolor = iconSr.color;
+            ncolor = new Color(ncolor.r, ncolor.g, ncolor.b, show ? 1f / 15f * i : 1 - 1f / 15f * i);
+            iconSr.color = ncolor;
+            nameText.color = ncolor;
+            //攻击力文字
+            var dcolor = damageText.color;
+            dcolor = new Color(dcolor.r, dcolor.g, dcolor.b, show ? 1f / 15f * i : 1 - 1f / 15f * i);
+            damageText.color = dcolor;
+            //速度文字
+            var scolor = speedText.color;
+            scolor = new Color(scolor.r, scolor.g, scolor.b, show ? 1f / 15f * i : 1 - 1f / 15f * i);
+            speedText.color = scolor;
+            yield return new WaitForFixedUpdate();
+        }
+
+        var bgc = sr.color;
+        bgc = new Color(bgc.r, bgc.g, bgc.b, show ? 1 : 0);
+        sr.color = bgc;
+        //名字与图标
+        var c = iconSr.color;
+        c = new Color(c.r, c.g, c.b, show ? 1 : 0);
+        iconSr.color = c;
+        nameText.color = c;
+        //攻击力文字
+        var dc = damageText.color;
+        dc = new Color(dc.r, dc.g, dc.b, show ? 1 : 0);
+        damageText.color = dc;
+        //速度文字
+        var sc = speedText.color;
+        sc = new Color(sc.r, sc.g, sc.b, show ? 1 : 0);
+        speedText.color = sc;
     }
 }
