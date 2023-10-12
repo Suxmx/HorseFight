@@ -30,7 +30,6 @@ public class Road : MonoBehaviour
     {
         core = ServiceLocator.Get<GameCore>();
         core.RegisterRoad(this);
-        spriteSize = leftHorse.GetComponent<SpriteRenderer>().bounds.size.x;
     }
 
     /// <summary>
@@ -48,8 +47,8 @@ public class Road : MonoBehaviour
 
     public void OnStart()
     {
-        leftHorse.SetDir(Team.A);
-        rightHorse.SetDir(Team.B);
+        // leftHorse.SetDir(Team.A);
+        // rightHorse.SetDir(Team.B);
     }
 
     public void LogicUpdate(float t)
@@ -98,5 +97,28 @@ public class Road : MonoBehaviour
         {
             return Team.None;
         }
+    }
+
+    public void SetHorse(Horse horse)
+    {
+        if (horse.horseTeam == Team.A)
+        {
+            if(leftHorse!=null)return;
+            leftHorse = horse;
+            horse.transform.position = leftPos;
+            horse.SetPutMode(horse.horseTeam,false);
+            horse.SetDir(horse.horseTeam);
+            spriteSize = leftHorse.GetComponent<SpriteRenderer>().bounds.size.x;
+        }
+        else if (horse.horseTeam == Team.B)
+        {
+            if(rightHorse!=null)return;
+            rightHorse = horse;
+            horse.transform.position = rightPos;
+            horse.SetPutMode(horse.horseTeam,false);
+            horse.SetDir(horse.horseTeam);
+            spriteSize = leftHorse.GetComponent<SpriteRenderer>().bounds.size.x;
+        }
+        
     }
 }

@@ -51,8 +51,7 @@ public class Horse : MonoBehaviour
     [OnValueChanged(nameof(ResetText))] public int speed;
     [OnValueChanged(nameof(ResetText))] public int damage;
     [OnValueChanged(nameof(ResetText))] public int price;
-    [Header("面板")]
-    public Team horseTeam=Team.None;
+    [Header("面板")] public Team horseTeam = Team.None;
     [NonSerialized] public Skill skill;
 
 
@@ -60,9 +59,10 @@ public class Horse : MonoBehaviour
     private TextMeshPro damageText;
     private TextMeshPro speedText;
     private TextMeshPro nameText;
-    private Sprite backgroundL, backgroundR,backgroundM;
+    private Sprite backgroundL, backgroundR, backgroundM;
     private List<Status> statuses;
     private StatusFactory statusFactory;
+    private bool beingPut = false;
 
     private void Awake()
     {
@@ -77,6 +77,26 @@ public class Horse : MonoBehaviour
     private void Start()
     {
         statusFactory = ServiceLocator.Get<StatusFactory>();
+    }
+
+    private void Update()
+    {
+        if (beingPut)
+        {
+            Vector3 mousePos = Input.mousePosition;
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 10f));
+            transform.position = mouseWorldPos;
+            if(Input.GetMouseButtonDown(0))
+            {
+                RaycastHit2D hit = Physics2D.Raycast(mouseWorldPos, Vector2.zero);
+                if (hit.collider != null)
+                {
+                    if ((horseTeam == Team.A && hit.transform.name[0] == 'R') ||
+                        (horseTeam == Team.B && hit.transform.name[0] == 'L')) return;
+                    hit.transform.parent.GetComponent<Road>().SetHorse(this);
+                }
+            }
+        }
     }
 
     public void ResetText()
@@ -130,8 +150,8 @@ public class Horse : MonoBehaviour
         Vector2 flyVec = horseTeam == Team.A ? new Vector2(-1, 1) : new Vector2(1, 1);
         for (int i = 1; i <= 30; i++)
         {
-            transform.Rotate(0,0,rotate);
-            tmpParent.Translate(flyVec*0.3f);
+            transform.Rotate(0, 0, rotate);
+            tmpParent.Translate(flyVec * 0.3f);
             yield return new WaitForFixedUpdate();
         }
     }
@@ -154,4 +174,10 @@ public class Horse : MonoBehaviour
         return true;
     }
 
+    public void SetPutMode(Team team,bool mode)
+    {
+        if (mode == beingPut) return;
+        horseTeam = team;
+        beingPut = mode;
+    }
 }

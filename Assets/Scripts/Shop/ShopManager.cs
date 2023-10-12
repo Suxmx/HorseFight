@@ -122,9 +122,9 @@ public class ShopManager : Service,IPointerExitHandler
         Debug.Log($"{curTeam}购买{item.type}成功,剩余金币{playerDic[curTeam].coins}");
         Transform gainItem= Instantiate(horseFactory.GetHorseObj(item.type), playerDic[curTeam].trans).transform;
         Vector3 mousePosition = Input.mousePosition;
-        Debug.Log(mousePosition);
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, 10f));
         gainItem.position = worldPosition;
+        gainItem.GetComponent<Horse>().SetPutMode(curTeam,true);
         HideShop();
     }
 }
