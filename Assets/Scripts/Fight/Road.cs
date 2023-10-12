@@ -159,10 +159,15 @@ public class Road : MonoBehaviour
             horse.transform.position = rightPos;
             horse.SetPutMode(horse.horseTeam,false);
             horse.SetDir(horse.horseTeam);
-            horse.HideSelf();
             shop.NextRound();
             spriteSize = rightHorse.GetComponent<SpriteRenderer>().bounds.size.x;
         }
         
+    }
+
+    public void ShowHorses()
+    {
+        leftHorse?.ShowSelf();
+        rightHorse?.ShowSelf();
     }
 }

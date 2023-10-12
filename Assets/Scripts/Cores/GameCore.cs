@@ -39,6 +39,7 @@ public class GameCore : Service
     {
         base.Awake();
         DontDestroyOnLoad(this);
+        
     }
 
     protected override void Start()
@@ -60,9 +61,14 @@ public class GameCore : Service
         playerB = new PlayerInfo(10, Team.B, new GameObject("PlayerB").transform, shop.coinTextB, bScoreText);
         playerDic.Add(Team.A, playerA);
         playerDic.Add(Team.B, playerB);
-        roads = new List<Road>();
 
         shop.SetPlayerInfo(playerDic);
+    }
+
+    private void ResetGame()
+    {
+        roads = new List<Road>();
+        InitGame();
     }
 
     public void FightReady()
@@ -87,5 +93,15 @@ public class GameCore : Service
     public void AddScore(Team team, int score)
     {
         playerDic[team].Scores++;
+    }
+
+    public void ShowAllHorses()
+    {
+        Debug.Log(roads.Count);
+        foreach (var road in roads)
+        {
+            Debug.Log(road.name);
+            road.ShowHorses();
+        }
     }
 }

@@ -159,6 +159,8 @@ public class ShopManager : Service, IPointerExitHandler
     public void NextRound()
     {
         ResetButton();
+        Team nextTeam = curTeam == Team.A ? Team.B : Team.A;
+        if (curTeam == Team.B) core.ShowAllHorses();
         if ((playerDic[Team.A].ownHorses.Count == 5 || playerDic[Team.A].Coins == 0) &&
             (playerDic[Team.B].ownHorses.Count == 5 || playerDic[Team.B].Coins == 0))
         {
@@ -168,7 +170,6 @@ public class ShopManager : Service, IPointerExitHandler
             return;
         }
 
-        Team nextTeam = curTeam == Team.A ? Team.B : Team.A;
         if (!(playerDic[nextTeam].ownHorses.Count == 5 || playerDic[nextTeam].Coins == 0))
             curTeam = nextTeam;
     }

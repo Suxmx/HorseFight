@@ -193,6 +193,7 @@ public class Horse : MonoBehaviour
 
     public void ShowSelf()
     {
+        Debug.Log("show");
         if (!ifHiding) return;
         ifHiding = false;
         StartCoroutine(IeChangeAlpha(true));
