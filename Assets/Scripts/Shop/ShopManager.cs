@@ -169,7 +169,7 @@ public class ShopManager : Service, IPointerExitHandler
             RecoveryCoinText();
             core.ShowAllHorses();
             
-            core.StartFight();
+            core.FightReady();
             return;
         }
 

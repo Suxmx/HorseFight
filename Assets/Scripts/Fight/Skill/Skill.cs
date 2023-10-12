@@ -9,15 +9,15 @@ public class Skill: MonoBehaviour
 
     protected Horse owner;
     protected TimerOnly skillTimer;
-    protected StatusFactory factory;
+    protected GameCore core;
 
     private void Start()
     {
-        factory = ServiceLocator.Get<StatusFactory>();
+        core = ServiceLocator.Get<GameCore>();
     }
 
     public virtual void OnStart(){}
-    public virtual void TeamBuff(){}
+    public virtual void TickCheck(){}
     public virtual void OnDeath(){}
     public virtual void TimeBuff(){}
     public virtual void OnKill(){}

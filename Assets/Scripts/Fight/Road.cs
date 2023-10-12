@@ -10,14 +10,14 @@ public class Road : MonoBehaviour
 {
     public float roadLength => rightPos.x - leftPos.x;
     public int num => Convert.ToInt32((name.Split("Road ")[1]));
-    [LabelText("结束")]public bool finish = false;
-    [LabelText("僵持")]public bool stalemated=false;
-    [LabelText("是否开始")]public bool ifStart=false;
+    [LabelText("结束")] public bool finish = false;
+    [LabelText("僵持")] public bool stalemated = false;
+    [LabelText("是否开始")] public bool ifStart = false;
 
     private Vector2 leftPos => leftTrans.position;
     private Vector2 rightPos => rightTrans.position;
     private Transform leftTrans, rightTrans;
-    [SerializeField]private Horse leftHorse, rightHorse;
+    [SerializeField] private Horse leftHorse, rightHorse;
     private GameCore core;
     private ShopManager shop;
     private TimerOnly roadTimer;
@@ -52,60 +52,95 @@ public class Road : MonoBehaviour
         MoveHorses(Time.fixedDeltaTime);
     }
 
-    private Vector2 CalcVec(Team team, float dt,int speed)
+    private Vector2 CalcVec(Team team, float dt, int speed)
     {
         Vector2 dirVec = team == Team.A ? Vector2.right : Vector2.left;
-        return  dirVec * (dt * unitLength * speed);
+        return dirVec * (dt * unitLength * speed);
     }
 
     public void OnStart()
     {
         ifStart = true;
         roadTimer.Restart();
-        leftHorse?.ShowSelf();
-        rightHorse?.ShowSelf();
+        //释放开场技能
+        if (!leftHorse || !rightHorse)
+        {
+            leftHorse?.skill.OnStart();
+            rightHorse?.skill.OnStart();
+        }
+        else if (leftHorse.type == EHorse.沉默者 && !rightHorse.skill.onStartSilentAble)
+        {
+            rightHorse.skill.OnStart();
+        }
+        else if (rightHorse.type == EHorse.沉默者 && !leftHorse.skill.onStartSilentAble)
+        {
+            leftHorse.skill.OnStart();
+        }
+        else
+        {
+            leftHorse.skill.OnStart();
+            rightHorse.skill.OnStart();
+        }
     }
 
     public void LogicUpdate()
     {
         if (finish) return;
-        //TODO: 添加马匹状态检测
-        
-        if (CheckHit()|| stalemated)
+        ClearTempStatus();
+        TickSkill();
+        CalcAttribute();
+        if (CheckHit() || stalemated)
         {
             HorseFight();
             // Debug.Log($"相撞时间{roadTimer.Time}");
         }
-        
-        if(leftHorse!=null&&leftHorse.transform.position.x>rightPos.x)
+
+        if (leftHorse != null && leftHorse.transform.position.x > rightPos.x)
         {
             finish = true;
-            core.AddScore(Team.A,1);
+            core.AddScore(Team.A, 1);
             Debug.Log("AWIN");
             Debug.Log($"到达时间{roadTimer.Time}");
         }
 
-        if (rightHorse!=null&&rightHorse.transform.position.x < leftPos.x)
+        if (rightHorse != null && rightHorse.transform.position.x < leftPos.x)
         {
             finish = true;
             Debug.Log("BWIN");
-            core.AddScore(Team.B,1);
+            core.AddScore(Team.B, 1);
             Debug.Log($"到达时间{roadTimer.Time}");
         }
     }
-    
+
+    private void ClearTempStatus()
+    {
+        leftHorse?.ClearStatus();
+        rightHorse?.ClearStatus();
+    }
+
+    private void CalcAttribute()
+    {
+        leftHorse?.CalcDamageAndSpeed();
+        rightHorse?.CalcDamageAndSpeed();
+    }
+
+    private void TickSkill()
+    {
+        
+    }
+
 
     public void MoveHorses(float dt)
     {
         if (finish) return;
-        if(!stalemated)
+        if (!stalemated)
         {
-            if (leftHorse!=null &&!leftHorse.HasStatus(EStatus.Die))
+            if (leftHorse != null && !leftHorse.HasStatus(EStatus.Die))
             {
                 leftHorse.transform.Translate(CalcVec(Team.A, dt, leftHorse.speed));
             }
 
-            if (rightHorse!=null&&!rightHorse.HasStatus(EStatus.Die))
+            if (rightHorse != null && !rightHorse.HasStatus(EStatus.Die))
             {
                 rightHorse.transform.Translate(CalcVec(Team.B, dt, rightHorse.speed));
             }
@@ -143,10 +178,11 @@ public class Road : MonoBehaviour
     {
         if (horse.horseTeam == Team.A)
         {
-            if(leftHorse!=null)return;
+            if (leftHorse != null) return;
             leftHorse = horse;
+            horse.locateRoad = this;
             horse.transform.position = leftPos;
-            horse.SetPutMode(horse.horseTeam,false);
+            horse.SetPutMode(horse.horseTeam, false);
             horse.SetDir(horse.horseTeam);
             horse.HideSelf();
             shop.SetCoinTextUnknown(horse.price);
@@ -155,15 +191,15 @@ public class Road : MonoBehaviour
         }
         else if (horse.horseTeam == Team.B)
         {
-            if(rightHorse!=null)return;
+            if (rightHorse != null) return;
+            horse.locateRoad = this;
             rightHorse = horse;
             horse.transform.position = rightPos;
-            horse.SetPutMode(horse.horseTeam,false);
+            horse.SetPutMode(horse.horseTeam, false);
             horse.SetDir(horse.horseTeam);
             shop.NextRound();
             spriteSize = rightHorse.GetComponent<SpriteRenderer>().bounds.size.x;
         }
-        
     }
 
     public void ShowHorses()

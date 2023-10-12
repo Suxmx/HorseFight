@@ -48,11 +48,12 @@ public class Horse : MonoBehaviour
     [Header("属性"), OnValueChanged(nameof(ResetText))]
     public EHorse type;
 
-    public int speed;
-    public int damage;
+    [OnValueChanged(nameof(ResetText))] public int speed;
+    [OnValueChanged(nameof(ResetText))] public int damage;
     public int price;
     [Header("面板")] public Team horseTeam = Team.None;
     [NonSerialized] public Skill skill;
+    public Road locateRoad;
 
 
     private Transform attributeTransform;
@@ -61,11 +62,11 @@ public class Horse : MonoBehaviour
     private TextMeshPro nameText;
     private SpriteRenderer iconSr;
     private Sprite backgroundL, backgroundR, backgroundM;
-    private List<Status> statuses;
+    [LabelText("词条"), SerializeField] private List<Status> statuses;
     private StatusFactory statusFactory;
     private bool beingPut = false;
     private bool ifHiding = false;
-    private int oriDamage;//初始攻击力
+    private int oriDamage; //初始攻击力
     private int oriSpeed;
 
     private void Awake()
@@ -107,11 +108,16 @@ public class Horse : MonoBehaviour
 
     public void ResetText()
     {
-        attributeTransform = transform.Find("Texts");
-        damageText = attributeTransform.Find("DamageText").GetComponent<TextMeshPro>();
-        speedText = attributeTransform.Find("SpeedText").GetComponent<TextMeshPro>();
-        nameText = attributeTransform.Find("Name").GetComponent<TextMeshPro>();
-        iconSr = attributeTransform.Find("Image").GetComponent<SpriteRenderer>();
+        if (!attributeTransform)
+            attributeTransform = transform.Find("Texts");
+        if (!damageText)
+            damageText = attributeTransform.Find("DamageText").GetComponent<TextMeshPro>();
+        if (!speedText)
+            speedText = attributeTransform.Find("SpeedText").GetComponent<TextMeshPro>();
+        if (!nameText)
+            nameText = attributeTransform.Find("Name").GetComponent<TextMeshPro>();
+        if (!iconSr)
+            iconSr = attributeTransform.Find("Image").GetComponent<SpriteRenderer>();
 
         damageText.text = damage.ToString();
         speedText.text = speed.ToString();
@@ -167,7 +173,7 @@ public class Horse : MonoBehaviour
     {
         foreach (var status in statuses)
         {
-            if (status.StatusTag == tag)
+            if (status.statusTag == tag)
                 return true;
         }
 
@@ -181,12 +187,32 @@ public class Horse : MonoBehaviour
         return true;
     }
 
+    public void ClearStatus()
+    {
+        statuses.RemoveAll(status => status.ifTmp);
+    }
+
+    public void CalcDamageAndSpeed()
+    {
+        int tmpD=oriDamage, tmpS=oriSpeed;
+        foreach (var status in statuses)
+        {
+            tmpD += status.damageBuffer;
+            tmpS += status.speedBuffer;
+        }
+        damage = tmpD;
+        speed = tmpS;
+        ResetText();
+    }
+
     public void SetPutMode(Team team, bool mode)
     {
         if (mode == beingPut) return;
         horseTeam = team;
         beingPut = mode;
     }
+
+    #region 隐藏动画
 
     public void HideSelf()
     {
@@ -197,7 +223,6 @@ public class Horse : MonoBehaviour
 
     public void ShowSelf()
     {
-        Debug.Log("show");
         if (!ifHiding) return;
         ifHiding = false;
         StartCoroutine(IeChangeAlpha(true));
@@ -245,4 +270,6 @@ public class Horse : MonoBehaviour
         sc = new Color(sc.r, sc.g, sc.b, show ? 1 : 0);
         speedText.color = sc;
     }
+
+    #endregion
 }

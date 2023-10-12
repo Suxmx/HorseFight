@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Services;
 using UnityEngine;
 using UnityEngine.Events;
@@ -74,6 +75,7 @@ public class GameCore : Service
     public void FightReady()
     {
         currentState = GameState.Fighting;
+        roads = roads.OrderBy(road => road.gameObject.name).ToList();
     }
 
     [Button("开始游戏")]
@@ -100,8 +102,12 @@ public class GameCore : Service
         Debug.Log(roads.Count);
         foreach (var road in roads)
         {
-            Debug.Log(road.name);
             road.ShowHorses();
         }
+    }
+
+    public List<Road> GetRoadList()
+    {
+        return roads;
     }
 }
