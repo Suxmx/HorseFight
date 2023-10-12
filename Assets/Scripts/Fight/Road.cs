@@ -15,6 +15,7 @@ public class Road : MonoBehaviour
     private Transform leftTrans, rightTrans;
     [SerializeField]private Horse leftHorse, rightHorse;
     private GameCore core;
+    private ShopManager shop;
     private float spriteSize;
 
     private float unitLength => roadLength / 20f;
@@ -29,6 +30,7 @@ public class Road : MonoBehaviour
     private void Start()
     {
         core = ServiceLocator.Get<GameCore>();
+        shop = ServiceLocator.Get<ShopManager>();
         core.RegisterRoad(this);
     }
 
@@ -108,6 +110,7 @@ public class Road : MonoBehaviour
             horse.transform.position = leftPos;
             horse.SetPutMode(horse.horseTeam,false);
             horse.SetDir(horse.horseTeam);
+            shop.ResetButton();
             spriteSize = leftHorse.GetComponent<SpriteRenderer>().bounds.size.x;
         }
         else if (horse.horseTeam == Team.B)
@@ -117,6 +120,7 @@ public class Road : MonoBehaviour
             horse.transform.position = rightPos;
             horse.SetPutMode(horse.horseTeam,false);
             horse.SetDir(horse.horseTeam);
+            shop.ResetButton();
             spriteSize = leftHorse.GetComponent<SpriteRenderer>().bounds.size.x;
         }
         

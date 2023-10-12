@@ -5,6 +5,7 @@ using Services;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class ShopItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,IPointerClickHandler
 {
@@ -21,6 +22,7 @@ public class ShopItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,I
     //√Ë ˆ
     private Transform descRoot;
     private TextMeshProUGUI desctext;
+    private Horse tmpBoughtItem;
 
     private void Awake()
     {
@@ -68,4 +70,6 @@ public class ShopItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,I
     {
         manager.ShopRequest(this);
     }
+
+    
 }
