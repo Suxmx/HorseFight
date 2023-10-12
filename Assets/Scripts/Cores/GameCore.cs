@@ -14,21 +14,25 @@ public enum GameState
     /// 购买马匹
     /// </summary>
     Shopping,
+
     /// <summary>
     /// 放置马匹
     /// </summary>
     Putting,
+
     /// <summary>
     /// 进行对战
     /// </summary>
     Fighting
 }
+
 public class GameCore : Service
 {
     public UnityEvent<float> OnFightTick;
+    public UnityEvent OnFightStart;
     public GameState currentState;
-    public float curTime=>gameTimer.Time;
-    
+    public float curTime => gameTimer.Time;
+
     private List<Road> roads;
     private PlayerInfo playerA, playerB;
     private TimerOnly gameTimer;
@@ -37,36 +41,37 @@ public class GameCore : Service
     {
         base.Awake();
         DontDestroyOnLoad(this);
-        
-        
+        InitGame();
     }
 
     protected override void Start()
     {
         base.Start();
-        RestartGame();
     }
 
-    public void RestartGame()
-    {
-        gameTimer = new TimerOnly(true);
-        gameTimer.OnTick += _ => { OnFightTick?.Invoke(gameTimer.Time);};
 
+    private void InitGame()
+    {
         currentState = GameState.Shopping;
         playerA = new PlayerInfo(10);
         playerB = new PlayerInfo(10);
         roads = new List<Road>();
-        for (int i = 1; i <= 5; i++)
-        {
-            string roadName = "Road " + i;
-            roads.Add(GameObject.Find(roadName).GetComponent<Road>());
-            OnFightTick.AddListener(roads[i-1].LogicUpdate);
-        }
     }
+
     [Button("开始游戏")]
-    public void FightStart()
+    public void StartFight()
     {
+        gameTimer = new TimerOnly(true);
+        gameTimer.OnTick += _ => { OnFightTick?.Invoke(gameTimer.Time); };
+        OnFightStart?.Invoke();
         gameTimer.Restart();
     }
 
+    public void RegisterRoad(Road road)
+    {
+        roads.Add(road);
+        OnFightTick.AddListener(road.LogicUpdate);
+        OnFightStart.AddListener(road.OnStart);
+    }
+    
 }
