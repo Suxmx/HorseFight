@@ -96,8 +96,6 @@ public class Road : MonoBehaviour
         }
         else
         {
-            rightHorse.LoseCG();
-            leftHorse.LoseCG();
             return Team.None;
         }
     }

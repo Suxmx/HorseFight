@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Services;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ShopManager : MonoBehaviour,IPointerExitHandler
+public class ShopManager : Service,IPointerExitHandler
 {
     public GameObject panelObj;
     public float aniTime = 0.2f;
@@ -13,17 +14,20 @@ public class ShopManager : MonoBehaviour,IPointerExitHandler
     private bool ifShow;
     private bool ifAnim=false;//防止协程多次被开始
     private RectTransform panelRect;
+    private List<ShopItem> shopItems;
 
     private int loopTimes;
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         panelRect = panelObj.GetComponent<RectTransform>();
         height = panelRect.sizeDelta.y;
         ifShow = panelRect.anchoredPosition.y > -100;
 
         loopTimes = (int)(aniTime / 0.02f);
+        shopItems = new List<ShopItem>();
     }
-
+# region 商店动画
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -81,5 +85,11 @@ public class ShopManager : MonoBehaviour,IPointerExitHandler
     public void OnPointerExit(PointerEventData eventData)
     {
         HideShop();
+    }
+    #endregion
+
+    public void RegisterItem(ShopItem item)
+    {
+        shopItems.Add(item);
     }
 }
