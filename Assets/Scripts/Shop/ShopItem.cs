@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using Services;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class ShopItem : MonoBehaviour
+public class ShopItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
 {
     public EHorse type;
     
@@ -40,12 +41,24 @@ public class ShopItem : MonoBehaviour
         speedText.text = horseFactory.GetHorseSpeed(type).ToString();
         nameText.text = type.ToString();
         manager.RegisterItem(this);
-        
+
+        string desc = horseFactory.GetHorseDesc(type);
+        desc = string.IsNullOrEmpty(desc) ? "无特殊技能" : desc;
         descRoot.gameObject.SetActive(true);
         desctext = descRoot.Find("DescBg").Find("DescText").GetComponent<TextMeshProUGUI>();
-        desctext.text = $"<size=135%>{type.ToString()}\n" + "<size=135%>\n" +
-                        $"<size=100%>{horseFactory.GetHorseDesc(type)}";
+        desctext.text = $"<size=135%>{type.ToString()}\n" + "<size=30%>\n" +
+                        $"<size=100%>{desc}";
         descRoot.gameObject.SetActive(false);
 
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        descRoot.gameObject.SetActive(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        descRoot.gameObject.SetActive(false);
     }
 }
