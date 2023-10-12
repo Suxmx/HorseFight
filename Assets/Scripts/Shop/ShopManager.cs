@@ -13,16 +13,21 @@ public class ShopManager : Service, IPointerExitHandler
 
     private float height;
     private bool ifShow;
+
     private bool ifAnim = false; //防止协程多次被开始
+
+    //子物体
     private RectTransform panelRect;
+    private GameObject panelObj;
     private Button openButton;
     private TextMeshProUGUI openButtonText;
-    private GameObject panelObj;
+    [NonSerialized] public TextMeshProUGUI coinTextA, coinTextB;
+
     private List<ShopItem> shopItems;
     private Dictionary<Team, PlayerInfo> playerDic;
-    private PlayerInfo playerA, playerB;
     private Team curTeam = Team.A; //当前正在购买的对象
     private HorseFactory horseFactory;
+    private GameCore core;
 
     private int loopTimes;
 
@@ -32,9 +37,11 @@ public class ShopManager : Service, IPointerExitHandler
         panelObj = transform.Find("ShopPanel").gameObject;
         openButton = transform.Find("ShopButton").GetComponent<Button>();
         openButtonText = openButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+        coinTextA = openButton.transform.Find("PlayerACoins/Text").GetComponent<TextMeshProUGUI>();
+        coinTextB = openButton.transform.Find("PlayerBCoins/Text").GetComponent<TextMeshProUGUI>();
         panelRect = panelObj.GetComponent<RectTransform>();
         height = panelRect.sizeDelta.y;
-        ifShow = panelRect.anchoredPosition.y > -100;
+        ifShow = false;
 
         loopTimes = (int)(aniTime / 0.02f);
         shopItems = new List<ShopItem>();
@@ -44,21 +51,10 @@ public class ShopManager : Service, IPointerExitHandler
     {
         base.Start();
         horseFactory = ServiceLocator.Get<HorseFactory>();
+        core = ServiceLocator.Get<GameCore>();
     }
 
     # region 商店动画
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            ShowShop();
-        }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            HideShop();
-        }
-    }
 
     public void ShowShop()
     {
@@ -121,39 +117,59 @@ public class ShopManager : Service, IPointerExitHandler
 
     public void ShopRequest(ShopItem item)
     {
-        if (playerDic[curTeam].coins < item.price)
+        if (!ifShow) return;
+        if (playerDic[curTeam].Coins < item.price)
         {
-            Debug.LogWarning($"购买{item.type}失败,{curTeam}所持有金币:{playerDic[curTeam].coins},目标价格:{item.price}");
+            Debug.LogWarning($"购买{item.type}失败,{curTeam}所持有金币:{playerDic[curTeam].Coins},目标价格:{item.price}");
             return;
         }
 
-        playerDic[curTeam].coins -= item.price;
+        //购买
+        playerDic[curTeam].Coins -= item.price;
         playerDic[curTeam].ownHorses.Add(item.type);
-        Debug.Log($"{curTeam}购买{item.type}成功,剩余金币{playerDic[curTeam].coins}");
+        Debug.Log($"{curTeam}购买{item.type}成功,剩余金币{playerDic[curTeam].Coins}");
         Transform gainItem = Instantiate(horseFactory.GetHorseObj(item.type), playerDic[curTeam].trans).transform;
         Vector3 mousePosition = Input.mousePosition;
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, 10f));
         gainItem.position = worldPosition;
         gainItem.GetComponent<Horse>().SetPutMode(curTeam, true);
+        //撤回
         openButtonText.text = "撤回并打开商店";
         openButton.onClick.AddListener(() =>
         {
             Destroy(gainItem.gameObject);
-            playerDic[curTeam].coins += item.price;
+            playerDic[curTeam].Coins += item.price;
             playerDic[curTeam].ownHorses.Remove(item.type);
             ResetButton();
-            Debug.Log($"{curTeam}撤回{item.type}成功,剩余金币{playerDic[curTeam].coins}");
+            Debug.Log($"{curTeam}撤回{item.type}成功,剩余金币{playerDic[curTeam].Coins}");
         });
-        // Action tmp = () => { playerDic[curTeam].coins += item.price;};
         HideShop();
     }
-/// <summary>
-/// 因为简单粗暴的撤回方式 所以要重新设置一下打开商店的按钮
-/// </summary>
-    public void ResetButton()
+
+    /// <summary>
+    /// 因为简单粗暴的撤回方式 所以要重新设置一下打开商店的按钮
+    /// </summary>
+    private void ResetButton()
     {
         openButton.onClick.RemoveAllListeners();
         openButton.onClick.AddListener(ShowShop);
         openButtonText.text = "商店";
+    }
+
+    public void NextRound()
+    {
+        ResetButton();
+        if ((playerDic[Team.A].ownHorses.Count == 5 || playerDic[Team.A].Coins == 0) &&
+            (playerDic[Team.B].ownHorses.Count == 5 || playerDic[Team.B].Coins == 0))
+        {
+            //TODO:进入对战阶段
+            Debug.LogWarning("进入对战阶段");
+            core.StartFight();
+            return;
+        }
+
+        Team nextTeam = curTeam == Team.A ? Team.B : Team.A;
+        if (!(playerDic[nextTeam].ownHorses.Count == 5 || playerDic[nextTeam].Coins == 0))
+            curTeam = nextTeam;
     }
 }

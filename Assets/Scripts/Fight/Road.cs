@@ -97,6 +97,7 @@ public class Road : MonoBehaviour
         }
         else
         {
+            finish = true;
             return Team.None;
         }
     }
@@ -110,7 +111,7 @@ public class Road : MonoBehaviour
             horse.transform.position = leftPos;
             horse.SetPutMode(horse.horseTeam,false);
             horse.SetDir(horse.horseTeam);
-            shop.ResetButton();
+            shop.NextRound();
             spriteSize = leftHorse.GetComponent<SpriteRenderer>().bounds.size.x;
         }
         else if (horse.horseTeam == Team.B)
@@ -120,8 +121,8 @@ public class Road : MonoBehaviour
             horse.transform.position = rightPos;
             horse.SetPutMode(horse.horseTeam,false);
             horse.SetDir(horse.horseTeam);
-            shop.ResetButton();
-            spriteSize = leftHorse.GetComponent<SpriteRenderer>().bounds.size.x;
+            shop.NextRound();
+            spriteSize = rightHorse.GetComponent<SpriteRenderer>().bounds.size.x;
         }
         
     }

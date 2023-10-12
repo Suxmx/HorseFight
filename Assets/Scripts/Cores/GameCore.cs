@@ -58,8 +58,8 @@ public class GameCore : Service
         playerDic = new Dictionary<Team, PlayerInfo>();
         shop = ServiceLocator.Get<ShopManager>();
         currentState = GameState.Shopping;
-        playerA = new PlayerInfo(10,Team.A,new GameObject("PlayerA").transform);
-        playerB = new PlayerInfo(10,Team.B,new GameObject("PlayerA").transform);
+        playerA = new PlayerInfo(10,Team.A,new GameObject("PlayerA").transform,shop.coinTextA);
+        playerB = new PlayerInfo(10,Team.B,new GameObject("PlayerA").transform,shop.coinTextB);
         playerDic.Add(Team.A,playerA);
         playerDic.Add(Team.B,playerB);
         roads = new List<Road>();
