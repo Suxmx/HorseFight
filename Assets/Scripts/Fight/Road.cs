@@ -149,6 +149,7 @@ public class Road : MonoBehaviour
             horse.SetPutMode(horse.horseTeam,false);
             horse.SetDir(horse.horseTeam);
             horse.HideSelf();
+            shop.SetCoinTextUnknown(horse.price);
             shop.NextRound();
             spriteSize = leftHorse.GetComponent<SpriteRenderer>().bounds.size.x;
         }

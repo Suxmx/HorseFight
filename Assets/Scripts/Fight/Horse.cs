@@ -48,9 +48,9 @@ public class Horse : MonoBehaviour
     [Header("属性"), OnValueChanged(nameof(ResetText))]
     public EHorse type;
 
-    [OnValueChanged(nameof(ResetText))] public int speed;
-    [OnValueChanged(nameof(ResetText))] public int damage;
-    [OnValueChanged(nameof(ResetText))] public int price;
+    public int speed;
+    public int damage;
+    public int price;
     [Header("面板")] public Team horseTeam = Team.None;
     [NonSerialized] public Skill skill;
 
@@ -65,6 +65,8 @@ public class Horse : MonoBehaviour
     private StatusFactory statusFactory;
     private bool beingPut = false;
     private bool ifHiding = false;
+    private int oriDamage;//初始攻击力
+    private int oriSpeed;
 
     private void Awake()
     {
@@ -74,6 +76,8 @@ public class Horse : MonoBehaviour
         backgroundR = Resources.Load<Sprite>("HorseBackgroundR");
         backgroundM = Resources.Load<Sprite>("HorseBackgroundM");
         statuses = new List<Status>();
+        oriDamage = damage;
+        oriSpeed = speed;
     }
 
     private void Start()

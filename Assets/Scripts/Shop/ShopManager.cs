@@ -159,22 +159,50 @@ public class ShopManager : Service, IPointerExitHandler
     public void NextRound()
     {
         ResetButton();
-        Team nextTeam = curTeam == Team.A ? Team.B : Team.A;
-        if (curTeam == Team.B) core.ShowAllHorses();
+
+
         if ((playerDic[Team.A].ownHorses.Count == 5 || playerDic[Team.A].Coins == 0) &&
             (playerDic[Team.B].ownHorses.Count == 5 || playerDic[Team.B].Coins == 0))
         {
             //TODO:进入对战阶段
             Debug.LogWarning("进入对战阶段");
+            RecoveryCoinText();
+            core.ShowAllHorses();
+            
             core.StartFight();
             return;
         }
 
+        Team nextTeam = curTeam == Team.A ? Team.B : Team.A;
+        if (curTeam == Team.B)
+        {
+            core.ShowAllHorses();
+            RecoveryCoinText();
+        }
+
+        //若有一方先花完钱
         if (!(playerDic[nextTeam].ownHorses.Count == 5 || playerDic[nextTeam].Coins == 0))
             curTeam = nextTeam;
         else
         {
             core.ShowAllHorses();
+            RecoveryCoinText();
         }
+    }
+
+    /// <summary>
+    /// 将文字显示成xxx:n-?的形式
+    /// </summary>
+    /// <param name="itemPrice"></param>
+    public void SetCoinTextUnknown(int itemPrice)
+    {
+        coinTextA.text = coinTextA.text.Split(':')[0] + ":" +
+                         (Convert.ToInt32(coinTextA.text.Split(':')[1]) + itemPrice) + "- ?";
+    }
+
+    public void RecoveryCoinText()
+    {
+        playerDic[Team.A].Coins = playerDic[Team.A].Coins;
+        playerDic[Team.B].Coins = playerDic[Team.B].Coins;
     }
 }
