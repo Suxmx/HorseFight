@@ -172,5 +172,9 @@ public class ShopManager : Service, IPointerExitHandler
 
         if (!(playerDic[nextTeam].ownHorses.Count == 5 || playerDic[nextTeam].Coins == 0))
             curTeam = nextTeam;
+        else
+        {
+            core.ShowAllHorses();
+        }
     }
 }
