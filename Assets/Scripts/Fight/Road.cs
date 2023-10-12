@@ -68,16 +68,20 @@ public class Road : MonoBehaviour
             leftHorse?.skill.OnStart();
             rightHorse?.skill.OnStart();
         }
-        else if (leftHorse.type == EHorse.³ÁÄ¬Õß && !rightHorse.skill.onStartSilentAble)
+        else if (leftHorse.type == EHorse.³ÁÄ¬Õß)
         {
-            rightHorse.skill.OnStart();
+            if (!rightHorse.skill.onStartSilentAble)
+                rightHorse.skill.OnStart();
         }
-        else if (rightHorse.type == EHorse.³ÁÄ¬Õß && !leftHorse.skill.onStartSilentAble)
+        else if (rightHorse.type == EHorse.³ÁÄ¬Õß)
         {
-            leftHorse.skill.OnStart();
+            if (!leftHorse.skill.onStartSilentAble)
+                leftHorse.skill.OnStart();
         }
         else
         {
+            // Debug.Log(
+            //     $"Default:{leftHorse.type} {rightHorse.type} {leftHorse.skill.onStartSilentAble} {rightHorse.skill.onStartSilentAble}");
             leftHorse.skill.OnStart();
             rightHorse.skill.OnStart();
         }
@@ -126,7 +130,6 @@ public class Road : MonoBehaviour
 
     private void TickSkill()
     {
-        
     }
 
 
