@@ -14,7 +14,19 @@ public class GameManager : Service
 
     private bool ifPause = false;
 
-    public void GamePause()
+    public void PauseButton()
+    {
+        if(ifPause)
+        {
+            GameResume();
+        }
+        else
+        {
+            GamePause();
+        }
+        
+    }
+    private void GamePause()
     {
         if (ifPause) return;
         OnPause?.Invoke();
@@ -22,7 +34,7 @@ public class GameManager : Service
         Time.timeScale = 0f;
     }
 
-    public void GameResume()
+    private void GameResume()
     {
         if (!ifPause) return;
         OnResume?.Invoke();
@@ -36,5 +48,20 @@ public class GameManager : Service
         this.timeScale = timeScale;
         if (Time.timeScale > 0.05f)
             Time.timeScale = timeScale;
+    }
+
+    public void SetTimeToHalf()
+    {
+        SetTimeScale(0.5f);
+    }
+
+    public void SetTimeToDouble()
+    {
+        SetTimeScale(2f);
+    }
+
+    public void SetTimeToNormal()
+    {
+        SetTimeScale(1);
     }
 }

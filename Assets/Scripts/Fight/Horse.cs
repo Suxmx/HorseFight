@@ -68,7 +68,7 @@ public class Horse : MonoBehaviour
     private bool beingPut = false;
     private bool ifHiding = false;
     [NonSerialized]public int oriDamage; //初始攻击力
-    private int oriSpeed;
+    [NonSerialized]public int oriSpeed;
 
     private void Awake()
     {
