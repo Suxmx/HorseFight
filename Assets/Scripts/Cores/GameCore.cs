@@ -87,12 +87,12 @@ public class GameCore : Service
         currentState = GameState.Fighting;
         roads = roads.OrderBy(road => road.gameObject.name).ToList();
         startButton.gameObject.SetActive(true);
-        
     }
 
     [Button("开始游戏")]//测试按钮
     public void StartFight()
     {
+        Debug.LogWarning("进入对战阶段");
         startButton.gameObject.SetActive(false);
         gameTimer = new TimerOnly(true);
         gameTimer.Restart();

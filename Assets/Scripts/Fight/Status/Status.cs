@@ -43,7 +43,7 @@ public enum EStatus
     /// <summary>
     /// 冰冻,冻结3秒
     /// </summary>
-    Freeze
+    Freeze,
 }
 
 [System.Serializable]

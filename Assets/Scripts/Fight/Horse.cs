@@ -67,7 +67,7 @@ public class Horse : MonoBehaviour
     private StatusFactory statusFactory;
     private bool beingPut = false;
     private bool ifHiding = false;
-    private int oriDamage; //初始攻击力
+    [NonSerialized]public int oriDamage; //初始攻击力
     private int oriSpeed;
 
     private void Awake()

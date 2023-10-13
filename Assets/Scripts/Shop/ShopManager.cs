@@ -164,8 +164,6 @@ public class ShopManager : Service, IPointerExitHandler
         if ((playerDic[Team.A].ownHorses.Count == 5 || playerDic[Team.A].Coins == 0) &&
             (playerDic[Team.B].ownHorses.Count == 5 || playerDic[Team.B].Coins == 0))
         {
-            //TODO:进入对战阶段
-            Debug.LogWarning("进入对战阶段");
             RecoveryCoinText();
             core.ShowAllHorses();
             

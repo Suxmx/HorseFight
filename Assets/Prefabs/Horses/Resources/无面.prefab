@@ -103,7 +103,10 @@ MonoBehaviour:
   speed: 6
   damage: 1
   price: 3
+  score: 1
   horseTeam: 0
+  locateRoad: {fileID: 0}
+  statuses: []
 --- !u!1 &529406846374711873
 GameObject:
   m_ObjectHideFlags: 0
@@ -664,7 +667,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2879169901494323612}
-  - component: {fileID: 5253462500510997270}
+  - component: {fileID: 3114257285653985951}
   m_Layer: 0
   m_Name: Skill
   m_TagString: Untagged
@@ -687,7 +690,7 @@ Transform:
   m_Father: {fileID: 5390205548429708512}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5253462500510997270
+--- !u!114 &3114257285653985951
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -696,14 +699,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7678369794547692230}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 602a94987bf540288b387d52c5d2dc81, type: 3}
+  m_Script: {fileID: 11500000, guid: 5564ee48f15a483d949aacc5547288c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onStartSilentAble: 0
-  teamBuffSilentAble: 0
-  onDeathSilentAble: 0
-  timeBuffSilentAble: 0
-  onKillSilentAble: 0
+  silented: 0
 --- !u!1 &8087760757579797684
 GameObject:
   m_ObjectHideFlags: 0
