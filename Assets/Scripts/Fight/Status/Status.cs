@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using MyTimer;
+using Sirenix.OdinInspector;
 
 public enum EStatus
 {
@@ -38,7 +39,11 @@ public enum EStatus
     /// <summary>
     /// 冲锋技能，+1攻击
     /// </summary>
-    Rush
+    Rush,
+    /// <summary>
+    /// 冰冻,冻结3秒
+    /// </summary>
+    Freeze
 }
 
 [System.Serializable]
@@ -58,4 +63,14 @@ public class Status
     [LabelText("攻击增益缓冲")] public int damageBuffer;
     [LabelText("速度增益缓冲")] public int speedBuffer;
     [LabelText("叠加")]public bool repeatable;
+
+    private CountdownTimer timer;
+
+    public void SetTimer(float t)
+    {
+        timer = new CountdownTimer();
+        timer.Initialize(t,false);
+        timer.OnComplete += () => { ifTmp = true; };
+        timer.Restart();
+    }
 }

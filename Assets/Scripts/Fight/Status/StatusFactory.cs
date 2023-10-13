@@ -14,7 +14,15 @@ public class StatusFactory : Service
         { EStatus.Savior, () => new Status(EStatus.Savior, false, damageBuffer: 2, repeatable: true) },
         { EStatus.Boomed, () => new Status(EStatus.Boomed, false, damageBuffer: -1, repeatable: true) },
         { EStatus.Logistics, () => new Status(EStatus.Logistics, true, damageBuffer: 1, repeatable: true) },
-        { EStatus.Rush, () => new Status(EStatus.Rush, true, damageBuffer: 1, repeatable: true) }
+        { EStatus.Rush, () => new Status(EStatus.Rush, true, damageBuffer: 1, repeatable: true) },
+        {
+            EStatus.Freeze, () =>
+            {
+                Status tmp = new Status(EStatus.Freeze, false, true);
+                tmp.SetTimer(3);
+                return tmp;
+            }
+        }
     };
 
     private Dictionary<EStatus, Status> templateDic = new Dictionary<EStatus, Status>();

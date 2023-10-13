@@ -35,7 +35,7 @@ public class Road : MonoBehaviour
     private ShopManager shop;
     private TimerOnly roadTimer;
     private float spriteSize;
-    private bool hasHorseWin=false;
+    private bool hasHorseWin = false;
 
     private float unitLength => roadLength / 20f;
     // private float curTime => core.curTime;
@@ -135,7 +135,8 @@ public class Road : MonoBehaviour
             foreach (var info in infoDic.Values)
             {
                 if (!info.horse) continue;
-                if (info.horse.HasStatus(EStatus.Die)|| info.horse.HasStatus(EStatus.End)) continue;
+                if (info.horse.HasStatus(EStatus.Die) || info.horse.HasStatus(EStatus.End) ||
+                    info.horse.HasStatus(EStatus.Freeze)) continue;
                 info.horse.transform.Translate(CalcVec(info.team, dt, info.horse.speed));
             }
         }
@@ -160,12 +161,13 @@ public class Road : MonoBehaviour
             if (Mathf.Abs(info.horse.transform.position.x - info.startPoint.x) < roadLength) continue;
             flag = true;
             info.horse.AddStatus(EStatus.End);
-            if(!hasHorseWin)
+            if (!hasHorseWin)
             {
                 core.AddScore(info.team, info.horse.score);
                 Debug.Log($"{info.team} Win At {roadTimer.Time}");
             }
         }
+
         hasHorseWin = flag;
     }
 
