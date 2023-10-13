@@ -191,6 +191,16 @@ public class Horse : MonoBehaviour
         return true;
     }
 
+    public bool AddStatus(EStatus status, int d, int s)
+    {
+        if (HasStatus(status) && !statusFactory.GetTemplateStatus(status).repeatable) return false;
+        Status tmp = statusFactory.GetStatus(status);
+        tmp.damageBuffer = d;
+        tmp.speedBuffer = s;
+        statuses.Add(tmp);
+        return true;
+    }
+
     public void ClearStatus()
     {
         statuses.RemoveAll(status => status.ifTmp);

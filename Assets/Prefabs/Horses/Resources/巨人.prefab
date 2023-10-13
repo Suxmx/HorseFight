@@ -388,7 +388,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1836911174884604749}
-  - component: {fileID: 8728049390691894093}
+  - component: {fileID: 1892405321589665952}
   m_Layer: 0
   m_Name: Skill
   m_TagString: Untagged
@@ -411,7 +411,7 @@ Transform:
   m_Father: {fileID: 8378258264324346361}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8728049390691894093
+--- !u!114 &1892405321589665952
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -420,14 +420,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5859423651531009192}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 602a94987bf540288b387d52c5d2dc81, type: 3}
+  m_Script: {fileID: 11500000, guid: 1c0ccff953dd465aa1b41a39f6ce7498, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onStartSilentAble: 0
-  teamBuffSilentAble: 0
-  onDeathSilentAble: 0
-  timeBuffSilentAble: 0
-  onKillSilentAble: 0
+  silented: 0
 --- !u!1 &7265628659674407015
 GameObject:
   m_ObjectHideFlags: 0
@@ -787,4 +783,7 @@ MonoBehaviour:
   speed: 1
   damage: 5
   price: 4
+  score: 1
   horseTeam: 0
+  locateRoad: {fileID: 0}
+  statuses: []

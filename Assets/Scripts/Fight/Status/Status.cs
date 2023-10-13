@@ -47,7 +47,11 @@ public enum EStatus
     /// <summary>
     /// 烧马,相邻单位+1速度
     /// </summary>
-    FireHorse
+    FireHorse,
+    /// <summary>
+    /// 巨人，将溢出攻击力传递给相邻路线
+    /// </summary>
+    Giant
 }
 
 [System.Serializable]

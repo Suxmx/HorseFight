@@ -29,9 +29,9 @@ public class GrowthSkill: Skill
         skillTimer.Paused = true;
     }
 
-    public override void OnWin()
+    public override void OnEnd()
     {
-        base.OnWin();
+        base.OnEnd();
         skillTimer.Paused = true;
     }
 }

@@ -23,7 +23,8 @@ public class StatusFactory : Service
                 return tmp;
             }
         },
-        { EStatus.FireHorse ,()=>new Status(EStatus.FireHorse,false,speedBuffer:1)}
+        { EStatus.FireHorse ,()=>new Status(EStatus.FireHorse,false,speedBuffer:1)},
+        { EStatus.Giant ,()=>new Status(EStatus.Giant,false,repeatable:true)}
     };
 
     private Dictionary<EStatus, Status> templateDic = new Dictionary<EStatus, Status>();

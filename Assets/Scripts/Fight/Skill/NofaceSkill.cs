@@ -1,4 +1,6 @@
-﻿public class NofaceSkill : Skill
+﻿using UnityEngine;
+
+public class NofaceSkill : Skill
 {
     public override void OnStart()
     {
@@ -8,5 +10,6 @@
         Horse horse = owner.locateRoad.GetHorse(another);
         if (!horse) return;
         owner.oriDamage = horse.damage;
+        Debug.Log($"Road {owner.locateRoad.num}: Team{owner.horseTeam} {owner.type}技能触发\n 复制攻击力{owner.oriDamage}");
     }
 }

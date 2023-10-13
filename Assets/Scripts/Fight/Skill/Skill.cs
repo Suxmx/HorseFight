@@ -40,15 +40,11 @@ public class Skill : MonoBehaviour
     {
     }
 
-    public virtual void TimeBuff()
+    public virtual void OnKill(int overflow)
     {
     }
 
-    public virtual void OnKill()
-    {
-    }
-
-    public virtual void OnWin()
+    public virtual void OnEnd()
     {
     }
 }
