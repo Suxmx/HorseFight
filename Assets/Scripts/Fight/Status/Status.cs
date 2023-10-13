@@ -27,6 +27,10 @@ public enum EStatus
     /// 到达终点状态
     /// </summary>
     End,
+    /// <summary>
+    /// 被爆弹魔攻击 -1攻击
+    /// </summary>
+    Boomed,
 }
 
 [System.Serializable]

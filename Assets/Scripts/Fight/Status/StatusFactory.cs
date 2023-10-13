@@ -11,7 +11,8 @@ public class StatusFactory: Service
         { EStatus.Storm ,()=>new Status(EStatus.Storm,false,damageBuffer:2)},
         { EStatus.Growth ,()=>new Status(EStatus.Growth,false,damageBuffer:1,repeatable:true)},
         { EStatus.Coach ,()=>new Status(EStatus.Coach,false,damageBuffer:1,repeatable: false)},
-        { EStatus.Savior ,()=>new Status(EStatus.Savior,false,damageBuffer:2,repeatable: true)}
+        { EStatus.Savior ,()=>new Status(EStatus.Savior,false,damageBuffer:2,repeatable: true)},
+        { EStatus.Boomed ,()=>new Status(EStatus.Boomed,false,damageBuffer:-1,repeatable: true)}
     };
 
     private Dictionary<EStatus, Status> templateDic = new Dictionary<EStatus, Status>();

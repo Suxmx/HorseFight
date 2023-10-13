@@ -159,8 +159,6 @@ public class Road : MonoBehaviour
 
     private void CheckWin()
     {
-        RoadInfo aInfo = infoDic[Team.A], bInfo = infoDic[Team.B];
-        Horse aHorse = aInfo.horse, bHorse = bInfo.horse;
         bool flag = false;
         foreach (var info in infoDic.Values)
         {
@@ -182,12 +180,14 @@ public class Road : MonoBehaviour
         if (infoDic[Team.A].horse.damage > infoDic[Team.B].horse.damage)
         {
             infoDic[Team.B].horse.LoseCG();
+            infoDic[Team.B].horse.skill.OnDeath();
             stalemated = false;
             return Team.A;
         }
         else if (infoDic[Team.A].horse.damage < infoDic[Team.B].horse.damage)
         {
             infoDic[Team.A].horse.LoseCG();
+            infoDic[Team.A].horse.skill.OnDeath();
             stalemated = false;
             return Team.B;
         }
