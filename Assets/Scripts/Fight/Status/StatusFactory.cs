@@ -7,6 +7,7 @@ public class StatusFactory: Service
     private Dictionary<EStatus, Func<Status>> facDic=new Dictionary<EStatus, Func<Status>>()
     {
         { EStatus.Die ,()=>new Status(EStatus.Die,false)},
+        { EStatus.End ,()=>new Status(EStatus.End,false)},
         { EStatus.Storm ,()=>new Status(EStatus.Storm,false,damageBuffer:2)},
         { EStatus.Growth ,()=>new Status(EStatus.Growth,false,damageBuffer:1,repeatable:true)},
         { EStatus.Coach ,()=>new Status(EStatus.Coach,false,damageBuffer:1,repeatable: false)},

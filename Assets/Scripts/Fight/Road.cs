@@ -37,6 +37,7 @@ public class Road : MonoBehaviour
     private ShopManager shop;
     private TimerOnly roadTimer;
     private float spriteSize;
+    private bool hasHorseWin=false;
 
     private float unitLength => roadLength / 20f;
     // private float curTime => core.curTime;
@@ -50,7 +51,7 @@ public class Road : MonoBehaviour
 
         infoDic = new Dictionary<Team, RoadInfo>();
         infoDic.Add(Team.A, infoa);
-        infoDic.Add(Team.B,infob);
+        infoDic.Add(Team.B, infob);
     }
 
     private void Start()
@@ -85,7 +86,7 @@ public class Road : MonoBehaviour
         //释放开场技能
         foreach (var info in infoDic.Values)
         {
-            if(!info.horse)continue;
+            if (!info.horse) continue;
             info.horse.skill.OnStart();
         }
     }
@@ -102,21 +103,14 @@ public class Road : MonoBehaviour
         }
 
         //检测终点
-        foreach (var info in infoDic.Values)
-        {
-            if (!info.horse) continue;
-            if (Mathf.Abs(info.horse.transform.position.x - info.startPoint.x) < roadLength) continue;
-            finish = true;
-            core.AddScore(info.team, 1);
-            Debug.Log($"{info.team} Win At {roadTimer.Time}");
-        }
+        CheckWin();
     }
 
     private void ClearTempStatus()
     {
         foreach (var info in infoDic.Values)
         {
-            if(!info.horse)continue;
+            if (!info.horse) continue;
             info.horse.ClearStatus();
         }
     }
@@ -125,7 +119,7 @@ public class Road : MonoBehaviour
     {
         foreach (var info in infoDic.Values)
         {
-            if(!info.horse)continue;
+            if (!info.horse) continue;
             info.horse.CalcDamageAndSpeed();
         }
     }
@@ -134,7 +128,7 @@ public class Road : MonoBehaviour
     {
         foreach (var info in infoDic.Values)
         {
-            if(!info.horse)continue;
+            if (!info.horse) continue;
             info.horse.skill.TickCheck();
         }
     }
@@ -147,17 +141,41 @@ public class Road : MonoBehaviour
         {
             foreach (var info in infoDic.Values)
             {
-                if(!info.horse)continue;
-                if(info.horse.HasStatus(EStatus.Die))continue;
-                info.horse.transform.Translate(CalcVec(info.team,dt,info.horse.speed));
+                if (!info.horse) continue;
+                if (info.horse.HasStatus(EStatus.Die)|| info.horse.HasStatus(EStatus.End)) continue;
+                info.horse.transform.Translate(CalcVec(info.team, dt, info.horse.speed));
             }
         }
     }
 
     private bool CheckHit()
     {
-        if (!infoDic[Team.A].horse || !infoDic[Team.B].horse) return false;
-        return infoDic[Team.A].horse.transform.position.x >= infoDic[Team.B].horse.transform.position.x;
+        Horse aHorse = infoDic[Team.A].horse, bHorse = infoDic[Team.B].horse;
+        if (!aHorse || !bHorse) return false;
+        if ((aHorse.type == EHorse.幽灵 && !aHorse.skill.silented) ||
+            (bHorse.type == EHorse.幽灵 && !bHorse.skill.silented))
+            return false;
+        return aHorse.transform.position.x >= bHorse.transform.position.x;
+    }
+
+    private void CheckWin()
+    {
+        RoadInfo aInfo = infoDic[Team.A], bInfo = infoDic[Team.B];
+        Horse aHorse = aInfo.horse, bHorse = bInfo.horse;
+        bool flag = false;
+        foreach (var info in infoDic.Values)
+        {
+            if (!info.horse) continue;
+            if (Mathf.Abs(info.horse.transform.position.x - info.startPoint.x) < roadLength) continue;
+            flag = true;
+            info.horse.AddStatus(EStatus.End);
+            if(!hasHorseWin)
+            {
+                core.AddScore(info.team, 1);
+                Debug.Log($"{info.team} Win At {roadTimer.Time}");
+            }
+        }
+        hasHorseWin = flag;
     }
 
     private Team HorseFight()
@@ -190,21 +208,21 @@ public class Road : MonoBehaviour
         horse.transform.position = teamInfo.startPoint;
         horse.SetPutMode(horse.horseTeam, false);
         horse.SetDir(horse.horseTeam);
-        if(horse.horseTeam==Team.A)
+        if (horse.horseTeam == Team.A)
         {
             horse.HideSelf();
             shop.SetCoinTextUnknown(horse.price);
         }
-        teamInfo.spriteSize=horse.GetComponent<SpriteRenderer>().bounds.size.x;
-        shop.NextRound();
 
+        teamInfo.spriteSize = horse.GetComponent<SpriteRenderer>().bounds.size.x;
+        shop.NextRound();
     }
 
     public void ShowHorses()
     {
         foreach (var info in infoDic.Values)
         {
-            if(!info.horse)continue;
+            if (!info.horse) continue;
             info.horse.ShowSelf();
         }
     }

@@ -23,6 +23,10 @@ public enum EStatus
     /// 救星技能，随机单位攻击+2
     /// </summary>
     Savior,
+    /// <summary>
+    /// 到达终点状态
+    /// </summary>
+    End,
 }
 
 [System.Serializable]
