@@ -44,6 +44,10 @@ public enum EStatus
     /// 冰冻,冻结3秒
     /// </summary>
     Freeze,
+    /// <summary>
+    /// 烧马,相邻单位+1速度
+    /// </summary>
+    FireHorse
 }
 
 [System.Serializable]

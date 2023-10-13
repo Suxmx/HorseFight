@@ -22,7 +22,8 @@ public class StatusFactory : Service
                 tmp.SetTimer(3);
                 return tmp;
             }
-        }
+        },
+        { EStatus.FireHorse ,()=>new Status(EStatus.FireHorse,false,speedBuffer:1)}
     };
 
     private Dictionary<EStatus, Status> templateDic = new Dictionary<EStatus, Status>();
