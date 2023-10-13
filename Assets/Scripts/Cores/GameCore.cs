@@ -109,7 +109,6 @@ public class GameCore : Service
 
     public void ShowAllHorses()
     {
-        Debug.Log(roads.Count);
         foreach (var road in roads)
         {
             road.ShowHorses();

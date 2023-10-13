@@ -19,6 +19,10 @@ public enum EStatus
     /// 教官技能，正下方攻击+1
     /// </summary>
     Coach,
+    /// <summary>
+    /// 救星技能，随机单位攻击+2
+    /// </summary>
+    Savior,
 }
 
 [System.Serializable]

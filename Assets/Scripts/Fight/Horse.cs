@@ -157,6 +157,7 @@ public class Horse : MonoBehaviour
 
     private IEnumerator IeLose()
     {
+        Transform oriParent = transform.parent;
         Transform tmpParent = new GameObject("TempParent").transform;
         transform.SetParent(tmpParent);
         float rotate = horseTeam == Team.A ? 50 : -50;
@@ -167,6 +168,8 @@ public class Horse : MonoBehaviour
             tmpParent.Translate(flyVec * 0.3f);
             yield return new WaitForFixedUpdate();
         }
+        transform.parent = oriParent;
+        Destroy(tmpParent.gameObject);
     }
 
     public bool HasStatus(EStatus tag)

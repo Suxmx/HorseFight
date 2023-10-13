@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class CoachSkill : Skill
 {
@@ -17,6 +18,8 @@ public class CoachSkill : Skill
         if (owner.locateRoad.num == 5) return;
         Horse downRoadHorse = roads[owner.locateRoad.num].GetHorse(owner.horseTeam);
         if (!downRoadHorse) return;
-        // downRoadHorse.AddStatus()
+        downRoadHorse.AddStatus(EStatus.Coach);
+        Debug.Log($"Road {owner.locateRoad.num}: Team{owner.horseTeam} {owner.type} 技能触发");
+
     }
 }

@@ -9,7 +9,8 @@ public class StatusFactory: Service
         { EStatus.Die ,()=>new Status(EStatus.Die,false)},
         { EStatus.Storm ,()=>new Status(EStatus.Storm,false,damageBuffer:2)},
         { EStatus.Growth ,()=>new Status(EStatus.Growth,false,damageBuffer:1,repeatable:true)},
-        // {E}
+        { EStatus.Coach ,()=>new Status(EStatus.Coach,false,damageBuffer:1,repeatable: false)},
+        { EStatus.Savior ,()=>new Status(EStatus.Savior,false,damageBuffer:2,repeatable: true)}
     };
 
     private Dictionary<EStatus, Status> templateDic = new Dictionary<EStatus, Status>();

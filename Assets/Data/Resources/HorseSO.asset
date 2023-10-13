@@ -43,7 +43,7 @@ MonoBehaviour:
     damage: 1
     speed: 1
     price: 2
-    description: "\u6BCF3\u79D2+1\u653B\u51FB"
+    description: "\u6BCF6\u79D2+1\u653B\u51FB"
   - type: 7
     damage: 2
     speed: 1
