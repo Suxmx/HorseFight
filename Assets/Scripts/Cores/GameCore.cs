@@ -9,6 +9,7 @@ using MyTimer;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public enum GameState
 {
@@ -35,6 +36,7 @@ public class GameCore : Service
     private TimerOnly gameTimer;
     private ShopManager shop;
     private Dictionary<Team, PlayerInfo> playerDic;
+    private Button startButton;
 
     protected override void Awake()
     {
@@ -55,13 +57,19 @@ public class GameCore : Service
         playerDic = new Dictionary<Team, PlayerInfo>();
         shop = ServiceLocator.Get<ShopManager>();
         currentState = GameState.Shopping;
-        Transform scoreUI = GameObject.Find("UICanvas").transform.Find("ScoreUI");
+        Transform UICanvasTrans = GameObject.Find("UICanvas").transform;
+        Transform scoreUI = UICanvasTrans.Find("ScoreUI");
         TextMeshProUGUI aScoreText = scoreUI.Find("TeamABg/ScoreText").GetComponent<TextMeshProUGUI>();
         TextMeshProUGUI bScoreText = scoreUI.Find("TeamBBg/ScoreText").GetComponent<TextMeshProUGUI>();
+        
         playerA = new PlayerInfo(10, Team.A, new GameObject("PlayerA").transform, shop.coinTextA, aScoreText);
         playerB = new PlayerInfo(10, Team.B, new GameObject("PlayerB").transform, shop.coinTextB, bScoreText);
         playerDic.Add(Team.A, playerA);
         playerDic.Add(Team.B, playerB);
+        
+        startButton = UICanvasTrans.Find("StartButton").GetComponent<Button>();
+        startButton.onClick.AddListener(StartFight);
+        startButton.gameObject.SetActive(false);
 
         shop.SetPlayerInfo(playerDic);
     }
@@ -76,11 +84,13 @@ public class GameCore : Service
     {
         currentState = GameState.Fighting;
         roads = roads.OrderBy(road => road.gameObject.name).ToList();
+        startButton.gameObject.SetActive(true);
     }
 
-    [Button("开始游戏")]
+    [Button("开始游戏")]//测试按钮
     public void StartFight()
     {
+        startButton.gameObject.SetActive(false);
         gameTimer = new TimerOnly(true);
         OnFightStart?.Invoke();
         gameTimer.Restart();

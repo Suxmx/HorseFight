@@ -3,19 +3,18 @@ using UnityEngine;
 
 public class StormSkill: Skill
 {
-    private void Awake()
+    protected override void Awake()
     {
-        onStartSilentAble = true;
-        owner = transform.parent.GetComponent<Horse>();
+        base.Awake();
     }
 
     public override void OnStart()
     {
         base.OnStart();
-        if (skillOnStart) return;
+        if (silented) return;
         if (owner.locateRoad.num == 3)
         {
-            Debug.Log("风暴技能触发");
+            Debug.Log($"Road {owner.locateRoad.num}: Team{owner.horseTeam} 技能触发");
             owner.AddStatus(EStatus.Storm);
         }
     }

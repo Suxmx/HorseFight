@@ -28,7 +28,7 @@ MonoBehaviour:
     damage: 1
     speed: 2
     price: 1
-    description: "\u5728\u4E2D\u8DEF+1\u653B\u51FB"
+    description: "\u5728\u4E2D\u8DEF+2\u653B\u51FB"
   - type: 4
     damage: 1
     speed: 4

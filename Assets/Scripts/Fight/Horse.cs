@@ -161,7 +161,7 @@ public class Horse : MonoBehaviour
         transform.SetParent(tmpParent);
         float rotate = horseTeam == Team.A ? 50 : -50;
         Vector2 flyVec = horseTeam == Team.A ? new Vector2(-1, 1) : new Vector2(1, 1);
-        for (int i = 1; i <= 30; i++)
+        for (int i = 1; i <= 40; i++)
         {
             transform.Rotate(0, 0, rotate);
             tmpParent.Translate(flyVec * 0.3f);
@@ -182,7 +182,7 @@ public class Horse : MonoBehaviour
 
     public bool AddStatus(EStatus status)
     {
-        if (HasStatus(status)) return false;
+        if (HasStatus(status) && !statusFactory.GetTemplateStatus(status).repeatable) return false;
         statuses.Add(statusFactory.GetStatus(status));
         return true;
     }
@@ -194,12 +194,13 @@ public class Horse : MonoBehaviour
 
     public void CalcDamageAndSpeed()
     {
-        int tmpD=oriDamage, tmpS=oriSpeed;
+        int tmpD = oriDamage, tmpS = oriSpeed;
         foreach (var status in statuses)
         {
             tmpD += status.damageBuffer;
             tmpS += status.speedBuffer;
         }
+
         damage = tmpD;
         speed = tmpS;
         ResetText();

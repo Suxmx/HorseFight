@@ -11,21 +11,31 @@ public enum EStatus
     /// 风暴技能，攻击+2
     /// </summary>
     Storm,
+    /// <summary>
+    /// 成长技能，攻击+1
+    /// </summary>
+    Growth,
+    /// <summary>
+    /// 教官技能，正下方攻击+1
+    /// </summary>
+    Coach,
 }
 
 [System.Serializable]
 public class Status
 {
-    public Status(EStatus statusTag, bool ifTmp, int damageBuffer = 0, int speedBuffer = 0)
+    public Status(EStatus statusTag, bool ifTmp,bool repeatable=false ,int damageBuffer = 0, int speedBuffer = 0)
     {
         this.ifTmp = ifTmp;
         this.damageBuffer = damageBuffer;
         this.speedBuffer = speedBuffer;
         this.statusTag = statusTag;
+        this.repeatable = repeatable;
     }
 
     [LabelText("词条种类")] public EStatus statusTag;
     [LabelText("是否临时")] public bool ifTmp;
     [LabelText("攻击增益缓冲")] public int damageBuffer;
     [LabelText("速度增益缓冲")] public int speedBuffer;
+    [LabelText("叠加")]public bool repeatable;
 }

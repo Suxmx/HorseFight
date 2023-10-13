@@ -132,6 +132,11 @@ public class Road : MonoBehaviour
 
     private void TickSkill()
     {
+        foreach (var info in infoDic.Values)
+        {
+            if(!info.horse)continue;
+            info.horse.skill.TickCheck();
+        }
     }
 
 
@@ -151,8 +156,6 @@ public class Road : MonoBehaviour
 
     private bool CheckHit()
     {
-        bool flag=true;
-        
         if (!infoDic[Team.A].horse || !infoDic[Team.B].horse) return false;
         return infoDic[Team.A].horse.transform.position.x >= infoDic[Team.B].horse.transform.position.x;
     }
