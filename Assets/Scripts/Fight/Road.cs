@@ -31,7 +31,6 @@ public class Road : MonoBehaviour
     private Vector2 leftPos => leftTrans.position;
     private Vector2 rightPos => rightTrans.position;
     private Transform leftTrans, rightTrans;
-    public Horse leftHorse, rightHorse; //TODO:ÐÞ¸ÄÎª×Öµä
     private Dictionary<Team, RoadInfo> infoDic;
     private GameCore core;
     private ShopManager shop;
@@ -171,7 +170,7 @@ public class Road : MonoBehaviour
             info.horse.AddStatus(EStatus.End);
             if(!hasHorseWin)
             {
-                core.AddScore(info.team, 1);
+                core.AddScore(info.team, info.horse.score);
                 Debug.Log($"{info.team} Win At {roadTimer.Time}");
             }
         }

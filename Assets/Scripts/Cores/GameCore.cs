@@ -104,7 +104,7 @@ public class GameCore : Service
 
     public void AddScore(Team team, int score)
     {
-        playerDic[team].Scores++;
+        playerDic[team].Scores+=score;
     }
 
     public void ShowAllHorses()

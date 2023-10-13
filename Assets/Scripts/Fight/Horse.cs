@@ -51,6 +51,7 @@ public class Horse : MonoBehaviour
     [OnValueChanged(nameof(ResetText))] public int speed;
     [OnValueChanged(nameof(ResetText))] public int damage;
     public int price;
+    public int score = 1;
     [Header("面板")] public Team horseTeam = Team.None;
     [NonSerialized] public Skill skill;
     public Road locateRoad;
