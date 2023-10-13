@@ -9,6 +9,6 @@ public class GrowthSkill: Skill
 
     public override void OnStart()
     {
-        base.OnStart();
+        
     }
 }
