@@ -35,6 +35,7 @@ public class GameCore : Service
     private PlayerInfo playerA, playerB;
     private TimerOnly gameTimer;
     private ShopManager shop;
+    private RoadManager roadManager;
     private Dictionary<Team, PlayerInfo> playerDic;
     private Button startButton;
 
@@ -56,6 +57,7 @@ public class GameCore : Service
     {
         playerDic = new Dictionary<Team, PlayerInfo>();
         shop = ServiceLocator.Get<ShopManager>();
+        roadManager = ServiceLocator.Get<RoadManager>();
         currentState = GameState.Shopping;
         Transform UICanvasTrans = GameObject.Find("UICanvas").transform;
         Transform scoreUI = UICanvasTrans.Find("ScoreUI");
@@ -85,6 +87,7 @@ public class GameCore : Service
         currentState = GameState.Fighting;
         roads = roads.OrderBy(road => road.gameObject.name).ToList();
         startButton.gameObject.SetActive(true);
+        
     }
 
     [Button("开始游戏")]//测试按钮
@@ -92,14 +95,14 @@ public class GameCore : Service
     {
         startButton.gameObject.SetActive(false);
         gameTimer = new TimerOnly(true);
-        OnFightStart?.Invoke();
         gameTimer.Restart();
+        roadManager.Init(roads);
+        roadManager.OnStart();
     }
 
     public void RegisterRoad(Road road)
     {
         roads.Add(road);
-        OnFightStart.AddListener(road.OnStart);
     }
 
     public void AddScore(Team team, int score)

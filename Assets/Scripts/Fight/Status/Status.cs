@@ -31,6 +31,14 @@ public enum EStatus
     /// 被爆弹魔攻击 -1攻击
     /// </summary>
     Boomed,
+    /// <summary>
+    /// 后勤技能，+1攻击
+    /// </summary>
+    Logistics,
+    /// <summary>
+    /// 冲锋技能，+1攻击
+    /// </summary>
+    Rush
 }
 
 [System.Serializable]

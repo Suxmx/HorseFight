@@ -24,7 +24,6 @@ public class Road : MonoBehaviour
 {
     public float roadLength => rightPos.x - leftPos.x;
     public int num => Convert.ToInt32((name.Split("Road ")[1]));
-    [LabelText("结束")] public bool finish = false;
     [LabelText("僵持")] public bool stalemated = false;
     [LabelText("是否开始")] public bool ifStart = false;
 
@@ -60,17 +59,17 @@ public class Road : MonoBehaviour
         core.RegisterRoad(this);
     }
 
-    private void Update()
-    {
-        if (!ifStart) return;
-        LogicUpdate();
-    }
-
-    private void FixedUpdate()
-    {
-        if (!ifStart) return;
-        MoveHorses(Time.fixedDeltaTime);
-    }
+    // private void Update()
+    // {
+    //     if (!ifStart) return;
+    //     LogicUpdate();
+    // }
+    //
+    // private void FixedUpdate()
+    // {
+    //     if (!ifStart) return;
+    //     MoveHorses(Time.fixedDeltaTime);
+    // }
 
     private Vector2 CalcVec(Team team, float dt, int speed)
     {
@@ -92,10 +91,6 @@ public class Road : MonoBehaviour
 
     public void LogicUpdate()
     {
-        if (finish) return;
-        ClearTempStatus();
-        TickSkill();
-        CalcAttribute();
         if (CheckHit() || stalemated)
         {
             HorseFight();
@@ -105,7 +100,7 @@ public class Road : MonoBehaviour
         CheckWin();
     }
 
-    private void ClearTempStatus()
+    public void ClearTempStatus()
     {
         foreach (var info in infoDic.Values)
         {
@@ -114,7 +109,7 @@ public class Road : MonoBehaviour
         }
     }
 
-    private void CalcAttribute()
+    public void CalcAttribute()
     {
         foreach (var info in infoDic.Values)
         {
@@ -123,7 +118,7 @@ public class Road : MonoBehaviour
         }
     }
 
-    private void TickSkill()
+    public void TickSkill()
     {
         foreach (var info in infoDic.Values)
         {
@@ -135,7 +130,6 @@ public class Road : MonoBehaviour
 
     public void MoveHorses(float dt)
     {
-        if (finish) return;
         if (!stalemated)
         {
             foreach (var info in infoDic.Values)
@@ -229,5 +223,10 @@ public class Road : MonoBehaviour
     public Horse GetHorse(Team team)
     {
         return infoDic[team].horse;
+    }
+
+    public RoadInfo GetInfo(Team team)
+    {
+        return infoDic[team];
     }
 }

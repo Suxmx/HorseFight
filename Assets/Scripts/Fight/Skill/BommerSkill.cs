@@ -17,7 +17,7 @@ public class BommerSkill : Skill
             if (Mathf.Abs(posx - horse.transform.position.x) / unit <= 2.5f)
             {
                 Debug.Log(
-                    $"Road {owner.locateRoad.num}: Team{owner.horseTeam} 技能触发\n距离:{Mathf.Abs(posx - horse.transform.position.x) / unit}");
+                    $"Road {owner.locateRoad.num}: Team{owner.horseTeam} {owner.type}技能触发\n距离:{Mathf.Abs(posx - horse.transform.position.x) / unit}");
                 horse.AddStatus(EStatus.Boomed);
                 {
                 }

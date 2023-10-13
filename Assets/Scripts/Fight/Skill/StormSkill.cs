@@ -14,7 +14,7 @@ public class StormSkill: Skill
         if (silented) return;
         if (owner.locateRoad.num == 3)
         {
-            Debug.Log($"Road {owner.locateRoad.num}: Team{owner.horseTeam} 技能触发");
+            Debug.Log($"Road {owner.locateRoad.num}: Team{owner.horseTeam} {owner.type}技能触发");
             owner.AddStatus(EStatus.Storm);
         }
     }
