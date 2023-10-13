@@ -21,9 +21,8 @@ public class Skill : MonoBehaviour
     {
         if (onStartSilentAble)
         {
-            Horse horse = owner.horseTeam == Team.A
-                ? owner.locateRoad.rightHorse
-                : owner.locateRoad.leftHorse;
+            Team another = owner.horseTeam == Team.A ? Team.B : Team.A;
+            Horse horse = owner.locateRoad.GetHorse(another);
             if (horse && horse.type == EHorse.沉默者)
             {
                 Debug.Log("被沉默");
