@@ -166,7 +166,7 @@ public class ShopManager : Service, IPointerExitHandler
         {
             RecoveryCoinText();
             core.ShowAllHorses();
-            
+
             core.FightReady();
             return;
         }
@@ -194,8 +194,8 @@ public class ShopManager : Service, IPointerExitHandler
     /// <param name="itemPrice"></param>
     public void SetCoinTextUnknown(int itemPrice)
     {
-        coinTextA.text = coinTextA.text.Split(':')[0] + ":" +
-                         (Convert.ToInt32(coinTextA.text.Split(':')[1]) + itemPrice) + "- ?";
+        coinTextA.text =
+            (Convert.ToInt32(coinTextA.text) + itemPrice) + "- ?";
     }
 
     public void RecoveryCoinText()

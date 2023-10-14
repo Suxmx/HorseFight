@@ -25,7 +25,7 @@ public class PlayerInfo
         {
             coins = value;
             string tmp = coinText.text;
-            coinText.text = tmp.Split(':')[0] + ":" + coins;
+            coinText.text = coins.ToString();
         }
     }
 
