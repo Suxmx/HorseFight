@@ -27,9 +27,9 @@ public class ShopItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,I
     private void Awake()
     {
         texts = transform.Find("BottomTexts");
-        damageText = texts.Find("Damage").GetComponent<TextMeshProUGUI>();
-        speedText = texts.Find("Speed").GetComponent<TextMeshProUGUI>();
-        nameText = texts.Find("Name").GetComponent<TextMeshProUGUI>();
+        damageText = texts.Find("Damage/Text").GetComponent<TextMeshProUGUI>();
+        speedText = texts.Find("Speed/Text").GetComponent<TextMeshProUGUI>();
+        // nameText = texts.Find("Name").GetComponent<TextMeshProUGUI>();
         
         descRoot = transform.Find("DescriptionRoot");
         
@@ -42,7 +42,7 @@ public class ShopItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,I
         horseFactory = ServiceLocator.Get<HorseFactory>();
         damageText.text = horseFactory.GetHorseDamage(type).ToString();
         speedText.text = horseFactory.GetHorseSpeed(type).ToString();
-        nameText.text = type.ToString();
+        // nameText.text = type.ToString();
         price = horseFactory.GetHorsePrice(type);
         manager.RegisterItem(this);
 

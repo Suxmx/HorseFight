@@ -29,6 +29,19 @@ public class ShopManager : Service, IPointerExitHandler
     private HorseFactory horseFactory;
     private GameCore core;
 
+    private int curRound=1;
+    private int CurRound
+    {
+        get => curRound;
+        set
+        {
+            Debug.Log(value);
+            curRound = value;
+            shopRoundText.text = $"{value}/5";
+        }
+    }
+    private TextMeshProUGUI shopRoundText;
+
     private int loopTimes;
 
     protected override void Awake()
@@ -39,10 +52,11 @@ public class ShopManager : Service, IPointerExitHandler
         openButtonText = openButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
         coinTextA = openButton.transform.Find("PlayerACoins/Text").GetComponent<TextMeshProUGUI>();
         coinTextB = openButton.transform.Find("PlayerBCoins/Text").GetComponent<TextMeshProUGUI>();
+        shopRoundText = transform.parent.Find("ShopRound/Text").GetComponent<TextMeshProUGUI>();
         panelRect = panelObj.GetComponent<RectTransform>();
         height = panelRect.sizeDelta.y;
         ifShow = false;
-
+        
         loopTimes = (int)(aniTime / 0.02f);
         shopItems = new List<ShopItem>();
     }
@@ -164,9 +178,9 @@ public class ShopManager : Service, IPointerExitHandler
         if ((playerDic[Team.A].ownHorses.Count == 5 || playerDic[Team.A].Coins == 0) &&
             (playerDic[Team.B].ownHorses.Count == 5 || playerDic[Team.B].Coins == 0))
         {
+            shopRoundText.transform.parent.gameObject.SetActive(false);
             RecoveryCoinText();
             core.ShowAllHorses();
-
             core.FightReady();
             return;
         }
@@ -176,6 +190,7 @@ public class ShopManager : Service, IPointerExitHandler
         {
             core.ShowAllHorses();
             RecoveryCoinText();
+            CurRound++;
         }
 
         //若有一方先花完钱
@@ -185,6 +200,8 @@ public class ShopManager : Service, IPointerExitHandler
         {
             core.ShowAllHorses();
             RecoveryCoinText();
+            if(nextTeam==Team.B)
+                CurRound++;
         }
     }
 
