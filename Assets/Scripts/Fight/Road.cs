@@ -212,7 +212,7 @@ public class Road : MonoBehaviour
             shop.SetCoinTextUnknown(horse.price);
         }
 
-        teamInfo.spriteSize = horse.GetComponent<SpriteRenderer>().bounds.size.x;
+        // teamInfo.spriteSize = horse.GetComponent<SpriteRenderer>().bounds.size.x;
         shop.NextRound();
     }
 

@@ -22,7 +22,7 @@ public class HorseAttriSO: ScriptableObject
     [Button("一键生成预制体")]
     public void GeneratePrefabs()
     {
-        string folderPath = "Assets/Prefabs/Horses/";
+        string folderPath = "Assets/Prefabs/NewHorses/Resources/";
         GameObject tmp = new GameObject("tmp");
         foreach (var unit in horses)
         {

@@ -58,6 +58,7 @@ public class Horse : MonoBehaviour
 
 
     private Transform attributeTransform;
+    private Transform spriteTrans;
     private TextMeshPro damageText;
     private TextMeshPro speedText;
     private TextMeshPro nameText;
@@ -74,6 +75,7 @@ public class Horse : MonoBehaviour
     {
         ResetText();
         skill = transform.Find("Skill").GetComponent<Skill>();
+        iconSr = GetComponent<SpriteRenderer>();
         backgroundL = Resources.Load<Sprite>("HorseBackgroundL");
         backgroundR = Resources.Load<Sprite>("HorseBackgroundR");
         backgroundM = Resources.Load<Sprite>("HorseBackgroundM");
@@ -115,35 +117,46 @@ public class Horse : MonoBehaviour
             damageText = attributeTransform.Find("DamageText").GetComponent<TextMeshPro>();
         if (!speedText)
             speedText = attributeTransform.Find("SpeedText").GetComponent<TextMeshPro>();
-        if (!nameText)
-            nameText = attributeTransform.Find("Name").GetComponent<TextMeshPro>();
+        // if (!nameText)
+        //     nameText = attributeTransform.Find("Name").GetComponent<TextMeshPro>();
         if (!iconSr)
-            iconSr = attributeTransform.Find("Image").GetComponent<SpriteRenderer>();
+            iconSr = GetComponent<SpriteRenderer>();
 
         damageText.text = damage.ToString();
         speedText.text = speed.ToString();
-        nameText.text = horseName;
+        // nameText.text = horseName;
     }
 
     public void SetDir(Team team)
     {
+        spriteTrans = transform.Find("Sprite");
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        float backSize = sr.sprite.bounds.size.x;
+        Texture2D test=Resources.Load<Texture2D>("女孩");
+        Rect rect = new Rect(0,0, test.width, test.height);//获得图片的长、宽
         horseTeam = team;
         if (team == Team.A)
         {
-            sr.sprite = backgroundL;
+            Sprite tsp = Sprite.Create(test, rect, new Vector2(1,0.5f),sr.sprite.pixelsPerUnit);
+            sr.sprite = tsp;
+            float backSize = sr.sprite.bounds.size.x;
             attributeTransform.localPosition = new Vector3(-backSize / 2f, 0, 1);
+            Vector2 tmp = spriteTrans.localPosition;
+            spriteTrans.localPosition = new Vector2(tmp.x - backSize / 2f, tmp.y);
         }
         else if (team == Team.B)
         {
-            sr.sprite = backgroundR;
+            Sprite tsp = Sprite.Create(test, rect, new Vector2(1,0.5f),sr.sprite.pixelsPerUnit);
+            sr.sprite = tsp;
+            float backSize = sr.sprite.bounds.size.x;
             attributeTransform.localPosition = new Vector3(backSize / 2f, 0, 1);
+            Vector2 tmp = spriteTrans.localPosition;
+            spriteTrans.localPosition = new Vector2(tmp.x + backSize / 2f, tmp.y);
         }
         else
         {
             Debug.LogWarning("设置方向错误");
         }
+        iconSr.flipX = horseTeam != Team.A;
     }
 
     public void LoseCG()
@@ -151,7 +164,7 @@ public class Horse : MonoBehaviour
         if (HasStatus(EStatus.Die)) return;
         AddStatus(EStatus.Die);
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        sr.sprite = backgroundM;
+        // sr.sprite = backgroundM;
         attributeTransform.localPosition = new Vector3(0, 0, 1);
         StartCoroutine(IeLose());
     }
@@ -245,18 +258,17 @@ public class Horse : MonoBehaviour
 
     IEnumerator IeChangeAlpha(bool show)
     {
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        SpriteRenderer dbg = transform.Find("Sprite/Damage").GetComponent<SpriteRenderer>();
+        SpriteRenderer sbg = transform.Find("Sprite/Speed").GetComponent<SpriteRenderer>();
         for (int i = 1; i <= 15; i++)
         {
-            //背景
-            var bGcolor = sr.color;
-            bGcolor = new Color(bGcolor.r, bGcolor.g, bGcolor.b, show ? 1f / 15f * i : 1 - 1f / 15f * i);
-            sr.color = bGcolor;
             //名字与图标
             var ncolor = iconSr.color;
             ncolor = new Color(ncolor.r, ncolor.g, ncolor.b, show ? 1f / 15f * i : 1 - 1f / 15f * i);
+            // nameText.color = ncolor;
             iconSr.color = ncolor;
-            nameText.color = ncolor;
+            dbg.color = ncolor;
+            sbg.color = ncolor;
             //攻击力文字
             var dcolor = damageText.color;
             dcolor = new Color(dcolor.r, dcolor.g, dcolor.b, show ? 1f / 15f * i : 1 - 1f / 15f * i);
@@ -267,15 +279,14 @@ public class Horse : MonoBehaviour
             speedText.color = scolor;
             yield return new WaitForFixedUpdate();
         }
-
-        var bgc = sr.color;
-        bgc = new Color(bgc.r, bgc.g, bgc.b, show ? 1 : 0);
-        sr.color = bgc;
+        
         //名字与图标
         var c = iconSr.color;
         c = new Color(c.r, c.g, c.b, show ? 1 : 0);
         iconSr.color = c;
-        nameText.color = c;
+        // nameText.color = c;
+        dbg.color = c;
+        sbg.color = c;
         //攻击力文字
         var dc = damageText.color;
         dc = new Color(dc.r, dc.g, dc.b, show ? 1 : 0);
