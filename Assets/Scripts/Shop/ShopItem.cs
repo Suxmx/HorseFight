@@ -50,10 +50,10 @@ public class ShopItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,I
         desc = string.IsNullOrEmpty(desc) ? "无特殊技能" : desc;
         descRoot.gameObject.SetActive(true);
         desctext = descRoot.Find("DescBg").Find("DescText").GetComponent<TextMeshProUGUI>();
-        desctext.text = $"<size=135%>{type.ToString()}\n" + "<size=30%>\n" +
+        desctext.text = $"<align=center><size=135%><color=orange>{type.ToString()}</color></align>\n" + "<size=30%>\n" +
                         $"<size=100%>{desc}";
         descRoot.gameObject.SetActive(false);
-
+            // <align=center><size=25><color=orange>测试</color></size></align><size=30%>\n<size=100%>
     }
 
     public void OnPointerEnter(PointerEventData eventData)

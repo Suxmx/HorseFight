@@ -35,8 +35,8 @@ public class HorseAttriSO: ScriptableObject
             newHorse.speed = unit.speed;
             newHorse.price = unit.price;
             newHorse.ResetText();
-            PrefabUtility.SaveAsPrefabAsset(newHorseObj, path);
-            AssetDatabase.Refresh(); 
+            // PrefabUtility.SaveAsPrefabAsset(newHorseObj, path);
+            // AssetDatabase.Refresh(); 
         }
     }
 }
