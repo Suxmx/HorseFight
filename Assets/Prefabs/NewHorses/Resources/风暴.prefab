@@ -459,11 +459,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 3
   speed: 2
-  damage: 1
+  damage: 0
   price: 1
   score: 1
   horseTeam: 0
   locateRoad: {fileID: 0}
+  ifHiding: 0
   statuses: []
 --- !u!212 &7934682974825813010
 SpriteRenderer:
@@ -931,7 +932,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0ef219eec5d20e54a908ecdfa6964021, type: 2}
   m_sharedMaterial: {fileID: -1265039355344610869, guid: 0ef219eec5d20e54a908ecdfa6964021, type: 2}
