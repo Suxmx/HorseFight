@@ -29,6 +29,7 @@ public class Skill : MonoBehaviour
         {
             Debug.Log($"Road {owner.locateRoad.num}: Team{owner.horseTeam} {owner.type}被沉默");
             silented = true;
+            owner.RemoveStatus(EStatus.Savior);
         }
     }
 
@@ -47,4 +48,6 @@ public class Skill : MonoBehaviour
     public virtual void OnEnd()
     {
     }
+
+    public virtual void OnPut(){ }
 }

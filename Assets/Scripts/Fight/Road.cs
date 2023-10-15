@@ -206,6 +206,7 @@ public class Road : MonoBehaviour
         horse.transform.position = teamInfo.startPoint;
         horse.SetPutMode(horse.horseTeam, false);
         horse.SetDir(horse.horseTeam);
+        horse.skill.OnPut();
         if (horse.horseTeam == Team.A)
         {
             horse.HideSelf();

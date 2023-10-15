@@ -55,7 +55,7 @@ public class Horse : MonoBehaviour
     [Header("面板")] public Team horseTeam = Team.None;
     [NonSerialized] public Skill skill;
     public Road locateRoad;
-
+    public bool ifHiding = false;
 
     private Transform attributeTransform;
     private Transform spriteTrans;
@@ -67,9 +67,9 @@ public class Horse : MonoBehaviour
     [LabelText("词条"), SerializeField] private List<Status> statuses;
     private StatusFactory statusFactory;
     private bool beingPut = false;
-    private bool ifHiding = false;
-    [NonSerialized]public int oriDamage; //初始攻击力
-    [NonSerialized]public int oriSpeed;
+
+    [NonSerialized] public int oriDamage; //初始攻击力
+    [NonSerialized] public int oriSpeed;
 
     private void Awake()
     {
@@ -131,12 +131,12 @@ public class Horse : MonoBehaviour
     {
         spriteTrans = transform.Find("Sprite");
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        Texture2D test=Resources.Load<Texture2D>("女孩");
-        Rect rect = new Rect(0,0, test.width, test.height);//获得图片的长、宽
+        Texture2D test = Resources.Load<Texture2D>("女孩");
+        Rect rect = new Rect(0, 0, test.width, test.height); //获得图片的长、宽
         horseTeam = team;
         if (team == Team.A)
         {
-            Sprite tsp = Sprite.Create(test, rect, new Vector2(1,0.5f),sr.sprite.pixelsPerUnit);
+            Sprite tsp = Sprite.Create(test, rect, new Vector2(1, 0.5f), sr.sprite.pixelsPerUnit);
             sr.sprite = tsp;
             float backSize = sr.sprite.bounds.size.x;
             attributeTransform.localPosition = new Vector3(-backSize / 2f, 0, 1);
@@ -145,7 +145,7 @@ public class Horse : MonoBehaviour
         }
         else if (team == Team.B)
         {
-            Sprite tsp = Sprite.Create(test, rect, new Vector2(1,0.5f),sr.sprite.pixelsPerUnit);
+            Sprite tsp = Sprite.Create(test, rect, new Vector2(1, 0.5f), sr.sprite.pixelsPerUnit);
             sr.sprite = tsp;
             float backSize = sr.sprite.bounds.size.x;
             attributeTransform.localPosition = new Vector3(backSize / 2f, 0, 1);
@@ -156,6 +156,7 @@ public class Horse : MonoBehaviour
         {
             Debug.LogWarning("设置方向错误");
         }
+
         iconSr.flipX = horseTeam != Team.A;
     }
 
@@ -182,6 +183,7 @@ public class Horse : MonoBehaviour
             tmpParent.Translate(flyVec * 0.3f);
             yield return new WaitForFixedUpdate();
         }
+
         transform.parent = oriParent;
         Destroy(tmpParent.gameObject);
     }
@@ -217,6 +219,11 @@ public class Horse : MonoBehaviour
     public void ClearStatus()
     {
         statuses.RemoveAll(status => status.ifTmp);
+    }
+
+    public void RemoveStatus(EStatus type)
+    {
+        statuses.RemoveAll(status => status.statusTag==type);
     }
 
     public void CalcDamageAndSpeed()
@@ -279,7 +286,7 @@ public class Horse : MonoBehaviour
             speedText.color = scolor;
             yield return new WaitForFixedUpdate();
         }
-        
+
         //名字与图标
         var c = iconSr.color;
         c = new Color(c.r, c.g, c.b, show ? 1 : 0);

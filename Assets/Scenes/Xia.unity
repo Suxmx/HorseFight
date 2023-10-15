@@ -2107,6 +2107,7 @@ GameObject:
   - component: {fileID: 575578995}
   - component: {fileID: 575578994}
   - component: {fileID: 575578996}
+  - component: {fileID: 575578997}
   m_Layer: 0
   m_Name: GlobalUtilities
   m_TagString: Untagged
@@ -2151,6 +2152,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8455257f7df4b5e4aaf81a1cd17a5eca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &575578997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 575578993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5156d12a6d3c0246871e065eee17c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &581577646
@@ -7885,6 +7898,10 @@ PrefabInstance:
     - target: {fileID: 3567952127107248970, guid: f10fd5727e1104543bb9bed554f5d226, type: 3}
       propertyPath: m_SizeDelta.y
       value: 198.43
+      objectReference: {fileID: 0}
+    - target: {fileID: 4986058134443330530, guid: f10fd5727e1104543bb9bed554f5d226, type: 3}
+      propertyPath: m_text
+      value: "<size=135%>\u5E7D\u7075\u9CA8\n<size=30%>\n<size=100%>\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5"
       objectReference: {fileID: 0}
     - target: {fileID: 7341779308868002573, guid: f10fd5727e1104543bb9bed554f5d226, type: 3}
       propertyPath: m_IsActive
