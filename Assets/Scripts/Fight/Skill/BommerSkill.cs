@@ -3,10 +3,11 @@ using UnityEngine;
 
 public class BommerSkill : Skill
 {
+    private bool triggered = false;
     public override void OnDeath()
     {
         base.OnDeath();
-        if (silented) return;
+        if (silented|| triggered) return;
         List<Road> roads = core.GetRoadList();
         float posx = owner.transform.position.x, unit = roads[0].roadLength / 20f;
         Team anotherTeam = owner.horseTeam == Team.A ? Team.B : Team.A;
@@ -19,9 +20,9 @@ public class BommerSkill : Skill
                 Debug.Log(
                     $"Road {owner.locateRoad.num}: Team{owner.horseTeam} {owner.type}技能触发\n距离:{Mathf.Abs(posx - horse.transform.position.x) / unit}");
                 horse.AddStatus(EStatus.Boomed);
-                {
-                }
+                
             }
         }
+        triggered = true;
     }
 }
