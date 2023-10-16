@@ -36,15 +36,18 @@ public class GameCore : Service
     private RoadManager roadManager;
     private Dictionary<Team, PlayerInfo> playerDic;
     private Button startButton;
+    private SceneController sceneController;
 
     protected override void Awake()
     {
         base.Awake();
+        DontDestroyOnLoad(this);
     }
 
     protected override void Start()
     {
         base.Start();
+        sceneController = ServiceLocator.Get<SceneController>();
         InitGame();
     }
 
@@ -119,8 +122,18 @@ public class GameCore : Service
         return roads;
     }
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))OnGameEnd();
+    }
+
     public void OnGameEnd()
     {
-        
+        sceneController.LoadNextScene();
+    }
+
+    public int GetScore(Team team)
+    {
+        return playerDic[team].Scores;
     }
 }
