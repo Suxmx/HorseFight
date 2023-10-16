@@ -7,6 +7,13 @@ public class RoadManager: Service
 {
     private List<Road> roads;
     private bool ifStart=false;
+    private GameCore core;
+    protected override void Start()
+    {
+        base.Start();
+        core = ServiceLocator.Get<GameCore>();
+    }
+
     public void Init(List<Road> roads)
     {
         this.roads = roads;
@@ -42,7 +49,7 @@ public class RoadManager: Service
         {
             road.LogicUpdate();
         }
-        
+        CheckWin();        
     }
 
     public void PhysicsUpdate()
@@ -61,5 +68,19 @@ public class RoadManager: Service
         }
 
         ifStart = true;
+    }
+
+    public void CheckWin()
+    {
+        bool flag=true;
+        foreach (var road in roads)
+        {
+            if (!road.end) flag = false;
+        }
+        if(flag)
+        {
+            ifStart = false;
+            core.OnGameEnd();
+        }
     }
 }

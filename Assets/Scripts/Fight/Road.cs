@@ -27,6 +27,8 @@ public class Road : MonoBehaviour
     [LabelText("僵持")] public bool stalemated = false;
     [LabelText("是否开始")] public bool ifStart = false;
 
+    public bool end => stalemated || hasHorseWin;
+
     private Vector2 leftPos => leftTrans.position;
     private Vector2 rightPos => rightTrans.position;
     private Transform leftTrans, rightTrans;

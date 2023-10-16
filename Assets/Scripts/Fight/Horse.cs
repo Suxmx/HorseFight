@@ -131,12 +131,12 @@ public class Horse : MonoBehaviour
     {
         spriteTrans = transform.Find("Sprite");
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        Texture2D test = Resources.Load<Texture2D>("女孩");
-        Rect rect = new Rect(0, 0, test.width, test.height); //获得图片的长、宽
+        Texture2D texture = Resources.Load<Texture2D>(type.ToString());
+        Rect rect = new Rect(0, 0, texture.width, texture.height); //获得图片的长、宽
         horseTeam = team;
         if (team == Team.A)
         {
-            Sprite tsp = Sprite.Create(test, rect, new Vector2(1, 0.5f), sr.sprite.pixelsPerUnit);
+            Sprite tsp = Sprite.Create(texture, rect, new Vector2(1, 0.5f), sr.sprite.pixelsPerUnit);
             sr.sprite = tsp;
             float backSize = sr.sprite.bounds.size.x;
             attributeTransform.localPosition = new Vector3(-backSize / 2f, 0, 1);
@@ -145,7 +145,7 @@ public class Horse : MonoBehaviour
         }
         else if (team == Team.B)
         {
-            Sprite tsp = Sprite.Create(test, rect, new Vector2(1, 0.5f), sr.sprite.pixelsPerUnit);
+            Sprite tsp = Sprite.Create(texture, rect, new Vector2(1, 0.5f), sr.sprite.pixelsPerUnit);
             sr.sprite = tsp;
             float backSize = sr.sprite.bounds.size.x;
             attributeTransform.localPosition = new Vector3(backSize / 2f, 0, 1);

@@ -23,14 +23,14 @@ public class ShopItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,I
     private Transform descRoot;
     private TextMeshProUGUI desctext;
     private Horse tmpBoughtItem;
+    private Image icon;
 
     private void Awake()
     {
         texts = transform.Find("BottomTexts");
         damageText = texts.Find("Damage/Text").GetComponent<TextMeshProUGUI>();
         speedText = texts.Find("Speed/Text").GetComponent<TextMeshProUGUI>();
-        // nameText = texts.Find("Name").GetComponent<TextMeshProUGUI>();
-        
+        icon = transform.Find("Icon").GetComponent<Image>();
         descRoot = transform.Find("DescriptionRoot");
         
         
@@ -53,7 +53,7 @@ public class ShopItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,I
         desctext.text = $"<align=center><size=135%><color=orange>{type.ToString()}</color></align>\n" + "<size=30%>\n" +
                         $"<size=100%>{desc}";
         descRoot.gameObject.SetActive(false);
-            // <align=center><size=25><color=orange>≤‚ ‘</color></size></align><size=30%>\n<size=100%>
+        icon.sprite = Resources.Load<Sprite>(type.ToString());
     }
 
     public void OnPointerEnter(PointerEventData eventData)

@@ -26,8 +26,6 @@ public enum GameState
 
 public class GameCore : Service
 {
-    public UnityEvent<float> OnFightTick;
-    public UnityEvent OnFightStart;
     public GameState currentState;
     public float curTime => gameTimer.Time;
 
@@ -42,8 +40,6 @@ public class GameCore : Service
     protected override void Awake()
     {
         base.Awake();
-        DontDestroyOnLoad(this);
-        
     }
 
     protected override void Start()
@@ -121,5 +117,10 @@ public class GameCore : Service
     public List<Road> GetRoadList()
     {
         return roads;
+    }
+
+    public void OnGameEnd()
+    {
+        
     }
 }
