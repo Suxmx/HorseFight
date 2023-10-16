@@ -34,7 +34,7 @@ namespace MyTimer
 
         private void Awake()
         {
-            DontDestroyOnLoad(gameObject);
+            // DontDestroyOnLoad(gameObject);
             foreach (EInvokeMode mode in System.Enum.GetValues(typeof(EInvokeMode)))
             {
                 cycle.Add(mode, null);

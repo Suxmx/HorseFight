@@ -35,7 +35,6 @@ public class ShopManager : Service, IPointerExitHandler
         get => curRound;
         set
         {
-            Debug.Log(value);
             curRound = value;
             shopRoundText.text = $"{value}/5";
         }
