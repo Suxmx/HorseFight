@@ -151,8 +151,8 @@ public class Road : MonoBehaviour
     {
         Horse aHorse = infoDic[Team.A].horse, bHorse = infoDic[Team.B].horse;
         if (!aHorse || !bHorse) return false;
-        if ((aHorse.type == EHorse.ÓÄÁé && !aHorse.skill.silented) ||
-            (bHorse.type == EHorse.ÓÄÁé && !bHorse.skill.silented))
+        if ((aHorse.type == EHorse.ÊçÅ® && !aHorse.skill.silented) ||
+            (bHorse.type == EHorse.ÊçÅ® && !bHorse.skill.silented))
             return false;
         return aHorse.transform.position.x >= bHorse.transform.position.x;
     }
