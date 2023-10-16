@@ -122,11 +122,6 @@ public class GameCore : Service
         return roads;
     }
 
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Escape))OnGameEnd();
-    }
-
     public void OnGameEnd()
     {
         GetComponent<AudioSource>().Play();
