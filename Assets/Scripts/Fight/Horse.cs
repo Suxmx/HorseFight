@@ -165,6 +165,7 @@ public class Horse : MonoBehaviour
         if (HasStatus(EStatus.Die)) return;
         AddStatus(EStatus.Die);
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        GetComponent<AudioSource>().Play();
         // sr.sprite = backgroundM;
         attributeTransform.localPosition = new Vector3(0, 0, 1);
         StartCoroutine(IeLose());

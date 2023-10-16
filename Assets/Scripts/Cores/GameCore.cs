@@ -129,6 +129,7 @@ public class GameCore : Service
 
     public void OnGameEnd()
     {
+        GetComponent<AudioSource>().Play();
         sceneController.LoadNextScene();
     }
 

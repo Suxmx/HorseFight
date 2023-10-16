@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class ShopManager : Service, IPointerExitHandler
 {
     public float aniTime = 0.2f;
-
+    public AudioSource buy, enter;
     private float height;
     private bool ifShow;
 
@@ -88,6 +88,8 @@ public class ShopManager : Service, IPointerExitHandler
 
     IEnumerator IeShowPanel()
     {
+        enter.Play();
+        enter.time = 0.2f;
         float posx = panelRect.anchoredPosition.x;
         for (int i = 1; i <= loopTimes; i++)
         {
@@ -139,6 +141,8 @@ public class ShopManager : Service, IPointerExitHandler
         }
 
         //购买
+        buy.Play();
+        buy.time = 0.2f;
         playerDic[curTeam].Coins -= item.price;
         playerDic[curTeam].ownHorses.Add(item.type);
         Debug.Log($"{curTeam}购买{item.type}成功,剩余金币{playerDic[curTeam].Coins}");
@@ -167,7 +171,7 @@ public class ShopManager : Service, IPointerExitHandler
     {
         openButton.onClick.RemoveAllListeners();
         openButton.onClick.AddListener(ShowShop);
-        openButtonText.text = "商店";
+        
     }
 
     public void NextRound()

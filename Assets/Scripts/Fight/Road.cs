@@ -27,6 +27,9 @@ public class Road : MonoBehaviour
     [LabelText("僵持")] public bool stalemated = false;
     [LabelText("是否开始")] public bool ifStart = false;
 
+    [Header("音效")] public AudioSource onwin;
+    public AudioSource onput;
+    public AudioSource onhit;
     public bool end => stalemated || hasHorseWin;
 
     private Vector2 leftPos => leftTrans.position;
@@ -168,6 +171,7 @@ public class Road : MonoBehaviour
             {
                 core.AddScore(info.team, info.horse.score);
                 Debug.Log($"{info.team} Win At {roadTimer.Time}");
+                onwin.Play();
             }
         }
 
@@ -194,6 +198,7 @@ public class Road : MonoBehaviour
         }
         else
         {
+            if(!stalemated)onhit.Play();
             stalemated = true;
             return Team.None;
         }
@@ -203,6 +208,7 @@ public class Road : MonoBehaviour
     {
         var teamInfo = infoDic[horse.horseTeam];
         if (teamInfo.horse) return;
+        onput.Play();
         teamInfo.horse = horse;
         horse.locateRoad = this;
         horse.transform.position = teamInfo.startPoint;
