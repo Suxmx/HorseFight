@@ -30,7 +30,7 @@ public class Road : MonoBehaviour
     [Header("ÒôÐ§")] public AudioSource onwin;
     public AudioSource onput;
     public AudioSource onhit;
-    public bool end => stalemated || hasHorseWin;
+    public bool end => stalemated || hasHorseWin||(!GetHorse(Team.A)||!GetHorse(Team.B));
 
     private Vector2 leftPos => leftTrans.position;
     private Vector2 rightPos => rightTrans.position;

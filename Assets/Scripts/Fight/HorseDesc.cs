@@ -20,7 +20,7 @@ public class HorseDesc : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log(gameObject.name);
+        // Debug.Log(gameObject.name);
         Canvas canvas;
         canvas = Instantiate(descCanvas, transform).GetComponent<Canvas>();
         canvas.worldCamera = Camera.main;
@@ -33,7 +33,7 @@ public class HorseDesc : MonoBehaviour
     private void Start()
     {
         factory = ServiceLocator.Get<HorseFactory>();
-        Debug.Log($"{factory.GetHorseDesc(type)} {type}");
+        // Debug.Log($"{factory.GetHorseDesc(type)} {type}");
         string desc = factory.GetHorseDesc(type);
         if (string.IsNullOrEmpty(desc)) desc = "无特殊技能";
         text.text = $"<align=center><size=25><color=orange>{type}</color></size></align><size=30%>\n<size=100%>" + desc;
