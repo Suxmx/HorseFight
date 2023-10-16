@@ -37,6 +37,7 @@ namespace Services
         {
             base.Awake();
             core = new SceneControllerCore(this, BeforeLoadScene, AfterLoadScene);
+            DontDestroyOnLoad(this);
         }
 
         public void LoadScene(string name, LoadSceneMode mode = LoadSceneMode.Single)
