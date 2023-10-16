@@ -808,6 +808,7 @@ MonoBehaviour:
   score: 1
   horseTeam: 0
   locateRoad: {fileID: 0}
+  ifHiding: 0
   statuses: []
 --- !u!212 &1654638387566370333
 SpriteRenderer:
@@ -850,7 +851,7 @@ SpriteRenderer:
   m_SortingLayerID: -73709949
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: c53406fab9744fc4fb0cffd4a6fbba61, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a82ca63ad9ac51e41816160972728ffb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
