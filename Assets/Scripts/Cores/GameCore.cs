@@ -124,6 +124,11 @@ public class GameCore : Service
 
     public void OnGameEnd()
     {
+        Invoke(nameof(LoadEndScene),0.7f);
+    }
+
+    private void LoadEndScene()
+    {
         GetComponent<AudioSource>().Play();
         sceneController.LoadNextScene();
     }
