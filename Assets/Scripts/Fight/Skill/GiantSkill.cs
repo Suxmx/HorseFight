@@ -8,23 +8,27 @@ public class GiantSkill : Skill
     {
         base.OnKill(overflow);
         if(silented|| triggered)return;
-        List<Road> roads = core.GetRoadList();
+        List<Road> roads = roadManager.GetRoads();
         int up = owner.locateRoad.num - 2, down = owner.locateRoad.num;
         if (up >= 0)
         {
             Horse horse = roads[up].GetHorse(owner.horseTeam);
-            if (!horse) return;
-            horse.AddStatus(EStatus.Giant,overflow,0);
-            triggered = true;
-            Debug.Log($"Road {owner.locateRoad.num}: Team{owner.horseTeam} {owner.type}技能触发\nRoad {up+1}");
+            if (horse)
+            {
+                horse.AddStatus(EStatus.Giant, overflow, 0);
+                triggered = true;
+                Debug.Log($"Road {owner.locateRoad.num}: Team{owner.horseTeam} {owner.type}技能触发\nRoad {up + 1}");
+            }
         }
         if (down < 5)
         {
             Horse horse = roads[down].GetHorse(owner.horseTeam);
-            if (!horse) return;
-            horse.AddStatus(EStatus.FireHorse,overflow,0);
-            triggered = true;
-            Debug.Log($"Road {owner.locateRoad.num}: Team{owner.horseTeam} {owner.type}技能触发\n Road {down+1}");
+            if (horse)
+            {
+                horse.AddStatus(EStatus.Giant, overflow, 0);
+                triggered = true;
+                Debug.Log($"Road {owner.locateRoad.num}: Team{owner.horseTeam} {owner.type}技能触发\n Road {down + 1}");
+            }
         }
     }
 }
