@@ -7,19 +7,19 @@ public class FireHorse : Skill
     {
         base.OnStart();
         if (silented) return;
-        List<Road> roads = core.GetRoadList();
+        List<Road> roads = roadManager.GetRoads();
         int up = owner.locateRoad.num - 2, down = owner.locateRoad.num;
         if (up >= 0)
         {
             Horse horse = roads[up].GetHorse(owner.horseTeam);
-            if (!horse) return;
-            horse.AddStatus(EStatus.FireHorse);
+            if (horse) 
+                horse.AddStatus(EStatus.FireHorse);
         }
         if (down < 5)
         {
             Horse horse = roads[down].GetHorse(owner.horseTeam);
-            if (!horse) return;
-            horse.AddStatus(EStatus.FireHorse);
+            if (horse)
+                horse.AddStatus(EStatus.FireHorse);
         }
     }
 }
