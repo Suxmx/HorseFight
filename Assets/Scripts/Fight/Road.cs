@@ -195,15 +195,15 @@ public class Road : MonoBehaviour
         }
     }
 
-    public void SetHorse(Horse horse)
+    public bool SetHorse(Horse horse)
     {
         var teamInfo = infoDic[horse.horseTeam];
-        if (teamInfo.horse) return;
+        if (teamInfo.horse) return false;
         onput.Play();
         teamInfo.horse = horse;
         horse.locateRoad = this;
         horse.transform.position = teamInfo.startPoint;
-        horse.SetPutMode(horse.horseTeam, false);
+        // horse.SetPutMode(horse.horseTeam, false);
         horse.SetDir(horse.horseTeam);
         horse.skill.OnPut();
         if (horse.horseTeam == Team.A)
@@ -211,9 +211,8 @@ public class Road : MonoBehaviour
             horse.HideSelf();
             shop.SetCoinTextUnknown(horse.price);
         }
-
-        // teamInfo.spriteSize = horse.GetComponent<SpriteRenderer>().bounds.size.x;
         shop.NextRound();
+        return true;
     }
 
     public void ShowHorses()

@@ -29,6 +29,7 @@ public class ShopManager : Service, IPointerExitHandler
     private HorseFactory horseFactory;
     private GameCore core;
     private RoadManager roadManager;
+    private HorsePutter horsePutter;
 
     private int curRound=1;
     private int CurRound
@@ -47,6 +48,7 @@ public class ShopManager : Service, IPointerExitHandler
     protected override void Awake()
     {
         base.Awake();
+        //寻找与设置子类UI
         panelObj = transform.Find("ShopPanel").gameObject;
         openButton = transform.Find("ShopButton").GetComponent<Button>();
         openButtonText = openButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
@@ -56,9 +58,11 @@ public class ShopManager : Service, IPointerExitHandler
         panelRect = panelObj.GetComponent<RectTransform>();
         height = panelRect.sizeDelta.y;
         ifShow = false;
-        
+        //设置隐藏动画
         loopTimes = (int)(aniTime / 0.02f);
         shopItems = new List<ShopItem>();
+        //获取HorsePutter
+        horsePutter = transform.Find("HorsePutter").GetComponent<HorsePutter>();
     }
 
     protected override void Start()
@@ -151,9 +155,10 @@ public class ShopManager : Service, IPointerExitHandler
         Vector3 mousePosition = Input.mousePosition;
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, 10f));
         gainItem.position = worldPosition;
-        gainItem.GetComponent<Horse>().SetPutMode(curTeam, true);
+        gainItem.GetComponent<Horse>().SetTeam(curTeam);
+        horsePutter.SetHorse(gainItem.GetComponent<Horse>());
+        // gainItem.GetComponent<Horse>().SetPutMode(curTeam, true);//TODO:替换
         //撤回
-        openButtonText.text = "撤回并打开商店";
         openButton.onClick.AddListener(() =>
         {
             Destroy(gainItem.gameObject);
@@ -186,6 +191,7 @@ public class ShopManager : Service, IPointerExitHandler
             shopRoundText.transform.parent.gameObject.SetActive(false);
             RecoveryCoinText();
             roadManager.ShowAllHorses();
+            horsePutter.gameObject.SetActive(false);
             core.FightReady();
             return;
         }

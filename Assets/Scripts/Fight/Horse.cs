@@ -91,22 +91,22 @@ public class Horse : MonoBehaviour
 
     private void Update()
     {
-        if (beingPut)
-        {
-            Vector3 mousePos = Input.mousePosition;
-            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 10f));
-            transform.position = mouseWorldPos;
-            if (Input.GetMouseButtonDown(0))
-            {
-                RaycastHit2D hit = Physics2D.Raycast(mouseWorldPos, Vector2.zero);
-                if (hit.collider != null)
-                {
-                    if ((horseTeam == Team.A && hit.transform.name[0] == 'R') ||
-                        (horseTeam == Team.B && hit.transform.name[0] == 'L')) return;
-                    hit.transform.parent.GetComponent<Road>().SetHorse(this);
-                }
-            }
-        }
+        // if (beingPut)
+        // {
+        //     Vector3 mousePos = Input.mousePosition;
+        //     Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 10f));
+        //     transform.position = mouseWorldPos;
+        //     if (Input.GetMouseButtonDown(0))
+        //     {
+        //         RaycastHit2D hit = Physics2D.Raycast(mouseWorldPos, Vector2.zero);
+        //         if (hit.collider != null)
+        //         {
+        //             if ((horseTeam == Team.A && hit.transform.name[0] == 'R') ||
+        //                 (horseTeam == Team.B && hit.transform.name[0] == 'L')) return;
+        //             hit.transform.parent.GetComponent<Road>().SetHorse(this);
+        //         }
+        //     }
+        // }
     }
 
     public void ResetText()
@@ -241,11 +241,16 @@ public class Horse : MonoBehaviour
         ResetText();
     }
 
-    public void SetPutMode(Team team, bool mode)
+    // public void SetPutMode(Team team, bool mode)
+    // {
+    //     if (mode == beingPut) return;
+    //     horseTeam = team;
+    //     beingPut = mode;
+    // }
+
+    public void SetTeam(Team team)
     {
-        if (mode == beingPut) return;
         horseTeam = team;
-        beingPut = mode;
     }
 
     #region 隐藏动画
