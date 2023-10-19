@@ -30,13 +30,14 @@ public class Road : MonoBehaviour
     [Header("音效")] public AudioSource onwin;
     public AudioSource onput;
     public AudioSource onhit;
-    public bool end => stalemated || hasHorseWin||(!GetHorse(Team.A)||!GetHorse(Team.B));
+    public bool end => stalemated || hasHorseWin||(!GetHorse(Team.A)&&!GetHorse(Team.B));
 
     private Vector2 leftPos => leftTrans.position;
     private Vector2 rightPos => rightTrans.position;
     private Transform leftTrans, rightTrans;
     private Dictionary<Team, RoadInfo> infoDic;
     private GameCore core;
+    private RoadManager roadManager;
     private ShopManager shop;
     private TimerOnly roadTimer;
     private float spriteSize;
@@ -55,26 +56,16 @@ public class Road : MonoBehaviour
         infoDic = new Dictionary<Team, RoadInfo>();
         infoDic.Add(Team.A, infoa);
         infoDic.Add(Team.B, infob);
+        roadManager =GameObject.Find("RoadManager").GetComponent<RoadManager>();//为了在Awake中注册该road
+        roadManager.RegisterRoad(this);
     }
 
     private void Start()
     {
         core = ServiceLocator.Get<GameCore>();
         shop = ServiceLocator.Get<ShopManager>();
-        core.RegisterRoad(this);
+        
     }
-
-    // private void Update()
-    // {
-    //     if (!ifStart) return;
-    //     LogicUpdate();
-    // }
-    //
-    // private void FixedUpdate()
-    // {
-    //     if (!ifStart) return;
-    //     MoveHorses(Time.fixedDeltaTime);
-    // }
 
     private Vector2 CalcVec(Team team, float dt, int speed)
     {
