@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Services;
 using UnityEngine;
 
@@ -8,16 +9,18 @@ public class RoadManager: Service
     private List<Road> roads;
     private bool ifStart=false;
     private GameCore core;
+
     protected override void Start()
     {
         base.Start();
         core = ServiceLocator.Get<GameCore>();
+        roads = roads.OrderBy(road => road.gameObject.name).ToList();
     }
 
-    public void Init(List<Road> roads)
-    {
-        this.roads = roads;
-    }
+    // public void Init(List<Road> roads)
+    // {
+    //     this.roads = roads;
+    // }
 
     private void Update()
     {
@@ -70,7 +73,7 @@ public class RoadManager: Service
         ifStart = true;
     }
 
-    public void CheckWin()
+    private void CheckWin()
     {
         bool flag=true;
         foreach (var road in roads)
@@ -81,6 +84,40 @@ public class RoadManager: Service
         {
             ifStart = false;
             core.OnGameEnd();
+        }
+    }
+
+    public void RegisterRoad(Road road)
+    {
+        if (roads == null) roads = new List<Road>();
+        roads.Add(road);
+    }
+
+    public List<Road> GetRoads()
+    {
+        return roads;
+    }
+
+    /// <summary>
+    /// 根据道路序号来获得Road
+    /// </summary>
+    /// <param name="num">Road序号 从一开始</param>
+    /// <returns></returns>
+    public Road GetRoad(int num)
+    {
+        if (num < 1 || num > roads.Count)
+        {
+            return null;
+        }
+
+        return roads[num - 1];
+    }
+
+    public void ShowAllHorses()
+    {
+        foreach (var road in roads)
+        {
+            road.ShowHorses();
         }
     }
 }

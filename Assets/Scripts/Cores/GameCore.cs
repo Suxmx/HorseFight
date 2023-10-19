@@ -28,8 +28,7 @@ public class GameCore : Service
 {
     public GameState currentState;
     public float curTime => gameTimer.Time;
-
-    private List<Road> roads= new List<Road>();
+    
     private PlayerInfo playerA, playerB;
     private TimerOnly gameTimer;
     private ShopManager shop;
@@ -77,14 +76,12 @@ public class GameCore : Service
 
     private void ResetGame()
     {
-        roads = new List<Road>();
         InitGame();
     }
 
     public void FightReady()
     {
         currentState = GameState.Fighting;
-        roads = roads.OrderBy(road => road.gameObject.name).ToList();
         startButton.gameObject.SetActive(true);
     }
 
@@ -95,31 +92,12 @@ public class GameCore : Service
         startButton.gameObject.SetActive(false);
         gameTimer = new TimerOnly(true);
         gameTimer.Restart();
-        roadManager.Init(roads);
         roadManager.OnStart();
-    }
-
-    public void RegisterRoad(Road road)
-    {
-        roads.Add(road);
     }
 
     public void AddScore(Team team, int score)
     {
         playerDic[team].Scores+=score;
-    }
-
-    public void ShowAllHorses()
-    {
-        foreach (var road in roads)
-        {
-            road.ShowHorses();
-        }
-    }
-
-    public List<Road> GetRoadList()
-    {
-        return roads;
     }
 
     public void OnGameEnd()

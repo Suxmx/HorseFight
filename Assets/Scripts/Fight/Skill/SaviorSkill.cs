@@ -30,7 +30,7 @@ public class SaviorSkill : Skill
         //     return;
         // }
 
-        List<Road> roads = core.GetRoadList();
+        List<Road> roads = roadManager.GetRoads();
         List<Horse> horses = new List<Horse>();
         foreach (var road in roads)
         {

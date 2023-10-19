@@ -10,7 +10,7 @@ public class RushSkill: Skill
     {
         base.OnStart();
         ownerInfo = owner.locateRoad.GetInfo(owner.horseTeam);
-        roads = core.GetRoadList();
+        roads = roadManager.GetRoads();
     }
 
     public override void TickCheck()

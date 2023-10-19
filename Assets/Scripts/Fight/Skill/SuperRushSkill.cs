@@ -6,7 +6,7 @@ public class SuperRushSkill : Skill
     {
         base.OnEnd();
         if(silented)return;
-        List<Road> roads = core.GetRoadList();
+        List<Road> roads = roadManager.GetRoads();
         int down = owner.locateRoad.num;
         if (down < 5)
         {

@@ -28,6 +28,7 @@ public class ShopManager : Service, IPointerExitHandler
     private Team curTeam = Team.A; //当前正在购买的对象
     private HorseFactory horseFactory;
     private GameCore core;
+    private RoadManager roadManager;
 
     private int curRound=1;
     private int CurRound
@@ -65,6 +66,7 @@ public class ShopManager : Service, IPointerExitHandler
         base.Start();
         horseFactory = ServiceLocator.Get<HorseFactory>();
         core = ServiceLocator.Get<GameCore>();
+        roadManager = ServiceLocator.Get<RoadManager>();
     }
 
     # region 商店动画
@@ -183,7 +185,7 @@ public class ShopManager : Service, IPointerExitHandler
         {
             shopRoundText.transform.parent.gameObject.SetActive(false);
             RecoveryCoinText();
-            core.ShowAllHorses();
+            roadManager.ShowAllHorses();
             core.FightReady();
             return;
         }
@@ -191,7 +193,7 @@ public class ShopManager : Service, IPointerExitHandler
         Team nextTeam = curTeam == Team.A ? Team.B : Team.A;
         if (curTeam == Team.B)
         {
-            core.ShowAllHorses();
+            roadManager.ShowAllHorses();
             RecoveryCoinText();
             CurRound++;
         }
@@ -201,7 +203,7 @@ public class ShopManager : Service, IPointerExitHandler
             curTeam = nextTeam;
         else
         {
-            core.ShowAllHorses();
+            roadManager.ShowAllHorses();
             RecoveryCoinText();
             if(nextTeam==Team.B)
                 CurRound++;

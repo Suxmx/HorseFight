@@ -8,7 +8,7 @@ public class BommerSkill : Skill
     {
         base.OnDeath();
         if (silented|| triggered) return;
-        List<Road> roads = core.GetRoadList();
+        List<Road> roads = roadManager.GetRoads();
         float posx = owner.transform.position.x, unit = roads[0].roadLength / 20f;
         Team anotherTeam = owner.horseTeam == Team.A ? Team.B : Team.A;
         foreach (var road in roads)

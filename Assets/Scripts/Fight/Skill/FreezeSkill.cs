@@ -5,16 +5,16 @@ using UnityEngine;
 public class FreezeSkill : Skill
 {
     private List<Road> roads;
-    
+
     public override void OnStart()
     {
         base.OnStart();
-        if(silented)return;
+        if (silented) return;
         Team another = owner.horseTeam == Team.A ? Team.B : Team.A;
-        roads = core.GetRoadList().ToList();//副本
+        roads = roadManager.GetRoads().ToList(); //副本
         roads.Remove(owner.locateRoad);
         Debug.Log(roads.Count);
-        for (int i = 1; i <= 3&& roads.Count>0; i++)
+        for (int i = 1; i <= 3 && roads.Count > 0; i++)
         {
             int rand = Random.Range(0, roads.Count);
             Horse horse = roads[rand].GetHorse(another);
@@ -24,6 +24,7 @@ public class FreezeSkill : Skill
                 i--;
                 continue;
             }
+
             horse.AddStatus(EStatus.Freeze);
         }
     }
