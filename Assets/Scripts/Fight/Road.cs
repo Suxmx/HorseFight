@@ -30,12 +30,12 @@ public class Road : MonoBehaviour
     [Header("音效")] public AudioSource onwin;
     public AudioSource onput;
     public AudioSource onhit;
-    public bool end => stalemated || hasHorseWin||(!GetHorse(Team.A)&&!GetHorse(Team.B));
+    public bool end => stalemated || hasHorseWin || (!GetHorse(Team.A) && !GetHorse(Team.B));
 
     private Vector2 leftPos => leftTrans.position;
     private Vector2 rightPos => rightTrans.position;
     private Transform leftTrans, rightTrans;
-    private Dictionary<Team, RoadInfo> infoDic;
+    private Dictionary<Team, RoadInfo> infoDic; //TODO:实现多马匹支持,但是似乎优先级较低
     private GameCore core;
     private RoadManager roadManager;
     private ShopManager shop;
@@ -56,7 +56,7 @@ public class Road : MonoBehaviour
         infoDic = new Dictionary<Team, RoadInfo>();
         infoDic.Add(Team.A, infoa);
         infoDic.Add(Team.B, infob);
-        roadManager =GameObject.Find("RoadManager").GetComponent<RoadManager>();//为了在Awake中注册该road
+        roadManager = GameObject.Find("RoadManager").GetComponent<RoadManager>(); //为了在Awake中注册该road
         roadManager.RegisterRoad(this);
     }
 
@@ -64,7 +64,6 @@ public class Road : MonoBehaviour
     {
         core = ServiceLocator.Get<GameCore>();
         shop = ServiceLocator.Get<ShopManager>();
-        
     }
 
     private Vector2 CalcVec(Team team, float dt, int speed)
@@ -87,7 +86,7 @@ public class Road : MonoBehaviour
 
     public void LogicUpdate()
     {
-        if (CheckHit() || stalemated)
+        if (CheckHit()) //重构逻辑防止多次触发Hit
         {
             HorseFight();
         }
@@ -145,7 +144,8 @@ public class Road : MonoBehaviour
         if ((aHorse.type == EHorse.淑女 && !aHorse.skill.silented) ||
             (bHorse.type == EHorse.淑女 && !bHorse.skill.silented))
             return false;
-        return aHorse.transform.position.x >= bHorse.transform.position.x;
+        return stalemated || ((aHorse.transform.position.x >= bHorse.transform.position.x) &&
+                              (!aHorse.HasStatus(EStatus.Die) && !bHorse.HasStatus(EStatus.Die)));
     }
 
     private void CheckWin()
@@ -189,7 +189,7 @@ public class Road : MonoBehaviour
         }
         else
         {
-            if(!stalemated)onhit.Play();
+            if (!stalemated) onhit.Play();
             stalemated = true;
             return Team.None;
         }
@@ -211,6 +211,7 @@ public class Road : MonoBehaviour
             horse.HideSelf();
             shop.SetCoinTextUnknown(horse.price);
         }
+
         shop.NextRound();
         return true;
     }

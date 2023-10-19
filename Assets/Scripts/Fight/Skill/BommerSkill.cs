@@ -3,11 +3,10 @@ using UnityEngine;
 
 public class BommerSkill : Skill
 {
-    private bool triggered = false;
     public override void OnDeath()
     {
         base.OnDeath();
-        if (silented|| triggered) return;
+        if (silented) return;
         List<Road> roads = roadManager.GetRoads();
         float posx = owner.transform.position.x, unit = roads[0].roadLength / 20f;
         Team anotherTeam = owner.horseTeam == Team.A ? Team.B : Team.A;
@@ -23,6 +22,5 @@ public class BommerSkill : Skill
                 
             }
         }
-        triggered = true;
     }
 }

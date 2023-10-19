@@ -63,10 +63,9 @@ public class Horse : MonoBehaviour
     private TextMeshPro speedText;
     private TextMeshPro nameText;
     private SpriteRenderer iconSr;
-    private Sprite backgroundL, backgroundR, backgroundM;
+
     [LabelText("词条"), SerializeField] private List<Status> statuses;
     private StatusFactory statusFactory;
-    private bool beingPut = false;
 
     [NonSerialized] public int oriDamage; //初始攻击力
     [NonSerialized] public int oriSpeed;
@@ -76,9 +75,7 @@ public class Horse : MonoBehaviour
         ResetText();
         skill = transform.Find("Skill").GetComponent<Skill>();
         iconSr = GetComponent<SpriteRenderer>();
-        backgroundL = Resources.Load<Sprite>("HorseBackgroundL");
-        backgroundR = Resources.Load<Sprite>("HorseBackgroundR");
-        backgroundM = Resources.Load<Sprite>("HorseBackgroundM");
+
         statuses = new List<Status>();
         oriDamage = damage;
         oriSpeed = speed;
@@ -87,26 +84,6 @@ public class Horse : MonoBehaviour
     private void Start()
     {
         statusFactory = ServiceLocator.Get<StatusFactory>();
-    }
-
-    private void Update()
-    {
-        // if (beingPut)
-        // {
-        //     Vector3 mousePos = Input.mousePosition;
-        //     Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 10f));
-        //     transform.position = mouseWorldPos;
-        //     if (Input.GetMouseButtonDown(0))
-        //     {
-        //         RaycastHit2D hit = Physics2D.Raycast(mouseWorldPos, Vector2.zero);
-        //         if (hit.collider != null)
-        //         {
-        //             if ((horseTeam == Team.A && hit.transform.name[0] == 'R') ||
-        //                 (horseTeam == Team.B && hit.transform.name[0] == 'L')) return;
-        //             hit.transform.parent.GetComponent<Road>().SetHorse(this);
-        //         }
-        //     }
-        // }
     }
 
     public void ResetText()
@@ -160,6 +137,8 @@ public class Horse : MonoBehaviour
         iconSr.flipX = horseTeam != Team.A;
     }
 
+    #region 死亡动画
+
     public void LoseCG()
     {
         if (HasStatus(EStatus.Die)) return;
@@ -189,6 +168,15 @@ public class Horse : MonoBehaviour
         Destroy(tmpParent.gameObject);
     }
 
+    #endregion
+
+    #region 词条相关
+
+    /// <summary>
+    /// 查看是否有某词条
+    /// </summary>
+    /// <param name="tag">词条枚举</param>
+    /// <returns></returns>
     public bool HasStatus(EStatus tag)
     {
         foreach (var status in statuses)
@@ -200,6 +188,11 @@ public class Horse : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// 添加词条
+    /// </summary>
+    /// <param name="status">词条枚举</param>
+    /// <returns></returns>
     public bool AddStatus(EStatus status)
     {
         if (HasStatus(status) && !statusFactory.GetTemplateStatus(status).repeatable) return false;
@@ -207,6 +200,13 @@ public class Horse : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// 添加词条的重载,给增益不确定的词条使用
+    /// </summary>
+    /// <param name="status">词条枚举</param>
+    /// <param name="d">词条攻击增益</param>
+    /// <param name="s">词条速度增益</param>
+    /// <returns></returns>
     public bool AddStatus(EStatus status, int d, int s)
     {
         if (HasStatus(status) && !statusFactory.GetTemplateStatus(status).repeatable) return false;
@@ -217,6 +217,9 @@ public class Horse : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// 清除临时(ifTmp==True)的词条
+    /// </summary>
     public void ClearStatus()
     {
         statuses.RemoveAll(status => status.ifTmp);
@@ -224,9 +227,12 @@ public class Horse : MonoBehaviour
 
     public void RemoveStatus(EStatus type)
     {
-        statuses.RemoveAll(status => status.statusTag==type);
+        statuses.RemoveAll(status => status.statusTag == type);
     }
 
+    /// <summary>
+    /// 计算所有词条的增益
+    /// </summary>
     public void CalcDamageAndSpeed()
     {
         int tmpD = oriDamage, tmpS = oriSpeed;
@@ -241,12 +247,8 @@ public class Horse : MonoBehaviour
         ResetText();
     }
 
-    // public void SetPutMode(Team team, bool mode)
-    // {
-    //     if (mode == beingPut) return;
-    //     horseTeam = team;
-    //     beingPut = mode;
-    // }
+    #endregion
+
 
     public void SetTeam(Team team)
     {

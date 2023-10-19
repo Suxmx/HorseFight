@@ -138,7 +138,7 @@ public class ShopManager : Service, IPointerExitHandler
 
     public void ShopRequest(ShopItem item)
     {
-        if (!ifShow) return;
+        if (!ifShow|| horsePutter.cacheHorse) return;
         if (playerDic[curTeam].Coins < item.price)
         {
             Debug.LogWarning($"购买{item.type}失败,{curTeam}所持有金币:{playerDic[curTeam].Coins},目标价格:{item.price}");
@@ -157,7 +157,6 @@ public class ShopManager : Service, IPointerExitHandler
         gainItem.position = worldPosition;
         gainItem.GetComponent<Horse>().SetTeam(curTeam);
         horsePutter.SetHorse(gainItem.GetComponent<Horse>());
-        // gainItem.GetComponent<Horse>().SetPutMode(curTeam, true);//TODO:替换
         //撤回
         openButton.onClick.AddListener(() =>
         {

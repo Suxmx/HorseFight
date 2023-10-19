@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class HorsePutter : MonoBehaviour
 {
-    private Horse cacheHorse;
+    public Horse cacheHorse;
     public void Update()
     {
         if (!cacheHorse) return;
@@ -30,5 +30,10 @@ public class HorsePutter : MonoBehaviour
     public void SetHorse(Horse horse)
     {
         cacheHorse = horse;
+    }
+
+    public void RevertHorse()
+    {
+        
     }
 }
