@@ -27,15 +27,13 @@ public enum GameState
 public class GameCore : Service
 {
     public GameState currentState;
-    public float curTime => gameTimer.Time;
-    
     private PlayerInfo playerA, playerB;
-    private TimerOnly gameTimer;
     private ShopManager shop;
     private RoadManager roadManager;
     private Dictionary<Team, PlayerInfo> playerDic;
     private Button startButton;
     private SceneController sceneController;
+    
 
     protected override void Awake()
     {
@@ -90,8 +88,6 @@ public class GameCore : Service
     {
         Debug.LogWarning("进入对战阶段");
         startButton.gameObject.SetActive(false);
-        gameTimer = new TimerOnly(true);
-        gameTimer.Restart();
         roadManager.OnStart();
     }
 

@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using EventSystem = Services.EventSystem;
 
 public class ShopManager : Service, IPointerExitHandler
 {
@@ -30,6 +31,7 @@ public class ShopManager : Service, IPointerExitHandler
     private GameCore core;
     private RoadManager roadManager;
     private HorsePutter horsePutter;
+    private EventSystem eventSystem;
 
     private int curRound=1;
     private int CurRound
@@ -71,6 +73,7 @@ public class ShopManager : Service, IPointerExitHandler
         horseFactory = ServiceLocator.Get<HorseFactory>();
         core = ServiceLocator.Get<GameCore>();
         roadManager = ServiceLocator.Get<RoadManager>();
+        eventSystem = ServiceLocator.Get<EventSystem>();
     }
 
     # region 商店动画
@@ -203,9 +206,12 @@ public class ShopManager : Service, IPointerExitHandler
             CurRound++;
         }
 
-        //若有一方先花完钱
+        
         if (!(playerDic[nextTeam].ownHorses.Count == 5 || playerDic[nextTeam].Coins == 0))
+        {
             curTeam = nextTeam;
+        }
+        //若有一方先花完钱
         else
         {
             roadManager.ShowAllHorses();
@@ -213,6 +219,7 @@ public class ShopManager : Service, IPointerExitHandler
             if(nextTeam==Team.B)
                 CurRound++;
         }
+        eventSystem.Invoke(EEvent.OnNextRound,curTeam,CurRound);
     }
 
     /// <summary>
@@ -230,4 +237,29 @@ public class ShopManager : Service, IPointerExitHandler
         playerDic[Team.A].Coins = playerDic[Team.A].Coins;
         playerDic[Team.B].Coins = playerDic[Team.B].Coins;
     }
+
+    #region AI
+
+    public bool AIShopRequest(EHorse type)
+    {
+        int price = horseFactory.GetHorsePrice(type);
+        if (playerDic[curTeam].Coins < price)
+        {
+            Debug.LogWarning($"AI购买{type}失败,AI所持有金币:{playerDic[curTeam].Coins},目标价格:{price}");
+            return false;
+        }
+        //购买
+        buy.Play();
+        buy.time = 0.2f;
+        playerDic[curTeam].Coins -= price;
+        playerDic[curTeam].ownHorses.Add(type);
+        Debug.Log($"AI购买{type}成功,剩余金币{playerDic[curTeam].Coins}");
+        Transform gainItem = Instantiate(horseFactory.GetHorseObj(type), playerDic[curTeam].trans).transform;
+        Vector3 mousePosition = Input.mousePosition;
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, 10f));
+        gainItem.position = worldPosition;
+        gainItem.GetComponent<Horse>().SetTeam(curTeam);
+        return true;
+    }
+    #endregion
 }
