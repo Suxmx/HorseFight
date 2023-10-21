@@ -33,7 +33,8 @@ public class ShopManager : Service, IPointerExitHandler
     private HorsePutter horsePutter;
     private EventSystem eventSystem;
 
-    private int curRound=1;
+    private int curRound = 1;
+
     private int CurRound
     {
         get => curRound;
@@ -43,6 +44,7 @@ public class ShopManager : Service, IPointerExitHandler
             shopRoundText.text = $"{value}/5";
         }
     }
+
     private TextMeshProUGUI shopRoundText;
 
     private int loopTimes;
@@ -141,7 +143,7 @@ public class ShopManager : Service, IPointerExitHandler
 
     public void ShopRequest(ShopItem item)
     {
-        if (!ifShow|| horsePutter.cacheHorse) return;
+        if (!ifShow || horsePutter.cacheHorse) return;
         if (playerDic[curTeam].Coins < item.price)
         {
             Debug.LogWarning($"购买{item.type}失败,{curTeam}所持有金币:{playerDic[curTeam].Coins},目标价格:{item.price}");
@@ -179,7 +181,6 @@ public class ShopManager : Service, IPointerExitHandler
     {
         openButton.onClick.RemoveAllListeners();
         openButton.onClick.AddListener(ShowShop);
-        
     }
 
     public void NextRound()
@@ -206,7 +207,7 @@ public class ShopManager : Service, IPointerExitHandler
             CurRound++;
         }
 
-        
+
         if (!(playerDic[nextTeam].ownHorses.Count == 5 || playerDic[nextTeam].Coins == 0))
         {
             curTeam = nextTeam;
@@ -216,10 +217,11 @@ public class ShopManager : Service, IPointerExitHandler
         {
             roadManager.ShowAllHorses();
             RecoveryCoinText();
-            if(nextTeam==Team.B)
+            if (nextTeam == Team.B)
                 CurRound++;
         }
-        eventSystem.Invoke(EEvent.OnNextRound,curTeam,CurRound);
+
+        eventSystem.Invoke(EEvent.OnNextRound, curTeam, CurRound);
     }
 
     /// <summary>
@@ -240,7 +242,13 @@ public class ShopManager : Service, IPointerExitHandler
 
     #region AI
 
-    public bool AIShopRequest(EHorse type)
+    /// <summary>
+    /// AI用于商店购买的接口
+    /// </summary>
+    /// <param name="type">购买的马匹类型</param>
+    /// <param name="num">放置的道路序号,从1开始</param>
+    /// <returns></returns>
+    public bool AIShopRequest(EHorse type, int num)
     {
         int price = horseFactory.GetHorsePrice(type);
         if (playerDic[curTeam].Coins < price)
@@ -248,18 +256,19 @@ public class ShopManager : Service, IPointerExitHandler
             Debug.LogWarning($"AI购买{type}失败,AI所持有金币:{playerDic[curTeam].Coins},目标价格:{price}");
             return false;
         }
+
         //购买
         buy.Play();
         buy.time = 0.2f;
         playerDic[curTeam].Coins -= price;
         playerDic[curTeam].ownHorses.Add(type);
         Debug.Log($"AI购买{type}成功,剩余金币{playerDic[curTeam].Coins}");
-        Transform gainItem = Instantiate(horseFactory.GetHorseObj(type), playerDic[curTeam].trans).transform;
-        Vector3 mousePosition = Input.mousePosition;
-        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, 10f));
-        gainItem.position = worldPosition;
-        gainItem.GetComponent<Horse>().SetTeam(curTeam);
-        return true;
+        //初始化马
+        Transform horseTrans = Instantiate(horseFactory.GetHorseObj(type), playerDic[curTeam].trans).transform;
+        Horse horse = horseTrans.GetComponent<Horse>();
+        horse.SetTeam(curTeam);
+        return roadManager.GetRoad(num).SetHorse(horse);
     }
+
     #endregion
 }

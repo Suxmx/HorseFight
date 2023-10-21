@@ -702,6 +702,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29f90bfd226ad25449787207e5b84ef8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ifAI: 0
+  aiMode: 0
   currentState: 0
 --- !u!82 &144764491
 AudioSource:
@@ -1249,6 +1251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73c6d04f480516a4d84a01dd78845a15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cacheHorse: {fileID: 0}
 --- !u!1 &237166893
 GameObject:
   m_ObjectHideFlags: 0
@@ -4341,6 +4344,63 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1053006884872947177, guid: f10fd5727e1104543bb9bed554f5d226, type: 3}
   m_PrefabInstance: {fileID: 1043853082}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1078120666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1078120668}
+  - component: {fileID: 1078120667}
+  - component: {fileID: 1078120669}
+  m_Layer: 0
+  m_Name: Tester
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1078120667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078120666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48627f427743de244a7f1d224e3902e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1078120668
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078120666}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.583973, y: -11.713866, z: 0.091597505}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1078120669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078120666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3abe8eed001f3f04c946a033b89ffd96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1107914212
 PrefabInstance:
   m_ObjectHideFlags: 0
