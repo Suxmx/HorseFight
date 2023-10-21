@@ -17,15 +17,15 @@ namespace AI
         }
 
         public GameAI(PlayerInfo playerInfo, AIMode difficulty, EventSystem eventSystem, RoadManager roadManager,
-            ShopManager shopManager, HorseFactory horseFactory)
+            ShopManager shop, HorseFactory horseFactory)
         {
-            this.playerInfo = playerInfo;
+            this.aiInfo = playerInfo;
             this.aiTeam = playerInfo.team;
             playerTeam = aiTeam.Opponent();
             this.eventSystem = eventSystem;
             this.difficulty = difficulty;
             this.roadManager = roadManager;
-            this.shopManager = shopManager;
+            this.shop = shop;
             this.horseFactory = horseFactory;
             eventSystem.AddListener<Team, int>(EEvent.OnNextRound, AIAction);
 
@@ -35,17 +35,18 @@ namespace AI
             playerInfo.Coins = config.coin;
         }
 
-        protected PlayerInfo playerInfo;
+        protected PlayerInfo aiInfo;
         protected Team aiTeam;
         protected Team playerTeam;
         protected AIMode difficulty;
         protected AIConfig configSO;
         protected EventSystem eventSystem;
         protected RoadManager roadManager;
-        protected ShopManager shopManager;
+        protected ShopManager shop;
         protected HorseFactory horseFactory;
         protected Dictionary<EHorse, EHorse> againstDic;
         protected DifficultyConfig config;
+        protected int coins => aiInfo.Coins;
 
         protected void AIAction(Team team, int round)
         {
@@ -61,12 +62,16 @@ namespace AI
                     BeginAction();
                     break;
                 case EAIAction.Against:
+                    AgainstAction();
                     break;
                 case EAIAction.PressFollow:
+                    AgainstAction();
                     break;
                 case EAIAction.StalemateFollow:
+                    AgainstAction();
                     break;
                 case EAIAction.Random:
+                    AgainstAction();
                     break;
                 case EAIAction.Final:
                     break;
@@ -91,18 +96,48 @@ namespace AI
                 horse = randHorses[randHorse];
             }
 
-            shopManager.AIShopRequest(horse, randRoad);
+            shop.AIShopRequest(horse, randRoad);
         }
 
         protected void AgainstAction()
         {
+            string log = "针对行为开始：\n";
             List<Road> againstRoads = new List<Road>();
-            bool canAgainst = false;
             foreach (var road in roadManager.GetRoads())
             {
                 if (road.GetHorse(playerTeam) && !road.GetHorse(playerTeam).ifHiding && !road.GetHorse(aiTeam))
+                {
                     againstRoads.Add(road);
+                    log += $"\t发现玩家已揭示卡牌道路：Road {road.num}\n";
+                }
             }
+
+            againstRoads.RemoveAll(road => againstDic[road.GetHorse(playerTeam).type] == EHorse.None); //移除没有可针对的
+            againstRoads.RemoveAll(road =>
+                horseFactory.GetHorsePrice(againstDic[road.GetHorse(playerTeam).type]) > coins); //移除买不起的
+
+            if (againstRoads.Count == 0)
+            {
+                log += "\t金币不足或未发现可针对道路,采用随机行为";
+                Debug.Log(log);
+                RandomAction();
+                return;
+            }
+            //Log
+            log += "\t移除无针对卡牌或与买不起的道路后剩余:Road ";
+            foreach (var road in againstRoads)
+            {
+                log += $" {road.num}";
+            }
+            log += "\n";
+            log += $"\t最终决策：在Road {againstRoads[0].num}购买{againstDic[againstRoads[0].GetHorse(playerTeam).type]}";
+            Debug.Log(log);
+
+            shop.AIShopRequest(againstDic[againstRoads[0].GetHorse(playerTeam).type], againstRoads[0].num);
+        }
+
+        protected void RandomAction()
+        {
         }
     }
 }
