@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Services;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace AI
 {
@@ -68,6 +70,7 @@ namespace AI
             EAIAction action;
             if (team != aiTeam) return;
             if (round == 1) action = EAIAction.Beginning;
+            else if (round == 5) action = EAIAction.Final;
             else
                 action = (EAIAction)Utilities.RandomChoose(config.against, config.pressFollow,
                     config.stalemateFollow, config.random);
@@ -80,15 +83,16 @@ namespace AI
                     AgainstAction();
                     break;
                 case EAIAction.PressFollow:
-                    RandomAction();
+                    PressFollowAction();
                     break;
                 case EAIAction.StalemateFollow:
-                    RandomAction();
+                    StalemateFollowAction();
                     break;
                 case EAIAction.Random:
                     RandomAction();
                     break;
                 case EAIAction.Final:
+                    FinalAction();
                     break;
                 default:
                     Debug.LogError($"未实现{action}对应的处理函数");
@@ -117,25 +121,15 @@ namespace AI
         protected void AgainstAction()
         {
             string log = "AI针对行为开始：\n";
-            List<Road> againstRoads = new List<Road>();
-            foreach (var road in roadManager.GetRoads())
-            {
-                if (road.GetHorse(playerTeam) && !road.GetHorse(playerTeam).ifHiding && !road.GetHorse(aiTeam))
-                {
-                    againstRoads.Add(road);
-                    log += $"\t发现玩家已揭示卡牌道路：Road {road.num}\n";
-                }
-            }
-
-            againstRoads.RemoveAll(road => againstDic[road.GetHorse(playerTeam).type] == EHorse.None); //移除没有可针对的
-            againstRoads.RemoveAll(road =>
-                horseFactory.GetHorsePrice(againstDic[road.GetHorse(playerTeam).type]) > coins); //移除买不起的
-
+            var againstRoads = GetAgainstRoads(ref log);
             if (againstRoads.Count == 0)
             {
-                log += "\t金币不足或未发现可针对道路,采用随机行为";
+                log += "\t金币不足或未发现可针对道路,采用其他行为";
                 Debug.Log(log);
-                RandomAction();
+                int rand = Utilities.RandomChoose(config.random, config.pressFollow, config.stalemateFollow);
+                if (rand == 1) PressFollowAction();
+                else if (rand == 2) StalemateFollowAction();
+                else RandomAction();
                 return;
             }
 
@@ -145,6 +139,7 @@ namespace AI
             {
                 log += $" {road.num}";
             }
+
             againstRoads.Disturb();
             log += "\n";
             log += $"\t最终决策：在Road {againstRoads[0].num}购买{againstDic[againstRoads[0].GetHorse(playerTeam).type]}";
@@ -161,7 +156,7 @@ namespace AI
             prices.RemoveAll(price => price > coins);
             foreach (var price in prices)
                 odds.Add(config.randomBuyPossibility[price]);
-            int choose = Utilities.RandomChoose(odds);
+            int choose = Utilities.RandomChoose(odds); //得到随机的价格
             log += $"\t随机价格：{choose}\n";
             //根据攻击随机
             var horseList = horseFactory.GetHorsesByPrice(choose);
@@ -172,16 +167,191 @@ namespace AI
                 damage = damage == 0 ? 1 : damage;
                 damageList.Add(damage);
             }
-            choose = Utilities.RandomChoose(damageList)-1;
+
+            choose = Utilities.RandomChoose(damageList) - 1;
             EHorse chooseHorse = horseList[choose];
             log += $"\t随机马匹：{chooseHorse}\n";
             //随机道路
-            var roads = roadManager.GetRoads().ToList();
-            roads.RemoveAll(road => road.GetHorse(aiTeam) != null);
-            roads.Disturb();
+            var roads = GetPutableRoads(true);
             log += $"\t随机道路编号：{roads[0].num}";
             Debug.Log(log);
             shop.AIShopRequest(chooseHorse, roads[0].num);
+        }
+
+        protected virtual void FinalAction()
+        {
+            string log = "开始最后一回合行为:\n";
+            var againstRoads = GetAgainstRoads(ref log);
+            againstRoads = againstRoads
+                .OrderBy(road => horseFactory.GetHorsePrice(againstDic[road.GetHorse(playerTeam).type])).ToList();
+
+            if (againstRoads.Count == 0 ||
+                horseFactory.GetHorsePrice(againstDic[againstRoads[0].GetHorse(playerTeam).type]) < coins)
+            {
+                //不进行针对行为
+                log += $"\t采用随机或是跟牌\n";
+                var road = GetPutableRoads()[0];
+                var horseList = horseFactory.GetHorsesByPrice(coins > 4 ? 4 : coins);
+                List<int> damageList = new List<int>();
+                int cnt = 0, maxDamage = -1, maxIndex = 0;
+                foreach (var horse in horseList)
+                {
+                    int damage = horseFactory.GetHorseDamage(horse);
+                    damage = damage == 0 ? 1 : damage;
+                    damageList.Add(damage);
+                    if (damage > maxDamage)
+                    {
+                        maxDamage = damage;
+                        maxIndex = cnt;
+                    }
+
+                    cnt++;
+                }
+
+                int rand = Utilities.RandomChoose(config.random, config.pressFollow * 2);
+                int choose = rand == 1 ? Utilities.RandomChoose(damageList) - 1 : maxIndex;
+                EHorse chooseHorse = horseList[choose];
+                //log
+                if (rand == 1) log += "\t采用随机决策\n";
+                else log += "\t采用跟牌决策\n";
+                log += $"\t最终决策：在Road {road.num}购买{chooseHorse}";
+                Debug.Log(log);
+                //log
+                shop.AIShopRequest(chooseHorse, road.num);
+            }
+            else
+            {
+                log +=
+                    $"\t采用针对策略\n\t最终决策：在Road {againstRoads[0].num}购买{againstDic[againstRoads[0].GetHorse(playerTeam).type]}";
+                Debug.Log(log);
+                shop.AIShopRequest(againstDic[againstRoads[0].GetHorse(playerTeam).type], againstRoads[0].num);
+            }
+        }
+
+        protected void PressFollowAction()
+        {
+            string log = "开始压制跟牌行为\n";
+            var visibleRoads = GetVisibleRoads(ref log);
+            visibleRoads.Disturb();
+            if (visibleRoads.Count == 0)
+            {
+                log += "\t无可跟牌道路,进行随机行为";
+                Debug.Log(log);
+                RandomAction();
+                return;
+            }
+
+            var road = visibleRoads[0];
+            List<EHorse> horseList = new List<EHorse>();
+            foreach (EHorse horse in Enum.GetValues(typeof(EHorse)))
+            {
+                if (horse == EHorse.None) continue;
+                if (horseFactory.GetHorseDamage(horse) > road.GetHorse(playerTeam).damage)
+                    horseList.Add(horse);
+            }
+
+            horseList = horseList.OrderBy(horse => horseFactory.GetHorsePrice(horse)).ToList();
+            int cheapest = horseFactory.GetHorsePrice(horseList[0]);
+            horseList.RemoveAll(horse => horseFactory.GetHorsePrice(horse) > cheapest);
+            horseList.Disturb(); //打乱所有价格一致的之后再选择
+            if (horseList.Count == 0 || horseFactory.GetHorsePrice(horseList[0]) > coins)
+            {
+                log += $"\t无法购买可压制Road {road.num}的马匹，尝试进行僵持跟牌";
+                Debug.Log(log);
+                StalemateFollowAction();
+                return;
+            }
+
+            log += $"\t最终决策：在Road {road.num} 购买{horseList[0]}";
+            Debug.Log(log);
+            shop.AIShopRequest(horseList[0], road.num);
+        }
+
+        protected void StalemateFollowAction()
+        {
+            string log = "开始僵持跟牌行为\n";
+            var visibleRoads = GetVisibleRoads(ref log);
+            visibleRoads.Disturb();
+            if (visibleRoads.Count == 0)
+            {
+                log += "\t无可跟牌道路,进行随机行为";
+                Debug.Log(log);
+                RandomAction();
+                return;
+            }
+
+            var road = visibleRoads[0];
+            List<EHorse> horseList = new List<EHorse>();
+            foreach (EHorse horse in Enum.GetValues(typeof(EHorse)))
+            {
+                if (horse == EHorse.None) continue;
+                if (horseFactory.GetHorseDamage(horse) == road.GetHorse(playerTeam).damage)
+                    horseList.Add(horse);
+            }
+
+            horseList = horseList.OrderBy(horse => horseFactory.GetHorsePrice(horse)).ToList();
+            int cheapest = horseFactory.GetHorsePrice(horseList[0]);
+            horseList.RemoveAll(horse => horseFactory.GetHorsePrice(horse) > cheapest);
+            horseList.Disturb(); //打乱所有价格一致的之后再选择
+            EHorse chooseHorse = horseList[0];
+            if (horseFactory.GetHorsePrice(chooseHorse) > coins)
+            {
+                log += $"\t无法购买可压制Road {road.num}的马匹，尝试进行随机跟牌";
+                Debug.Log(log);
+                RandomAction();
+                return;
+            }
+
+            log += $"\t最终决策：在Road {road.num} 购买{chooseHorse}";
+            Debug.Log(log);
+            shop.AIShopRequest(chooseHorse, road.num);
+        }
+
+        /// <summary>
+        /// 获取AI未放置卡牌而玩家已有可见卡牌的道路
+        /// </summary>
+        /// <param name="log">log</param>
+        /// <returns></returns>
+        protected List<Road> GetVisibleRoads(ref string log)
+        {
+            List<Road> visibleRoads = new List<Road>();
+            foreach (var road in roadManager.GetRoads())
+            {
+                if (road.GetHorse(playerTeam) && !road.GetHorse(playerTeam).ifHiding && !road.GetHorse(aiTeam))
+                {
+                    visibleRoads.Add(road);
+                    log += $"\t发现玩家已揭示卡牌道路：Road {road.num}\n";
+                }
+            }
+
+            return visibleRoads;
+        }
+
+        /// <summary>
+        /// 获取可针对的道路
+        /// </summary>
+        /// <param name="log"></param>
+        /// <returns></returns>
+        protected List<Road> GetAgainstRoads(ref string log)
+        {
+            var againstRoads = GetVisibleRoads(ref log);
+            againstRoads.RemoveAll(road => againstDic[road.GetHorse(playerTeam).type] == EHorse.None); //移除没有可针对的
+            againstRoads.RemoveAll(road =>
+                horseFactory.GetHorsePrice(againstDic[road.GetHorse(playerTeam).type]) > coins); //移除买不起的
+            return againstRoads;
+        }
+
+        /// <summary>
+        /// 获取还能够防止马匹的道路
+        /// </summary>
+        /// <param name="disturb">是否打乱</param>
+        /// <returns></returns>
+        protected List<Road> GetPutableRoads(bool disturb = false)
+        {
+            var roads = roadManager.GetRoads().ToList();
+            roads.RemoveAll(road => road.GetHorse(aiTeam) != null);
+            if (disturb) roads.Disturb();
+            return roads;
         }
     }
 }

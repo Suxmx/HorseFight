@@ -703,7 +703,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ifAI: 1
-  aiMode: 0
+  aiMode: 2
   currentState: 0
 --- !u!82 &144764491
 AudioSource:
@@ -3597,7 +3597,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 349186563, guid: f10fd5727e1104543bb9bed554f5d226, type: 3}
       propertyPath: type
-      value: 23
+      value: 21
+      objectReference: {fileID: 0}
+    - target: {fileID: 349186563, guid: f10fd5727e1104543bb9bed554f5d226, type: 3}
+      propertyPath: price
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 524777797, guid: f10fd5727e1104543bb9bed554f5d226, type: 3}
       propertyPath: m_AnchorMax.y

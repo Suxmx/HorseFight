@@ -114,7 +114,7 @@ MonoBehaviour:
     speed: 2
     price: 4
     description: "\u76F8\u90BB\u8DEF\u7EBF\u6211\u65B9\u5355\u4F4D+1\u901F"
-  - type: 23
+  - type: 21
     damage: 5
     speed: 1
     price: 4
