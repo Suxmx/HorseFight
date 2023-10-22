@@ -702,7 +702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29f90bfd226ad25449787207e5b84ef8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ifAI: 0
+  ifAI: 1
   aiMode: 0
   currentState: 0
 --- !u!82 &144764491

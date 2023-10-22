@@ -32,6 +32,7 @@ public class ShopManager : Service, IPointerExitHandler
     private RoadManager roadManager;
     private HorsePutter horsePutter;
     private EventSystem eventSystem;
+    private StatusFactory statusFactory;
 
     private int curRound = 1;
 
@@ -76,6 +77,7 @@ public class ShopManager : Service, IPointerExitHandler
         core = ServiceLocator.Get<GameCore>();
         roadManager = ServiceLocator.Get<RoadManager>();
         eventSystem = ServiceLocator.Get<EventSystem>();
+        statusFactory = ServiceLocator.Get<StatusFactory>();
     }
 
     # region 商店动画
@@ -161,6 +163,7 @@ public class ShopManager : Service, IPointerExitHandler
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, 10f));
         gainItem.position = worldPosition;
         gainItem.GetComponent<Horse>().SetTeam(curTeam);
+        gainItem.GetComponent<Horse>().Init(statusFactory,roadManager);
         horsePutter.SetHorse(gainItem.GetComponent<Horse>());
         //撤回
         openButton.onClick.AddListener(() =>
@@ -267,6 +270,7 @@ public class ShopManager : Service, IPointerExitHandler
         Transform horseTrans = Instantiate(horseFactory.GetHorseObj(type), playerDic[curTeam].trans).transform;
         Horse horse = horseTrans.GetComponent<Horse>();
         horse.SetTeam(curTeam);
+        horse.Init(statusFactory,roadManager);
         return roadManager.GetRoad(num).SetHorse(horse);
     }
 

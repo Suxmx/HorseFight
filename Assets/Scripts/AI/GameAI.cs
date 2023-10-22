@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Services;
 using UnityEngine;
 
@@ -27,25 +28,39 @@ namespace AI
             this.roadManager = roadManager;
             this.shop = shop;
             this.horseFactory = horseFactory;
-            eventSystem.AddListener<Team, int>(EEvent.OnNextRound, AIAction);
+            enabled = false;
 
-            configSO = Resources.Load<AIConfig>("AIConfigs");
+            AIConfig configSO = Resources.Load<AIConfig>("AIConfigs");
             againstDic = configSO.againstDic;
             config = configSO.configDic[difficulty];
             playerInfo.Coins = config.coin;
         }
 
+        protected bool enabled;
+
+        public bool Enabled
+        {
+            get => enabled;
+            set
+            {
+                if (enabled == value) return;
+                enabled = value;
+                if (enabled) eventSystem.AddListener<Team, int>(EEvent.OnNextRound, AIAction);
+                else eventSystem.RemoveListener<Team, int>(EEvent.OnNextRound, AIAction);
+            }
+        }
+
         protected PlayerInfo aiInfo;
-        protected Team aiTeam;
-        protected Team playerTeam;
-        protected AIMode difficulty;
-        protected AIConfig configSO;
-        protected EventSystem eventSystem;
-        protected RoadManager roadManager;
-        protected ShopManager shop;
-        protected HorseFactory horseFactory;
-        protected Dictionary<EHorse, EHorse> againstDic;
-        protected DifficultyConfig config;
+
+        protected readonly Team aiTeam;
+        protected readonly Team playerTeam;
+        protected readonly AIMode difficulty;
+        protected readonly EventSystem eventSystem;
+        protected readonly RoadManager roadManager;
+        protected readonly ShopManager shop;
+        protected readonly HorseFactory horseFactory;
+        protected readonly Dictionary<EHorse, EHorse> againstDic;
+        protected readonly DifficultyConfig config;
         protected int coins => aiInfo.Coins;
 
         protected void AIAction(Team team, int round)
@@ -65,13 +80,13 @@ namespace AI
                     AgainstAction();
                     break;
                 case EAIAction.PressFollow:
-                    AgainstAction();
+                    RandomAction();
                     break;
                 case EAIAction.StalemateFollow:
-                    AgainstAction();
+                    RandomAction();
                     break;
                 case EAIAction.Random:
-                    AgainstAction();
+                    RandomAction();
                     break;
                 case EAIAction.Final:
                     break;
@@ -101,7 +116,7 @@ namespace AI
 
         protected void AgainstAction()
         {
-            string log = "针对行为开始：\n";
+            string log = "AI针对行为开始：\n";
             List<Road> againstRoads = new List<Road>();
             foreach (var road in roadManager.GetRoads())
             {
@@ -123,12 +138,14 @@ namespace AI
                 RandomAction();
                 return;
             }
+
             //Log
             log += "\t移除无针对卡牌或与买不起的道路后剩余:Road ";
             foreach (var road in againstRoads)
             {
                 log += $" {road.num}";
             }
+            againstRoads.Disturb();
             log += "\n";
             log += $"\t最终决策：在Road {againstRoads[0].num}购买{againstDic[againstRoads[0].GetHorse(playerTeam).type]}";
             Debug.Log(log);
@@ -138,6 +155,33 @@ namespace AI
 
         protected void RandomAction()
         {
+            string log = "AI随机行为开始：\n";
+            List<int> prices = new List<int>() { 1, 2, 3, 4 };
+            List<float> odds = new List<float>();
+            prices.RemoveAll(price => price > coins);
+            foreach (var price in prices)
+                odds.Add(config.randomBuyPossibility[price]);
+            int choose = Utilities.RandomChoose(odds);
+            log += $"\t随机价格：{choose}\n";
+            //根据攻击随机
+            var horseList = horseFactory.GetHorsesByPrice(choose);
+            List<int> damageList = new List<int>();
+            foreach (var horse in horseList)
+            {
+                int damage = horseFactory.GetHorseDamage(horse);
+                damage = damage == 0 ? 1 : damage;
+                damageList.Add(damage);
+            }
+            choose = Utilities.RandomChoose(damageList)-1;
+            EHorse chooseHorse = horseList[choose];
+            log += $"\t随机马匹：{chooseHorse}\n";
+            //随机道路
+            var roads = roadManager.GetRoads().ToList();
+            roads.RemoveAll(road => road.GetHorse(aiTeam) != null);
+            roads.Disturb();
+            log += $"\t随机道路编号：{roads[0].num}";
+            Debug.Log(log);
+            shop.AIShopRequest(chooseHorse, roads[0].num);
         }
     }
 }

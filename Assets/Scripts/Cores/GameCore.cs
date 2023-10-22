@@ -79,6 +79,7 @@ public class GameCore : Service
 
         shop.SetPlayerInfo(playerDic);
         ai = new GameAI(playerB, AIMode.Easy, eventSystem, roadManager, shop, horseFactory);
+        ai.Enabled = ifAI;
     }
 
     private void ResetGame()
@@ -88,13 +89,13 @@ public class GameCore : Service
 
     public void FightReady()
     {
-        currentState = GameState.Fighting;
         startButton.gameObject.SetActive(true);
     }
 
     [Button("开始游戏")] //测试按钮
     public void StartFight()
     {
+        currentState = GameState.Fighting;
         Debug.LogWarning("进入对战阶段");
         startButton.gameObject.SetActive(false);
         roadManager.OnStart();

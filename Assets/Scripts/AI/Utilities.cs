@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Services;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 
 public static class Utilities
@@ -16,7 +18,47 @@ public static class Utilities
         float rand, addup = 0f, tmp = 0f;
         foreach (var pos in possibilities)
             addup += pos;
-        rand = Random.Range(0f, addup);
+        rand = UnityEngine.Random.Range(0f, addup);
+        foreach (var pos in possibilities)
+        {
+            choose++;
+            if (rand >= tmp && rand < tmp + pos)
+            {
+                break;
+            }
+
+            tmp += pos;
+        }
+
+        return choose;
+    }
+    public static int RandomChoose(List<float> possibilities)
+    {
+        int choose = 0;
+        float rand, addup = 0, tmp = 0;
+        foreach (var pos in possibilities)
+            addup += pos;
+        rand = Random.Range(0, addup);
+        foreach (var pos in possibilities)
+        {
+            choose++;
+            if (rand >= tmp && rand < tmp + pos)
+            {
+                break;
+            }
+
+            tmp += pos;
+        }
+
+        return choose;
+    }
+    public static int RandomChoose(List<int> possibilities)
+    {
+        int choose = 0;
+        float rand, addup = 0, tmp = 0;
+        foreach (var pos in possibilities)
+            addup += pos;
+        rand = Random.Range(0, addup);
         foreach (var pos in possibilities)
         {
             choose++;
@@ -41,7 +83,7 @@ public static class Utilities
     {
         for (int n = list.Count - 1; n > 0; n--)
         {
-            int k = Random.Range(0, n + 1);
+            int k = UnityEngine.Random.Range(0, n + 1);
            list.Swap(list[n],list[k]);
         }
     }
