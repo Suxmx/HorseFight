@@ -36,6 +36,7 @@ namespace AI
             againstDic = configSO.againstDic;
             config = configSO.configDic[difficulty];
             playerInfo.Coins = config.coin;
+            Debug.Log(config.coin);
         }
 
         protected bool enabled;
@@ -207,16 +208,20 @@ namespace AI
 
                     cnt++;
                 }
-
+                //随机选择是跟牌还是随机
                 int rand = Utilities.RandomChoose(config.random, config.pressFollow * 2);
+                if (rand == 1)
+                {
+                    log += "\t采用随机决策\n";
+                }
+                else
+                {
+                    log += "\t采用跟牌决策\n";
+                }
                 int choose = rand == 1 ? Utilities.RandomChoose(damageList) - 1 : maxIndex;
                 EHorse chooseHorse = horseList[choose];
-                //log
-                if (rand == 1) log += "\t采用随机决策\n";
-                else log += "\t采用跟牌决策\n";
                 log += $"\t最终决策：在Road {road.num}购买{chooseHorse}";
                 Debug.Log(log);
-                //log
                 shop.AIShopRequest(chooseHorse, road.num);
             }
             else

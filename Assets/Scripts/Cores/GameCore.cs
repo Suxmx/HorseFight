@@ -78,7 +78,7 @@ public class GameCore : Service
         startButton.gameObject.SetActive(false);
 
         shop.SetPlayerInfo(playerDic);
-        ai = new GameAI(playerB, AIMode.Easy, eventSystem, roadManager, shop, horseFactory);
+        ai = new GameAI(playerB, aiMode, eventSystem, roadManager, shop, horseFactory);
         ai.Enabled = ifAI;
     }
 
