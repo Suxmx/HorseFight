@@ -9,7 +9,6 @@ public class Skill : MonoBehaviour
 
     protected Horse owner;
     protected RepeatTimer skillTimer;
-    protected GameCore core;
     protected RoadManager roadManager;
 
     protected virtual void Awake()
@@ -19,7 +18,6 @@ public class Skill : MonoBehaviour
 
     private void Start()
     {
-        core = ServiceLocator.Get<GameCore>();
         roadManager = ServiceLocator.Get<RoadManager>();
     }
 
@@ -52,4 +50,9 @@ public class Skill : MonoBehaviour
     }
 
     public virtual void OnPut(){ }
+
+    public virtual void Init(RoadManager roadManager)
+    {
+        this.roadManager = roadManager;
+    }
 }

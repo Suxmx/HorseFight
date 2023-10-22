@@ -83,7 +83,7 @@ public class Horse : MonoBehaviour
 
     private void Start()
     {
-        statusFactory = ServiceLocator.Get<StatusFactory>();
+        // statusFactory = ServiceLocator.Get<StatusFactory>();
     }
 
     public void ResetText()
@@ -104,6 +104,11 @@ public class Horse : MonoBehaviour
         // nameText.text = horseName;
     }
 
+    public void Init(StatusFactory statusFactory, RoadManager roadManager)
+    {
+        this.statusFactory = statusFactory;
+        skill.Init(roadManager);
+    }
     public void SetDir(Team team)
     {
         spriteTrans = transform.Find("Sprite");
