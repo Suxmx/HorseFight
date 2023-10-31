@@ -49,6 +49,12 @@ public class GameCore : Service
     protected override void Start()
     {
         base.Start();
+        PlayModeConfig modeConfig = ServiceLocator.Get<PlayModeConfig>();
+        if(modeConfig)//如果读取到了配置文件
+        {
+            ifAI = modeConfig.IfAI;
+            aiMode = modeConfig.AIMode;
+        }
         sceneController = ServiceLocator.Get<SceneController>();
         shop = ServiceLocator.Get<ShopManager>();
         roadManager = ServiceLocator.Get<RoadManager>();
