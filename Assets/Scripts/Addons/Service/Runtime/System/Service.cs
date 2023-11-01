@@ -10,6 +10,7 @@ namespace Services
     /// </summary>
     public class Service : SerializedMonoBehaviour
     {
+        private int destroyIndex=-1;
         protected virtual void Awake()
         {
             ServiceLocator.Register(this);
@@ -41,6 +42,15 @@ namespace Services
                     info.SetValue(this, ServiceLocator.Get(type));
                 }
             }
+        }
+
+        public void SetDestroyIndex(int index)
+        {
+            this.destroyIndex = index;
+        }
+        public void DestroySelf(int index)
+        {
+            if(index==destroyIndex)Destroy(gameObject);
         }
     }
 

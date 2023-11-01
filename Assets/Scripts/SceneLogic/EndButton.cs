@@ -4,16 +4,19 @@ using System.Collections.Generic;
 using Services;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using EventSystem = Services.EventSystem;
 
 public class EndButton : MonoBehaviour
 {
     private SceneController sceneController;
     private GameCore core;
+    private EventSystem _eventSystem;
 
     private void Start()
     {
         sceneController = ServiceLocator.Get<SceneController>();
         core = ServiceLocator.Get<GameCore>();
+        _eventSystem = ServiceLocator.Get<EventSystem>();
     }
 
     private void Update()
@@ -34,6 +37,9 @@ public class EndButton : MonoBehaviour
     {
         Destroy(core.gameObject);
         sceneController.LoadScene(0);
+        _eventSystem.SetDestroyIndex(0);
+        _eventSystem.AddListener<int>(EEvent.AfterLoadScene,_eventSystem.DestroySelf);
+        
     }
     
 }
