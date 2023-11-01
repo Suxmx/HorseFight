@@ -38,7 +38,7 @@ public class EndButton : MonoBehaviour
         Destroy(core.gameObject);
         sceneController.LoadScene(0);
         _eventSystem.SetDestroyIndex(0);
-        _eventSystem.AddListener<int>(EEvent.AfterLoadScene,_eventSystem.DestroySelf);
+        _eventSystem.AddListener<int>(EEvent.AfterLoadScene,_eventSystem.DestroySelfAtIndex);
         
     }
     

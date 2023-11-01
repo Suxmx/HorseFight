@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AI;
+using Cores;
 using Services;
 using UnityEngine;
 using UnityEngine.Events;
@@ -31,7 +32,7 @@ public class GameCore : Service
 {
     [Header("AI"), LabelText("是否开启AI")] public bool ifAI;
     [LabelText("AI难度")] public AI.AIMode aiMode;
-    private bool _ifRandom = true;
+    private bool _ifRandom = false;
     public GameState currentState;
     private PlayerInfo playerA, playerB;
     private ShopManager shop;

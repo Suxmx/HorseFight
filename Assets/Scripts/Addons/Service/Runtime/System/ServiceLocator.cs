@@ -11,7 +11,6 @@ namespace Services
         /// 非0场景中的物体通常直接获取Service，不需要利用此事件
         /// </summary>
         //public static UnityAction<Service> ServiceInit;
-
         internal static readonly Dictionary<Type, Service> serviceDict = new Dictionary<Type, Service>();
 
         /// <summary>
@@ -28,19 +27,35 @@ namespace Services
                 Debug.LogWarning($"服务不存在，服务类型为{type}");
                 return null;
             }
+
             return serviceDict[type];
         }
 
         internal static void Register(Service service)
         {
             Type type = service.GetType();
-            if (serviceDict.ContainsKey(type))
+            if (serviceDict.ContainsKey(type) && serviceDict[type] is not null)
             {
-                Debug.LogWarning($"服务引用的脚本被修改了，服务类型为{type}");
-                serviceDict[type] = service;
+                if (!service.singleInAllScene)
+                {
+                    Debug.LogWarning($"服务引用的脚本被修改了，服务类型为{type}");
+                    serviceDict[type] = service;
+                }
+                else
+                {
+                    Debug.Log($"摧毁全局唯一单例{type}");
+                    service.DestroySelf();
+                }
             }
             else
                 serviceDict.Add(type, service);
+        }
+
+        internal static void UnRegister(Service service)
+        {
+            Type type = service.GetType();
+            if (!serviceDict.ContainsKey(type)) return;
+            serviceDict.Remove(type);
         }
     }
 }
