@@ -435,7 +435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8f0ffbae998ab142906065379656c23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 0}
+  Sprite: {fileID: 21300000, guid: f4f07005829125647885e32178a15d82, type: 3}
   texturePanel: {fileID: 846715935}
 --- !u!1 &153304696
 GameObject:
@@ -1599,7 +1599,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8f0ffbae998ab142906065379656c23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 0}
+  Sprite: {fileID: 21300000, guid: 8fc698fb057fb0942961542b2f9c0b05, type: 3}
   texturePanel: {fileID: 846715935}
 --- !u!1 &748120747
 GameObject:
@@ -1928,7 +1928,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 0947dd906e77d75439a712449af05701, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2153,7 +2153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8f0ffbae998ab142906065379656c23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 0}
+  Sprite: {fileID: 21300000, guid: d08d0dcd2a5859e44a214a1801fd148e, type: 3}
   texturePanel: {fileID: 846715935}
 --- !u!1 &885712953
 GameObject:
@@ -3565,7 +3565,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8f0ffbae998ab142906065379656c23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 0}
+  Sprite: {fileID: 21300000, guid: ee59e4530798d444b83cbdeadbf3c424, type: 3}
   texturePanel: {fileID: 846715935}
 --- !u!1 &1374049523
 GameObject:
@@ -4068,7 +4068,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8f0ffbae998ab142906065379656c23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 937291010, guid: 37bd275fa89b0204cb54c25afb5b4419, type: 3}
+  Sprite: {fileID: 21300000, guid: e5121c2703e27c24ca292f29f9745e2e, type: 3}
   texturePanel: {fileID: 846715935}
 --- !u!1 &1591960952
 GameObject:
@@ -4217,7 +4217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8f0ffbae998ab142906065379656c23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 0}
+  Sprite: {fileID: 21300000, guid: d33dca6944570014bb5d42c2307a6e1d, type: 3}
   texturePanel: {fileID: 846715935}
 --- !u!1 &1613570305
 GameObject:
@@ -4366,7 +4366,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8f0ffbae998ab142906065379656c23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 0}
+  Sprite: {fileID: 21300000, guid: 70a1e228bb1782042a07291bcc6cdde4, type: 3}
   texturePanel: {fileID: 846715935}
 --- !u!1 &1637923160
 GameObject:
@@ -4515,7 +4515,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8f0ffbae998ab142906065379656c23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 0}
+  Sprite: {fileID: 21300000, guid: 0d87e895f4b366d478e16632874dc337, type: 3}
   texturePanel: {fileID: 846715935}
 --- !u!1 &1703514125
 GameObject:
@@ -4798,7 +4798,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8f0ffbae998ab142906065379656c23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sprite: {fileID: -701971680, guid: 2c4b170f121d93d44b8fd0f13af9a580, type: 3}
+  Sprite: {fileID: 21300000, guid: 0947dd906e77d75439a712449af05701, type: 3}
   texturePanel: {fileID: 846715935}
 --- !u!1 &1934621603
 GameObject:
@@ -4965,7 +4965,7 @@ GameObject:
   - component: {fileID: 2021151352}
   - component: {fileID: 2021151351}
   m_Layer: 5
-  m_Name: Button
+  m_Name: CloseButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
