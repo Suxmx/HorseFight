@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Services
@@ -7,7 +8,7 @@ namespace Services
     /// <summary>
     /// 可通过Get获取继承此类的子类对象，每个类的对象应当是唯一的
     /// </summary>
-    public class Service : MonoBehaviour
+    public class Service : SerializedMonoBehaviour
     {
         protected virtual void Awake()
         {

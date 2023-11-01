@@ -2,41 +2,44 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Services;
+using Shop;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ShopItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,IPointerClickHandler
+public class ShopItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     public EHorse type;
     public int price;
-    
-    private ShopManager manager;
-    private HorseFactory horseFactory;
-    // Ù–‘œ‘ æ
-    private Transform texts;
-    private TextMeshProUGUI damageText;
-    private TextMeshProUGUI speedText;
-    private TextMeshProUGUI nameText;
-    //√Ë ˆ
-    private Transform descRoot;
-    private TextMeshProUGUI desctext;
-    private Horse tmpBoughtItem;
-    private Image icon;
 
-    private void Awake()
+    protected ShopManager manager;
+
+    protected HorseFactory horseFactory;
+
+    // Ù–‘œ‘ æ
+    protected Transform texts;
+    protected TextMeshProUGUI damageText;
+    protected TextMeshProUGUI speedText;
+
+    protected TextMeshProUGUI nameText;
+
+    //√Ë ˆ
+    protected Transform descRoot;
+    protected TextMeshProUGUI desctext;
+    protected Horse tmpBoughtItem;
+    protected Image icon;
+
+    protected void Awake()
     {
         texts = transform.Find("BottomTexts");
         damageText = texts.Find("Damage/Text").GetComponent<TextMeshProUGUI>();
         speedText = texts.Find("Speed/Text").GetComponent<TextMeshProUGUI>();
         icon = transform.Find("Icon").GetComponent<Image>();
         descRoot = transform.Find("DescriptionRoot");
-        
-        
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         manager = ServiceLocator.Get<ShopManager>();
         horseFactory = ServiceLocator.Get<HorseFactory>();
@@ -66,10 +69,8 @@ public class ShopItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,I
         descRoot.gameObject.SetActive(false);
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public virtual void OnPointerClick(PointerEventData eventData)
     {
         manager.ShopRequest(this);
     }
-
-    
 }

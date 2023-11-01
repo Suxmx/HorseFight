@@ -94,4 +94,13 @@ public static class Utilities
         list[indexB] = a;
         list[indexA] = b;
     }
+
+    public static T RandomPick<T>(this List<T> list)
+    {
+        List<int> tmp = new List<int>();
+        for(int i=0;i<list.Count;i++)
+            tmp.Add(1);
+        int choose = RandomChoose(tmp)-1;
+        return list[choose];
+    }
 }

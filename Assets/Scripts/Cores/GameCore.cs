@@ -7,6 +7,8 @@ using Services;
 using UnityEngine;
 using UnityEngine.Events;
 using MyTimer;
+using Shop;
+using Shop.Repo;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine.Serialization;
@@ -29,16 +31,20 @@ public class GameCore : Service
 {
     [Header("AI"), LabelText("是否开启AI")] public bool ifAI;
     [LabelText("AI难度")] public AI.AIMode aiMode;
+    private bool _ifRandom = true;
     public GameState currentState;
     private PlayerInfo playerA, playerB;
     private ShopManager shop;
-    private RoadManager roadManager;
+    private RepoManager _repoManager;
+    [Other] private RoadManager roadManager;
+    [Other] private SceneController sceneController;
+    [Other] private EventSystem eventSystem;
+    [Other] private HorseFactory horseFactory;
+
     private Dictionary<Team, PlayerInfo> playerDic;
     private Button startButton;
-    private SceneController sceneController;
-    private EventSystem eventSystem;
-    private HorseFactory horseFactory;
     private GameAI ai;
+    private IShop ishop;
 
     protected override void Awake()
     {
@@ -50,16 +56,19 @@ public class GameCore : Service
     {
         base.Start();
         PlayModeConfig modeConfig = ServiceLocator.Get<PlayModeConfig>();
-        if(modeConfig)//如果读取到了配置文件
+        if (modeConfig) //如果读取到了配置文件
         {
             ifAI = modeConfig.IfAI;
             aiMode = modeConfig.AIMode;
+            _ifRandom = modeConfig.IfRandom;
         }
-        sceneController = ServiceLocator.Get<SceneController>();
-        shop = ServiceLocator.Get<ShopManager>();
-        roadManager = ServiceLocator.Get<RoadManager>();
-        eventSystem = ServiceLocator.Get<EventSystem>();
-        horseFactory = ServiceLocator.Get<HorseFactory>();
+
+        if (!_ifRandom)
+        {
+            shop = ServiceLocator.Get<ShopManager>();
+            ishop = shop;
+        }
+
         InitGame();
     }
 
@@ -67,25 +76,46 @@ public class GameCore : Service
     private void InitGame()
     {
         playerDic = new Dictionary<Team, PlayerInfo>();
-        
+
         currentState = GameState.Shopping;
         Transform UICanvasTrans = GameObject.Find("UICanvas").transform;
         Transform scoreUI = UICanvasTrans.Find("ScoreUI");
         TextMeshProUGUI aScoreText = scoreUI.Find("TeamABg/ScoreText").GetComponent<TextMeshProUGUI>();
         TextMeshProUGUI bScoreText = scoreUI.Find("TeamBBg/ScoreText").GetComponent<TextMeshProUGUI>();
 
-        playerA = new PlayerInfo(10, Team.A, new GameObject("PlayerA").transform, shop.coinTextA, aScoreText);
-        playerB = new PlayerInfo(10, Team.B, new GameObject("PlayerB").transform, shop.coinTextB, bScoreText);
+        playerA = new PlayerInfo(10, Team.A, new GameObject("PlayerA").transform, shop != null ? shop.coinTextA : null,
+            aScoreText);
+        playerB = new PlayerInfo(10, Team.B, new GameObject("PlayerB").transform, shop != null ? shop.coinTextB : null,
+            bScoreText);
         playerDic.Add(Team.A, playerA);
         playerDic.Add(Team.B, playerB);
 
         startButton = UICanvasTrans.Find("StartButton").GetComponent<Button>();
         startButton.onClick.AddListener(StartFight);
         startButton.gameObject.SetActive(false);
+        //随机模式
+        if (_ifRandom)
+        {
+            _repoManager = ServiceLocator.Get<RepoManager>();
+            playerB.coinText = _repoManager.aiCoinText;
+            _repoManager.SetInfos(playerB, playerA);
+            ishop = _repoManager;
+        }
+        else 
+        {
+            shop.SetPlayerInfo(playerDic);
+        }
 
-        shop.SetPlayerInfo(playerDic);
-        ai = new GameAI(playerB, aiMode, eventSystem, roadManager, shop, horseFactory);
-        ai.Enabled = ifAI;
+        if (ifAI)
+        {
+            ai = new GameAI(playerB, aiMode, eventSystem, roadManager, ishop, horseFactory);
+            ai.Enabled = ifAI;
+        }
+    }
+
+    public IShop GetShop()
+    {
+        return ishop;
     }
 
     private void ResetGame()
@@ -95,6 +125,7 @@ public class GameCore : Service
 
     public void FightReady()
     {
+        Debug.Log("FightReady");
         startButton.gameObject.SetActive(true);
     }
 
@@ -120,7 +151,7 @@ public class GameCore : Service
     private void LoadEndScene()
     {
         GetComponent<AudioSource>().Play();
-        sceneController.LoadNextScene();
+        sceneController.LoadScene(3);
     }
 
     public int GetScore(Team team)

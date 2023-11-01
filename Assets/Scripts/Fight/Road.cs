@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using MyTimer;
 using Services;
+using Shop;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -38,7 +39,7 @@ public class Road : MonoBehaviour
     private Dictionary<Team, RoadInfo> infoDic; //TODO:实现多马匹支持,但是似乎优先级较低
     private GameCore core;
     private RoadManager roadManager;
-    private ShopManager shop;
+    private IShop shop;
     private TimerOnly roadTimer;
     private float spriteSize;
     private bool hasHorseWin = false;
@@ -63,7 +64,7 @@ public class Road : MonoBehaviour
     private void Start()
     {
         core = ServiceLocator.Get<GameCore>();
-        shop = ServiceLocator.Get<ShopManager>();
+        shop = core.GetShop();
     }
 
     private Vector2 CalcVec(Team team, float dt, int speed)
@@ -209,7 +210,8 @@ public class Road : MonoBehaviour
         if (horse.horseTeam == Team.A)
         {
             horse.HideSelf();
-            shop.SetCoinTextUnknown(horse.price);
+            if(shop is ShopManager manager)
+                manager.SetCoinTextUnknown(horse.price);
         }
 
         shop.NextRound();

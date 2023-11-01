@@ -23,7 +23,7 @@ public class EndButton : MonoBehaviour
             Vector3 mousePos = Input.mousePosition;
             Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 10f));
             RaycastHit2D hit = Physics2D.Raycast(mouseWorldPos, Vector2.zero);
-            if (hit.collider.gameObject == gameObject)
+            if (hit.collider is not null&&hit.collider.gameObject == gameObject)
             {
                 ReturnMenu();
             }

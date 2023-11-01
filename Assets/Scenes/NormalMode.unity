@@ -314,6 +314,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19c7a3cef1ad49f491b1cc2fdd563991, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
 --- !u!4 &39737555
 Transform:
   m_ObjectHideFlags: 0
@@ -683,6 +692,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63361ea1808dc9e47a62bf3a5cb962c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   OnPause:
     m_PersistentCalls:
       m_Calls: []
@@ -702,6 +720,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29f90bfd226ad25449787207e5b84ef8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   ifAI: 1
   aiMode: 2
   currentState: 0
@@ -2402,6 +2429,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af21f79bb3b7434ba509b4202c3692f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
 --- !u!4 &575578995
 Transform:
   m_ObjectHideFlags: 0
@@ -2429,6 +2465,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8455257f7df4b5e4aaf81a1cd17a5eca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
 --- !u!114 &575578997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2441,6 +2486,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5156d12a6d3c0246871e065eee17c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
 --- !u!1 &581577646
 GameObject:
   m_ObjectHideFlags: 0
@@ -2495,9 +2549,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43a99c91c75985f4eaa584dbfbdafadd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   aniTime: 0.2
   buy: {fileID: 581577650}
   enter: {fileID: 581577649}
+  PanelRect: {fileID: 1725145732}
 --- !u!82 &581577649
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4365,7 +4429,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1078120667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4405,6 +4469,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3abe8eed001f3f04c946a033b89ffd96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
 --- !u!1001 &1107914212
 PrefabInstance:
   m_ObjectHideFlags: 0

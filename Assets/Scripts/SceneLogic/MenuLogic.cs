@@ -14,6 +14,7 @@ public class MenuLogic : MonoBehaviour
     
     private SceneController sceneController;
     private Animator animator;
+    private Animation _animation;
     private PlayModeConfig _modeConfig;
 
     private void Awake()
@@ -47,7 +48,7 @@ public class MenuLogic : MonoBehaviour
     private void ChooseAIModeOnClick(AIMode aiMode)
     {
         HideObjs();
-        _modeConfig.SetPlayModeConfig(true, aiMode);
+        _modeConfig.SetPlayModeConfig(true,aiMode);
         animator.Play("MenuAnim");
     }
 
@@ -71,9 +72,21 @@ public class MenuLogic : MonoBehaviour
         ChooseAIModeOnClick(AIMode.ExtremeHard);
     }
 
-    public void LoadScene()
+    public void RandomButton()
     {
-        sceneController.LoadNextScene();
+        HideObjs();
+        _modeConfig.SetPlayModeConfig(true,AIMode.Easy,true);
+        animator.Play("MenuAnimToRandomMode");
+    }
+
+    public void LoadPlayerScene()
+    {
+        sceneController.LoadScene(1);
+    }
+
+    public void LoadRandomScene()
+    {
+        sceneController.LoadScene(2);
     }
 
     private void HideObjs()

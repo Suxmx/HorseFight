@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Services;
+using Shop;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -20,7 +21,7 @@ namespace AI
         }
 
         public GameAI(PlayerInfo playerInfo, AIMode difficulty, EventSystem eventSystem, RoadManager roadManager,
-            ShopManager shop, HorseFactory horseFactory)
+            IShop shop, HorseFactory horseFactory)
         {
             this.aiInfo = playerInfo;
             this.aiTeam = playerInfo.team;
@@ -60,7 +61,7 @@ namespace AI
         protected readonly AIMode difficulty;
         protected readonly EventSystem eventSystem;
         protected readonly RoadManager roadManager;
-        protected readonly ShopManager shop;
+        protected readonly IShop shop;
         protected readonly HorseFactory horseFactory;
         protected readonly Dictionary<EHorse, EHorse> againstDic;
         protected readonly DifficultyConfig config;
@@ -193,6 +194,7 @@ namespace AI
                 log += $"\t采用随机或是跟牌\n";
                 var road = GetPutableRoads()[0];
                 var horseList = horseFactory.GetHorsesByPrice(coins > 4 ? 4 : coins);
+                Debug.Log(coins > 4 ? 4 : coins);
                 List<int> damageList = new List<int>();
                 int cnt = 0, maxDamage = -1, maxIndex = 0;
                 foreach (var horse in horseList)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using AI;
 using Services;
+using Shop;
 using Sirenix.OdinInspector;
 
 public class GameTester : MonoBehaviour

@@ -17,9 +17,16 @@ public class PlayModeConfig : Service
         private set;
         get;
     }
-    
-    public void SetPlayModeConfig(bool ifAI,AIMode aiMode=AIMode.Easy)
+
+    public bool IfRandom
     {
+        private set;
+        get;
+    }
+    
+    public void SetPlayModeConfig(bool ifAI,AIMode aiMode=AIMode.Easy,bool ifRandom=false)
+    {
+        IfRandom = ifRandom;
         IfAI = ifAI;
         AIMode = aiMode;
     }

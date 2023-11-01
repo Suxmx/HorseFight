@@ -24,6 +24,7 @@ public class PlayerInfo
         set
         {
             coins = value;
+            if (coinText is null) return;
             string tmp = coinText.text;
             coinText.text = coins.ToString();
         }
@@ -43,7 +44,7 @@ public class PlayerInfo
     public Transform trans;
     
     private int coins;
-    private TextMeshProUGUI coinText;
+    public TextMeshProUGUI coinText;
     private TextMeshProUGUI scoreText;
 
 }

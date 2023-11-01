@@ -978,6 +978,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbfcbc544769aee40b2a56fa76128e0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   async: 1
   needConfirm: 0
 --- !u!4 &456511080
@@ -1007,6 +1016,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3abe8eed001f3f04c946a033b89ffd96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
 --- !u!114 &456511082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1019,6 +1037,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e5ffdbf41a283143aaedc8509bf456b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
 --- !u!1 &550725272
 GameObject:
   m_ObjectHideFlags: 0
@@ -2414,6 +2441,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf750a3f2163e25438fdc059bca12c28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
 --- !u!4 &906605069
 Transform:
   m_ObjectHideFlags: 0
@@ -5168,7 +5204,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2085022603}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1934621606}
+        m_TargetAssemblyTypeName: MenuLogic, Assembly-CSharp
+        m_MethodName: RandomButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2085022603
 MonoBehaviour:
   m_ObjectHideFlags: 0
