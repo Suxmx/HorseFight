@@ -35,10 +35,9 @@ public class EndButton : MonoBehaviour
 
     public void ReturnMenu()
     {
-        Destroy(core.gameObject);
         sceneController.LoadScene(0);
-        _eventSystem.SetDestroyIndex(0);
-        _eventSystem.AddListener<int>(EEvent.AfterLoadScene,_eventSystem.DestroySelfAtIndex);
+        sceneController.DestroySelf();
+        _eventSystem.DestroySelf();
         
     }
     

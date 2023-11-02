@@ -14,11 +14,13 @@ namespace Shop.Repo
     public class RepoManager : Service, IPointerExitHandler, IShop
     {
         public TextMeshProUGUI aiCoinText;
-        
+        public TextMeshProUGUI playerCoinText;
+
         [SerializeField] private RectTransform panelRect;
         [SerializeField] private TextMeshProUGUI roundText;
         [SerializeField] private Button openButton;
         [SerializeField] private AudioSource buy;
+        [SerializeField] private AudioSource enter;
         private float height;
         private bool ifShow = false;
         private bool ifAnim = false;
@@ -34,7 +36,6 @@ namespace Shop.Repo
         private int _curRound = 1;
         [SerializeField] private HorsePutter _horsePutter;
         [SerializeField] private Dictionary<int, List<RepoItem>> items;
-        [SerializeField] private List<GameObject> itemParents;
 
         private int CurRound
         {
@@ -78,6 +79,8 @@ namespace Shop.Repo
 
         IEnumerator IeShowPanel()
         {
+            enter.Play();
+            enter.time = 0.2f;
             float posx = panelRect.anchoredPosition.x;
             for (int i = 1; i <= 10; i++)
             {
@@ -135,7 +138,7 @@ namespace Shop.Repo
         {
             ResetButton();
             _roadManager.ShowAllHorses();
-            if ((playerPuts == 5) && (_aiInfo.ownHorses.Count == 5 || _aiInfo.Coins == 0))
+            if ((playerPuts == 5 || _playerInfo.Coins == 0) && (_aiInfo.ownHorses.Count == 5 || _aiInfo.Coins == 0))
             {
                 roundText.transform.parent.gameObject.SetActive(false);
                 _core.FightReady();
@@ -148,11 +151,12 @@ namespace Shop.Repo
                 CurRound++;
             }
 
-            if (_aiInfo.Coins != 0)
+            if (nextTeam == Team.A && (playerPuts != 5 && _playerInfo.Coins != 0))
+                _curTeam = nextTeam;
+            else if (nextTeam == Team.B && (_aiInfo.ownHorses.Count != 5 && _aiInfo.Coins != 0))
                 _curTeam = nextTeam;
             else if (nextTeam == Team.B)
                 CurRound++;
-            Debug.Log("invoke");
             _eventSystem.Invoke(EEvent.OnNextRound, _curTeam, CurRound);
         }
 
@@ -164,18 +168,29 @@ namespace Shop.Repo
                 for (int j = 0; j < items[i].Count; j++)
                 {
                     var horse = list.RandomPick();
-                    items[i][j].Init(_horseFactory,this);
+                    items[i][j].Init(_horseFactory, this);
                     items[i][j].SetType(horse);
+                    list.Remove(horse);
                 }
             }
         }
+
         private void ResetButton()
         {
             openButton.onClick.RemoveAllListeners();
             openButton.onClick.AddListener(ShowShop);
         }
+
         public void GetHorse(RepoItem item)
         {
+            if (!ifShow || _horsePutter.cacheHorse) return;
+            if (_playerInfo.Coins < item.price)
+            {
+                Debug.LogWarning($"购买{item.type}失败,Player所持有金币:{_playerInfo.Coins},目标价格:{item.price}");
+                return;
+            }
+
+            _playerInfo.Coins -= item.price;
             buy.Play();
             buy.time = 0.2f;
             Transform gainItem = Instantiate(_horseFactory.GetHorseObj(item.type), _playerInfo.trans).transform;
@@ -185,38 +200,18 @@ namespace Shop.Repo
             gainItem.GetComponent<Horse>().SetTeam(Team.A);
             gainItem.GetComponent<Horse>().Init(_statusFactory, _roadManager);
             _horsePutter.SetHorse(gainItem.GetComponent<Horse>());
-            item.gameObject.SetActive(false);
-            CheckList();
+            // item.gameObject.SetActive(false);
             playerPuts++;
             //撤回
             openButton.onClick.AddListener(() =>
             {
+                _playerInfo.Coins += item.price;
                 playerPuts--;
                 Destroy(gainItem.gameObject);
-                item.gameObject.SetActive(true);
-                CheckList();
+                // item.gameObject.SetActive(true);
                 ResetButton();
             });
             HideShop();
-        }
-
-        private void CheckList()
-        {
-            foreach (var parent in itemParents)
-            {
-                parent.transform.parent.parent.gameObject.SetActive(true);
-                bool flag = false;
-                //查找所有子物体
-                for (int i = 0; i < parent.transform.childCount; i++)
-                {
-                    if (parent.transform.GetChild(i).gameObject.activeInHierarchy)
-                    {
-                        flag = true;
-                        break;
-                    }
-                }
-                parent.transform.parent.parent.gameObject.SetActive(flag);
-            }
         }
 
         public void SetInfos(PlayerInfo AI, PlayerInfo player)

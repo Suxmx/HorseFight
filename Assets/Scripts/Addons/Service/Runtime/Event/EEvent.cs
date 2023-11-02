@@ -14,5 +14,9 @@ namespace Services
         /// 在商店的一个购买回合开始时,参数：购买者的队伍、当前购买回合数
         /// </summary>
         OnNextRound,
+        /// <summary>
+        /// 游戏结束时,参数：获胜者的队伍
+        /// </summary>
+        OnGameEnd
     }
 }

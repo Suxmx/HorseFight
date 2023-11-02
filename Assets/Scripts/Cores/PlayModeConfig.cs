@@ -1,12 +1,13 @@
 using AI;
 using Services;
+using UnityEngine;
 
 namespace Cores
 {
     public class PlayModeConfig : Service
     {
         private bool hasInited = false;
-        private AIMode randomModeDifficulty=AIMode.Easy;
+        public AIMode randomModeDifficulty = AIMode.Easy;
 
         protected override void Awake()
         {
@@ -35,6 +36,21 @@ namespace Cores
             IfRandom = ifRandom;
             IfAI = ifAI;
             AIMode = aiMode;
+        }
+
+        public void SetWinEvent(EventSystem eventSystem)
+        {
+            eventSystem.AddListener<Team>(EEvent.OnGameEnd,OnGameEnd);
+        }
+
+        public void OnGameEnd(Team winTeam)
+        {
+            if (winTeam == Team.A)
+                randomModeDifficulty =
+                    randomModeDifficulty != AIMode.ExtremeHard
+                        ? (AI.AIMode)(randomModeDifficulty + 1)
+                        : AIMode.ExtremeHard;
+            Debug.Log(randomModeDifficulty);
         }
     }
 }

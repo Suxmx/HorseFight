@@ -27,7 +27,7 @@ namespace Services
                 Debug.LogWarning($"服务不存在，服务类型为{type}");
                 return null;
             }
-
+            // Debug.Log($"Get {type}");
             return serviceDict[type];
         }
 
@@ -43,7 +43,6 @@ namespace Services
                 }
                 else
                 {
-                    Debug.Log($"摧毁全局唯一单例{type}");
                     service.DestroySelf();
                 }
             }
@@ -55,6 +54,7 @@ namespace Services
         {
             Type type = service.GetType();
             if (!serviceDict.ContainsKey(type)) return;
+            // Debug.Log($"注销{type}");
             serviceDict.Remove(type);
         }
     }

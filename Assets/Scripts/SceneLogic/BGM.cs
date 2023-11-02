@@ -6,15 +6,22 @@ using UnityEngine;
 
 public class BGM : Service
 {
+    public AudioSource win;
+    private bool hasInit=false;
+
     protected override void Awake()
     {
-        BGM instance = ServiceLocator.Get<BGM>();
-        if (instance != null&& instance!=this)
+        singleInAllScene = true;
+        if(!hasInit)
         {
-            Destroy(gameObject);
-            return;
+            hasInit = true;
+            base.Awake();
+            DontDestroyOnLoad(this);
         }
-        base.Awake();
-        DontDestroyOnLoad(this);
+    }
+
+    public void PlayWinSound()
+    {
+        win.Play();
     }
 }

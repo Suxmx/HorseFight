@@ -12,6 +12,7 @@ using Shop;
 using Shop.Repo;
 using Sirenix.OdinInspector;
 using TMPro;
+using UnityEditor.TerrainTools;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -38,8 +39,8 @@ public class GameCore : Service
     private ShopManager shop;
     private RepoManager _repoManager;
     [Other] private RoadManager roadManager;
-    [Other] private SceneController sceneController;
-    [Other] private EventSystem eventSystem;
+    private SceneController sceneController;
+    private EventSystem eventSystem;
     [Other] private HorseFactory horseFactory;
 
     private Dictionary<Team, PlayerInfo> playerDic;
@@ -56,12 +57,17 @@ public class GameCore : Service
     protected override void Start()
     {
         base.Start();
+        eventSystem = ServiceLocator.Get<EventSystem>();
+        sceneController = ServiceLocator.Get<SceneController>();
         PlayModeConfig modeConfig = ServiceLocator.Get<PlayModeConfig>();
         if (modeConfig) //如果读取到了配置文件
         {
+            Debug.Log(aiMode);
             ifAI = modeConfig.IfAI;
             aiMode = modeConfig.AIMode;
             _ifRandom = modeConfig.IfRandom;
+            if (_ifRandom) aiMode = modeConfig.randomModeDifficulty;
+            modeConfig.SetWinEvent(eventSystem);
         }
 
         if (!_ifRandom)
@@ -98,11 +104,12 @@ public class GameCore : Service
         if (_ifRandom)
         {
             _repoManager = ServiceLocator.Get<RepoManager>();
+            playerA.coinText = _repoManager.playerCoinText;
             playerB.coinText = _repoManager.aiCoinText;
             _repoManager.SetInfos(playerB, playerA);
             ishop = _repoManager;
         }
-        else 
+        else
         {
             shop.SetPlayerInfo(playerDic);
         }
@@ -118,7 +125,7 @@ public class GameCore : Service
     {
         return ishop;
     }
-
+    
     private void ResetGame()
     {
         InitGame();
@@ -147,11 +154,15 @@ public class GameCore : Service
     public void OnGameEnd()
     {
         Invoke(nameof(LoadEndScene), 0.7f);
+        Team winTeam = Team.None;
+        if (playerA.Scores > playerB.Scores) winTeam = Team.A;
+        else if (playerA.Scores < playerB.Scores) winTeam = Team.B;
+        eventSystem.Invoke(EEvent.OnGameEnd, winTeam);
     }
 
     private void LoadEndScene()
     {
-        GetComponent<AudioSource>().Play();
+        ServiceLocator.Get<BGM>().PlayWinSound();
         sceneController.LoadScene(3);
     }
 

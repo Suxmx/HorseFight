@@ -258,6 +258,7 @@ namespace AI
             }
 
             horseList = horseList.OrderBy(horse => horseFactory.GetHorsePrice(horse)).ToList();
+            Debug.Log(horseList.Count);
             int cheapest = horseFactory.GetHorsePrice(horseList[0]);
             horseList.RemoveAll(horse => horseFactory.GetHorsePrice(horse) > cheapest);
             horseList.Disturb(); //打乱所有价格一致的之后再选择

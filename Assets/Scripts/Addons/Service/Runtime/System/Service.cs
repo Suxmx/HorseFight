@@ -10,8 +10,9 @@ namespace Services
     /// </summary>
     public class Service : SerializedMonoBehaviour
     {
-        [NonSerialized]internal bool singleInAllScene=false;
-        private int destroyIndex=-1;
+        [NonSerialized] internal bool singleInAllScene = false;
+        private int destroyIndex = -1;
+
         protected virtual void Awake()
         {
             ServiceLocator.Register(this);
@@ -31,12 +32,13 @@ namespace Services
         /// </summary>
         internal void GetOtherService()
         {
-            FieldInfo[] infos = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            FieldInfo[] infos =
+                GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             foreach (FieldInfo info in infos)
             {
                 Type type = info.FieldType;
-                if (info.GetCustomAttribute(typeof(OtherAttribute), true) 
-                    is OtherAttribute attribute && type.IsSubclassOf(typeof(Service)))
+                if (info.GetCustomAttribute(typeof(OtherAttribute), true)
+                        is OtherAttribute attribute && type.IsSubclassOf(typeof(Service)))
                 {
                     if (attribute.type != null && attribute.type.IsSubclassOf(type))
                         type = attribute.type;
@@ -49,11 +51,17 @@ namespace Services
         {
             this.destroyIndex = index;
         }
+
         public void DestroySelfAtIndex(int index)
         {
-            if(index==destroyIndex)
+            if (index == destroyIndex)
             {
-                ServiceLocator.UnRegister(this);
+                var services = GetComponents<Service>();
+                foreach (var service in services)
+                {
+                    if (service != this) service.DestroySelf();
+                }
+
                 Destroy(gameObject);
             }
         }
@@ -61,6 +69,12 @@ namespace Services
         public void DestroySelf()
         {
             Destroy(gameObject);
+        }
+
+        protected void OnDestroy()
+        {
+            if(!singleInAllScene)
+                ServiceLocator.UnRegister(this);
         }
     }
 

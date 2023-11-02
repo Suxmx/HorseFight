@@ -25,6 +25,7 @@ public class EndAnimation : MonoBehaviour
 
         teamAScore.text = core.GetScore(Team.A).ToString();
         teamBScore.text = core.GetScore(Team.B).ToString();
+        core.DestroySelf();
     }
 
     private void StartAnim(int i)
