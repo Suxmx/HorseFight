@@ -276,6 +276,7 @@ public class Horse : MonoBehaviour
 
     IEnumerator IeChangeAlpha(bool show)
     {
+        yield return new WaitForSecondsRealtime(0.5f);
         SpriteRenderer dbg = transform.Find("Sprite/Damage").GetComponent<SpriteRenderer>();
         SpriteRenderer sbg = transform.Find("Sprite/Speed").GetComponent<SpriteRenderer>();
         for (int i = 1; i <= 15; i++)

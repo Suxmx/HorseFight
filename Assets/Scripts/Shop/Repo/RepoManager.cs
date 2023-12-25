@@ -11,10 +11,11 @@ using EventSystem = Services.EventSystem;
 namespace Shop.Repo
 {
     [SuppressMessage("ReSharper", "Unity.RedundantSerializeFieldAttribute")]
-    public class RepoManager : Service, IPointerExitHandler, IShop
+    public class RepoManager : Service, IShop
     {
         public TextMeshProUGUI aiCoinText;
         public TextMeshProUGUI playerCoinText;
+        public List<Button> hideShopButtons;
 
         [SerializeField] private RectTransform panelRect;
         [SerializeField] private TextMeshProUGUI roundText;
@@ -36,6 +37,9 @@ namespace Shop.Repo
         private int _curRound = 1;
         [SerializeField] private HorsePutter _horsePutter;
         [SerializeField] private Dictionary<int, List<RepoItem>> items;
+        
+        private Sprite shopButtonTex;
+        private Sprite cancelButtonTex;
 
         private int CurRound
         {
@@ -51,6 +55,8 @@ namespace Shop.Repo
         {
             base.Awake();
             height = panelRect.sizeDelta.y;
+            shopButtonTex = Resources.Load<Sprite>("deck");
+            cancelButtonTex = Resources.Load<Sprite>("cancel");
         }
 
         protected override void Start()
@@ -66,6 +72,10 @@ namespace Shop.Repo
             if (ifShow || ifAnim) return;
             ifShow = true;
             ifAnim = true;
+            foreach (var btn in hideShopButtons)
+            {
+                btn.gameObject.SetActive(true);
+            }
             StartCoroutine(IeShowPanel());
         }
 
@@ -74,6 +84,10 @@ namespace Shop.Repo
             if (!ifShow || ifAnim) return;
             ifShow = false;
             ifAnim = true;
+            foreach (var btn in hideShopButtons)
+            {
+                btn.gameObject.SetActive(false);
+            }
             StartCoroutine(IeHidePanel());
         }
 
@@ -104,12 +118,7 @@ namespace Shop.Repo
             ifAnim = false;
             panelRect.anchoredPosition = new Vector2(posx, -1 * height);
         }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            HideShop();
-        }
-
+        
         #endregion
 
         public bool AIShopRequest(EHorse type, int num)
@@ -137,6 +146,7 @@ namespace Shop.Repo
         public void NextRound()
         {
             ResetButton();
+            _roadManager.HideAllHalo(Team.A);
             _roadManager.ShowAllHorses();
             if ((playerPuts == 5 || _playerInfo.Coins == 0) && (_aiInfo.ownHorses.Count == 5 || _aiInfo.Coins == 0))
             {
@@ -177,6 +187,7 @@ namespace Shop.Repo
 
         private void ResetButton()
         {
+            openButton.GetComponent<Image>().sprite = shopButtonTex;
             openButton.onClick.RemoveAllListeners();
             openButton.onClick.AddListener(ShowShop);
         }
@@ -202,9 +213,12 @@ namespace Shop.Repo
             _horsePutter.SetHorse(gainItem.GetComponent<Horse>());
             // item.gameObject.SetActive(false);
             playerPuts++;
+            _roadManager.ShowAllHalo(Team.A);
             //撤回
+            openButton.GetComponent<Image>().sprite = cancelButtonTex;
             openButton.onClick.AddListener(() =>
             {
+                _roadManager.HideAllHalo(Team.A);
                 _playerInfo.Coins += item.price;
                 playerPuts--;
                 Destroy(gainItem.gameObject);

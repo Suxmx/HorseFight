@@ -19,6 +19,7 @@ public class RoadInfo
     public Horse horse;
     public Vector2 startPoint;
     public float spriteSize;
+    public GameObject halo;
 }
 
 public class Road : MonoBehaviour
@@ -43,6 +44,7 @@ public class Road : MonoBehaviour
     private TimerOnly roadTimer;
     private float spriteSize;
     private bool hasHorseWin = false;
+    private GameObject halo;
 
     private float unitLength => roadLength / 20f;
     // private float curTime => core.curTime;
@@ -53,6 +55,8 @@ public class Road : MonoBehaviour
         leftTrans = transform.Find("LeftStart");
         rightTrans = transform.Find("RightStart");
         RoadInfo infoa = new(Team.A, leftPos), infob = new(Team.B, rightPos);
+        infoa.halo = leftTrans.Find("halo").gameObject;
+        infob.halo = rightTrans.Find("halo").gameObject;
 
         infoDic = new Dictionary<Team, RoadInfo>();
         infoDic.Add(Team.A, infoa);
@@ -207,7 +211,7 @@ public class Road : MonoBehaviour
         // horse.SetPutMode(horse.horseTeam, false);
         horse.SetDir(horse.horseTeam);
         horse.skill.OnPut();
-        if (horse.horseTeam == Team.A)
+        if (horse.horseTeam == Team.A&& !core.ifAI && !core._ifRandom)
         {
             horse.HideSelf();
             if(shop is ShopManager manager)
@@ -235,5 +239,17 @@ public class Road : MonoBehaviour
     public RoadInfo GetInfo(Team team)
     {
         return infoDic[team];
+    }
+
+    public void ShowHalo(Team team)
+    {
+        var teamInfo = infoDic[team];
+        if (teamInfo.horse) return ;
+        teamInfo.halo.SetActive(true);
+    }
+
+    public void HideHalo(Team team)
+    {
+        infoDic[team].halo.SetActive(false);
     }
 }

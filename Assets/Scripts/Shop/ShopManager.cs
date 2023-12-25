@@ -10,7 +10,7 @@ using EventSystem = Services.EventSystem;
 
 namespace Shop
 {
-    public class ShopManager : Service, IPointerExitHandler, IShop
+    public class ShopManager : Service, IShop
     {
         public float aniTime = 0.2f;
         public AudioSource buy, enter;
@@ -21,6 +21,7 @@ namespace Shop
 
         //子物体
         public RectTransform PanelRect;
+        public List<Button> hideShopButtons;
         private Button openButton;
         private TextMeshProUGUI openButtonText;
         [NonSerialized] public TextMeshProUGUI coinTextA, coinTextB;
@@ -34,6 +35,8 @@ namespace Shop
         private HorsePutter horsePutter;
         private EventSystem eventSystem;
         private StatusFactory statusFactory;
+        private Sprite shopButtonTex;
+        private Sprite cancelButtonTex;
 
         private int curRound = 1;
 
@@ -56,6 +59,9 @@ namespace Shop
             base.Awake();
             //寻找与设置子类UI
 
+            shopButtonTex = Resources.Load<Sprite>("shop");
+            cancelButtonTex = Resources.Load<Sprite>("cancel");
+            
             openButton = transform.Find("ShopButton").GetComponent<Button>();
             openButtonText = openButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
             coinTextA = openButton.transform.Find("PlayerACoins/Text").GetComponent<TextMeshProUGUI>();
@@ -87,6 +93,10 @@ namespace Shop
             if (ifShow || ifAnim) return;
             ifShow = true;
             ifAnim = true;
+            foreach (var btn in hideShopButtons)
+            {
+                btn.gameObject.SetActive(true);
+            }
             StartCoroutine(IeShowPanel());
         }
 
@@ -95,6 +105,10 @@ namespace Shop
             if (!ifShow || ifAnim) return;
             ifShow = false;
             ifAnim = true;
+            foreach (var btn in hideShopButtons)
+            {
+                btn.gameObject.SetActive(false);
+            }
             StartCoroutine(IeHidePanel());
         }
 
@@ -124,11 +138,6 @@ namespace Shop
 
             ifAnim = false;
             PanelRect.anchoredPosition = new Vector2(posx, -1 * height);
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            HideShop();
         }
 
         #endregion
@@ -165,9 +174,12 @@ namespace Shop
             gainItem.GetComponent<Horse>().SetTeam(curTeam);
             gainItem.GetComponent<Horse>().Init(statusFactory, roadManager);
             horsePutter.SetHorse(gainItem.GetComponent<Horse>());
+            roadManager.ShowAllHalo(curTeam);
             //撤回
+            openButton.GetComponent<Image>().sprite = cancelButtonTex;
             openButton.onClick.AddListener(() =>
             {
+                roadManager.HideAllHalo(curTeam);
                 Destroy(gainItem.gameObject);
                 playerDic[curTeam].Coins += item.price;
                 playerDic[curTeam].ownHorses.Remove(item.type);
@@ -184,12 +196,13 @@ namespace Shop
         {
             openButton.onClick.RemoveAllListeners();
             openButton.onClick.AddListener(ShowShop);
+            openButton.GetComponent<Image>().sprite = shopButtonTex;
         }
 
         public void NextRound()
         {
             ResetButton();
-
+            roadManager.HideAllHalo(curTeam);
 
             if ((playerDic[Team.A].ownHorses.Count == 5 || playerDic[Team.A].Coins == 0) &&
                 (playerDic[Team.B].ownHorses.Count == 5 || playerDic[Team.B].Coins == 0))

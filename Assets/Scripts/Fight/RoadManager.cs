@@ -120,4 +120,20 @@ public class RoadManager: Service
             road.ShowHorses();
         }
     }
+
+    public void HideAllHalo(Team team)
+    {
+        foreach (var road in roads)
+        {
+            road.HideHalo(team);
+        }
+    }
+
+    public void ShowAllHalo(Team team)
+    {
+        foreach (var road in roads)
+        {
+            road.ShowHalo(team);
+        }
+    }
 }

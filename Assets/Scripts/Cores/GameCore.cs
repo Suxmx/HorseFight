@@ -33,7 +33,7 @@ public class GameCore : Service
 {
     [Header("AI"), LabelText("是否开启AI")] public bool ifAI;
     [LabelText("AI难度")] public AI.AIMode aiMode;
-    private bool _ifRandom = false;
+    public bool _ifRandom = false;
     public GameState currentState;
     private PlayerInfo playerA, playerB;
     private ShopManager shop;
